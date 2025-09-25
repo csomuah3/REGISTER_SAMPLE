@@ -72,4 +72,6 @@ function get_user_id() {
     if (check_login()) {
         return $_SESSION['user_id'];
     }
-    return null;
+        return null;
+    }
+    ?>

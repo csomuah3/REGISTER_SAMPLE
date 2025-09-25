@@ -88,34 +88,34 @@
         .form-header {
             text-align: left;
             margin-bottom: 30px;
+        }
 
+        .form-title,
+        h2 {
+            font-size: 5rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
 
-            .form-title,
-            h2 {
-                font-size: 5rem;
-                font-weight: 700;
-                color: #2d3748;
-                margin-bottom: 8px;
-            }
+        .form-subtitle,
+        .subtitle {
+            color: #718096;
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
 
-            .form-subtitle,
-            .subtitle {
-                color: #718096;
-                font-size: 40px;
-                margin-bottom: 20px;
-            }
+        .form-subtitle a,
+        .subtitle a {
+            color: #48cc6c;
+            text-decoration: none;
+            font-weight: 500;
+        }
 
-            .form-subtitle a,
-            .subtitle a {
-                color: #48cc6c;
-                text-decoration: none;
-                font-weight: 500;
-            }
-
-            .form-subtitle a:hover,
-            .subtitle a:hover {
-                text-decoration: underline;
-            }
+        .form-subtitle a:hover,
+        .subtitle a:hover {
+            text-decoration: underline;
+        }
 
             /* Form Fields */
             .form-group,
@@ -341,7 +341,7 @@
             }
 
             .card-header {
-                background-color: #D19C987;
+                background-color: #D19C97;
                 color: #fff;
             }
 

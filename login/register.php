@@ -117,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .form-header {
             text-align: left;
             margin-bottom: 30px;
-            
+        }
 
         .form-title,
         h2 {
