@@ -117,265 +117,265 @@
             text-decoration: underline;
         }
 
-            /* Form Fields */
-            .form-group,
-            .input-group,
-            .form-field {
-                margin-bottom: 20px;
-                position: relative;
+        /* Form Fields */
+        .form-group,
+        .input-group,
+        .form-field {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label,
+        .input-group label,
+        .form-field label {
+            display: block;
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #4a5568;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .input-group input,
+        .form-field input,
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 16px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1.4rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        .form-group input:focus,
+        .input-group input:focus,
+        .form-field input:focus,
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="tel"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #48cc6c;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(72, 204, 108, 0.1);
+        }
+
+        .form-group input::placeholder,
+        .input-group input::placeholder,
+        .form-field input::placeholder {
+            color: #a0aec0;
+        }
+
+        /* Input Icons */
+        .form-group input[type="text"],
+        .form-group input[type="password"],
+        .form-group input[type="email"],
+        .form-group input[type="tel"] {
+            padding-right: 50px;
+        }
+
+        .form-group::after {
+            content: '👤';
+            position: absolute;
+            right: 18px;
+            top: 42px;
+            font-size: 1.3rem;
+            color: #a0aec0;
+            pointer-events: none;
+        }
+
+        .form-group:has(input[type="password"])::after {
+            content: '🔒';
+        }
+
+        .form-group:has(input[type="email"])::after {
+            content: '📧';
+        }
+
+        .form-group:has(input[type="tel"])::after {
+            content: '📱';
+        }
+
+        /* Select Dropdown */
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 12px center;
+            background-repeat: no-repeat;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
+        /* Submit Button */
+        .submit-btn,
+        .btn-primary,
+        .sign-up-btn,
+        button[type="submit"] {
+            width: 100%;
+            background: linear-gradient(135deg, #48cc6c, #2dd55b);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            text-transform: none;
+        }
+
+        .submit-btn:hover,
+        .btn-primary:hover,
+        .sign-up-btn:hover,
+        button[type="submit"]:hover {
+            background: linear-gradient(135deg, #2dd55b, #48cc6c);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(72, 204, 108, 0.3);
+        }
+
+        /* Radio Button Groups */
+        .radio-group,
+        .register-as-group {
+            margin: 20px 0;
+        }
+
+        .radio-group label,
+        .register-as-group label {
+            display: block;
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #4a5568;
+            margin-bottom: 12px;
+        }
+
+        .radio-options {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            background: #f8fafc;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 140px;
+        }
+
+        .radio-option:hover {
+            border-color: #48cc6c;
+            background: #f0fff4;
+        }
+
+        .radio-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            margin: 0;
+            accent-color: #48cc6c;
+        }
+
+        .radio-option.selected,
+        .radio-option:has(input:checked) {
+            border-color: #48cc6c;
+            background: #f0fff4;
+            color: #22543d;
+        }
+
+        .radio-option span {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* Password Requirements */
+        .password-requirements {
+            font-size: 1rem;
+            color: #718096;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+
+        .btn-custom {
+            background-color: #D19C97;
+            border-color: #D19C97;
+            color: #fff;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .btn-custom:hover {
+            background-color: #b77a7a;
+            border-color: #b77a7a;
+        }
+
+        .highlight {
+            color: #d1456d;
+            transition: color 0.3s;
+        }
+
+        .highlight:hover {
+            color: #b77a7a;
+        }
+
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            padding-right: 0%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #D19C97;
+            color: #fff;
+        }
+
+        .animate-pulse-custom {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
             }
 
-            .form-group label,
-            .input-group label,
-            .form-field label {
-                display: block;
-                font-size: 1.3rem;
-                font-weight: 500;
-                color: #4a5568;
-                margin-bottom: 8px;
+            50% {
+                transform: scale(1.05);
             }
 
-            .form-group input,
-            .input-group input,
-            .form-field input,
-            input[type="text"],
-            input[type="email"],
-            input[type="password"],
-            input[type="tel"],
-            select {
-                width: 100%;
-                padding: 16px 18px;
-                border: 2px solid #e2e8f0;
-                border-radius: 12px;
-                font-size: 1.4rem;
-                font-family: inherit;
-                transition: all 0.3s ease;
-                background: #f8fafc;
+            100% {
+                transform: scale(1);
             }
+        }
 
-            .form-group input:focus,
-            .input-group input:focus,
-            .form-field input:focus,
-            input[type="text"]:focus,
-            input[type="email"]:focus,
-            input[type="password"]:focus,
-            input[type="tel"]:focus,
-            select:focus {
-                outline: none;
-                border-color: #48cc6c;
-                background: white;
-                box-shadow: 0 0 0 3px rgba(72, 204, 108, 0.1);
-            }
+        .form-label i {
+            margin-left: 5px;
+            color: #b77a7a;
+        }
 
-            .form-group input::placeholder,
-            .input-group input::placeholder,
-            .form-field input::placeholder {
-                color: #a0aec0;
-            }
+        .spinner-border-sm {
+            width: 1rem;
+            height: 1rem;
+        }
 
-            /* Input Icons */
-            .form-group input[type="text"],
-            .form-group input[type="password"],
-            .form-group input[type="email"],
-            .form-group input[type="tel"] {
-                padding-right: 50px;
-            }
-
-            .form-group::after {
-                content: '👤';
-                position: absolute;
-                right: 18px;
-                top: 42px;
-                font-size: 1.3rem;
-                color: #a0aec0;
-                pointer-events: none;
-            }
-
-            .form-group:has(input[type="password"])::after {
-                content: '🔒';
-            }
-
-            .form-group:has(input[type="email"])::after {
-                content: '📧';
-            }
-
-            .form-group:has(input[type="tel"])::after {
-                content: '📱';
-            }
-
-            /* Select Dropdown */
-            select {
-                cursor: pointer;
-                appearance: none;
-                background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
-                background-position: right 12px center;
-                background-repeat: no-repeat;
-                background-size: 16px;
-                padding-right: 40px;
-            }
-
-            /* Submit Button */
-            .submit-btn,
-            .btn-primary,
-            .sign-up-btn,
-            button[type="submit"] {
-                width: 100%;
-                background: linear-gradient(135deg, #48cc6c, #2dd55b);
-                color: white;
-                border: none;
-                padding: 16px;
-                border-radius: 12px;
-                font-size: 1.4rem;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                margin-top: 10px;
-                text-transform: none;
-            }
-
-            .submit-btn:hover,
-            .btn-primary:hover,
-            .sign-up-btn:hover,
-            button[type="submit"]:hover {
-                background: linear-gradient(135deg, #2dd55b, #48cc6c);
-                transform: translateY(-2px);
-                box-shadow: 0 10px 25px rgba(72, 204, 108, 0.3);
-            }
-
-            /* Radio Button Groups */
-            .radio-group,
-            .register-as-group {
-                margin: 20px 0;
-            }
-
-            .radio-group label,
-            .register-as-group label {
-                display: block;
-                font-size: 1.3rem;
-                font-weight: 500;
-                color: #4a5568;
-                margin-bottom: 12px;
-            }
-
-            .radio-options {
-                display: flex;
-                gap: 20px;
-                flex-wrap: wrap;
-            }
-
-            .radio-option {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                cursor: pointer;
-                padding: 12px 16px;
-                border: 2px solid #e2e8f0;
-                border-radius: 10px;
-                background: #f8fafc;
-                transition: all 0.3s ease;
-                flex: 1;
-                min-width: 140px;
-            }
-
-            .radio-option:hover {
-                border-color: #48cc6c;
-                background: #f0fff4;
-            }
-
-            .radio-option input[type="radio"] {
-                width: 18px;
-                height: 18px;
-                margin: 0;
-                accent-color: #48cc6c;
-            }
-
-            .radio-option.selected,
-            .radio-option:has(input:checked) {
-                border-color: #48cc6c;
-                background: #f0fff4;
-                color: #22543d;
-            }
-
-            .radio-option span {
-                font-size: 1.1rem;
-                font-weight: 500;
-            }
-
-            /* Password Requirements */
-            .password-requirements {
-                font-size: 1rem;
-                color: #718096;
-                margin-top: 5px;
-                font-style: italic;
-            }
-
-
-            .btn-custom {
-                background-color: #D19C97;
-                border-color: #D19C97;
-                color: #fff;
-                transition: background-color 0.3s, border-color 0.3s;
-            }
-
-            .btn-custom:hover {
-                background-color: #b77a7a;
-                border-color: #b77a7a;
-            }
-
-            .highlight {
-                color: #d1456d;
-                transition: color 0.3s;
-            }
-
-            .highlight:hover {
-                color: #b77a7a;
-            }
-
-
-            .card {
-                border: none;
-                border-radius: 15px;
-                overflow: hidden;
-                padding-right: 0%;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            }
-
-            .card-header {
-                background-color: #D19C97;
-                color: #fff;
-            }
-
-            .animate-pulse-custom {
-                animation: pulse 2s infinite;
-            }
-
-            @keyframes pulse {
-                0% {
-                    transform: scale(1);
-                }
-
-                50% {
-                    transform: scale(1.05);
-                }
-
-                100% {
-                    transform: scale(1);
-                }
-            }
-
-            .form-label i {
-                margin-left: 5px;
-                color: #b77a7a;
-            }
-
-            .spinner-border-sm {
-                width: 1rem;
-                height: 1rem;
-            }
-
-            .btn:disabled {
-                opacity: 0.6;
-            }
+        .btn:disabled {
+            opacity: 0.6;
+        }
     </style>
 </head>
 
