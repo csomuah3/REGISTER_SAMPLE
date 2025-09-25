@@ -21,7 +21,7 @@
         }
 
         .highlight {
-            color: #D19C97;
+            color: #d1456d;
             transition: color 0.3s;
         }
 
