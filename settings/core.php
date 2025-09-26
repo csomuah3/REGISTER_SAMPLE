@@ -1,85 +1,102 @@
 <?php
 
 /**
- * Core Functions - Updated to match your actual session variables
+ * Core Functions — role-safe + redirect helpers
+ * Adjust ADMIN_ROLE_ID below if your schema differs.
  */
 
-// Start session if not already started
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-/**
- * Check if a user is logged in
- * Updated to match your actual session variable names
- */
-function check_login()
+/** ====== CONFIG: change this if your DB uses a different id for admin ====== */
+const ADMIN_ROLE_ID = 2; // <-- if your DB uses 1 for admin, change to 1
+
+/** Utility: strict redirect and stop */
+function redirect(string $path)
 {
-    // Check if user session variables exist and are not empty
-    // Your login sets: user_id, role, name, email
-    if (
-        isset($_SESSION['user_id']) &&
-        !empty($_SESSION['user_id']) &&
-        isset($_SESSION['email']) &&
-        !empty($_SESSION['email'])
-    ) {
-        return true;
-    }
-    return false;
+    header('Location: ' . $path, true, 302);
+    exit;
 }
 
-/**
- * Check if a user has administrative privileges
- * Updated to check your 'role' session variable
- */
-function check_admin()
+/** Check if user is logged in (based on your actual session keys) */
+function check_login(): bool
 {
-    // First check if user is logged in
-    if (!check_login()) {
-        return false;
-    }
-
-    // Check if user has admin role
-    // Your login sets $_SESSION['role'] with user_role value
-    if (
-        isset($_SESSION['role']) &&
-        ($_SESSION['role'] === 'admin' || $_SESSION['role'] === 'administrator' || $_SESSION['role'] == 1)
-    ) {
-        return true;
-    }
-
-    return false;
+    return isset($_SESSION['user_id'], $_SESSION['email'])
+        && !empty($_SESSION['user_id'])
+        && !empty($_SESSION['email']);
 }
 
-/**
- * Get logged-in user ID
- */
+/** Get logged-in user id */
 function get_user_id()
 {
-    if (check_login()) {
-        return $_SESSION['user_id'];
-    }
-    return null;
+    return check_login() ? $_SESSION['user_id'] : null;
 }
 
-/**
- * Get logged-in user email  
- */
+/** Get logged-in user email */
 function get_user_email()
 {
-    if (check_login()) {
-        return $_SESSION['email']; // Your login sets 'email' not 'user_email'
-    }
-    return null;
+    return check_login() ? $_SESSION['email'] : null;
 }
 
-/**
- * Get logged-in user name
- */
+/** Get logged-in user name */
 function get_user_name()
 {
-    if (check_login()) {
-        return $_SESSION['name']; // Your login sets 'name' not 'user_firstname'
+    return check_login() ? ($_SESSION['name'] ?? null) : null;
+}
+
+/** Get logged-in user role (returns int when possible) */
+function get_user_role()
+{
+    if (!check_login()) return null;
+    if (!isset($_SESSION['role'])) return null;
+
+    $role = $_SESSION['role'];
+
+    if (is_string($role)) {
+        $role = trim($role);
+
+        // Numeric string → int
+        if ($role !== '' && ctype_digit($role)) {
+            return (int)$role;
+        }
+
+        // Common string labels
+        $lower = strtolower($role);
+        if ($lower === 'admin' || $lower === 'administrator') {
+            return ADMIN_ROLE_ID;
+        }
     }
-    return null;
+
+    return $role;
+}
+
+/** Is admin (supports int id and string labels) */
+function check_admin(): bool
+{
+    if (!check_login()) return false;
+
+    $role = get_user_role();
+
+    // Treat ADMIN_ROLE_ID as admin
+    if ($role === ADMIN_ROLE_ID) return true;
+
+    // In case someone stored role as literal string 'admin'
+    if (is_string($role)) {
+        $lower = strtolower($role);
+        return ($lower === 'admin' || $lower === 'administrator');
+    }
+
+    return false;
+}
+
+/** Gatekeepers you can use at the top of pages */
+function require_login(string $fallback = '/login/login.php')
+{
+    if (!check_login()) redirect($fallback);
+}
+
+function require_admin(string $fallback = '/index.php')
+{
+    if (!check_admin()) redirect($fallback);
 }

@@ -19,32 +19,40 @@ if ($isLogin) {
             exit;
         }
 
-        // Read POST data for login
         $email = trim($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
 
-        // Server-side validation for login
         if (empty($email) || empty($password)) {
             echo json_encode(['status' => 'error', 'message' => 'Please fill in all fields']);
             exit;
         }
-
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             echo json_encode(['status' => 'error', 'message' => 'Invalid email format']);
             exit;
         }
 
-        // Call the customer login controller
         $result = login_customer_ctr($email, $password);
 
-        // Set session variables on successful login
         if ($result['status'] === 'success' && isset($result['user_data'])) {
-            $_SESSION['user_id'] = $result['user_data']['customer_id'];
-            $_SESSION['role'] = $result['user_data']['user_role'];
-            $_SESSION['name'] = $result['user_data']['customer_name'];
-            $_SESSION['email'] = $result['user_data']['customer_email'];
+            // Normalize to ints/strings you actually use
+            $uid  = (int)$result['user_data']['customer_id'];
+            $role = (int)$result['user_data']['user_role']; // 1=user, 2=admin (per your lab)
 
-            // Remove user_data from response (don't send sensitive info back)
+            // Harden the session a bit
+            session_regenerate_id(true);
+
+            $_SESSION['user_id'] = $uid;
+            $_SESSION['role']    = $role;
+            $_SESSION['name']    = $result['user_data']['customer_name'];
+            $_SESSION['email']   = $result['user_data']['customer_email'];
+
+            // Add lightweight fields back to response for client logic
+            $result['role'] = $role;
+
+            // Optional: compute redirect server-side (keeps client super simple)
+            $result['redirect'] = ($role === 2) ? '../admin/category.php' : '../index.php';
+
+            // Never return the raw user_data to the client
             unset($result['user_data']);
         }
 
@@ -54,14 +62,13 @@ if ($isLogin) {
         echo json_encode(['status' => 'error', 'message' => 'Login failed. Please try again.']);
     }
 } else {
-    // HANDLE REGISTRATION REQUEST (original code)
+    // HANDLE REGISTRATION REQUEST (unchanged)
     try {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
             exit;
         }
 
-        // Read POST data for registration
         $name         = trim($_POST['name'] ?? '');
         $email        = trim($_POST['email'] ?? '');
         $password     = $_POST['password'] ?? '';
@@ -70,35 +77,29 @@ if ($isLogin) {
         $city         = trim($_POST['city'] ?? '');
         $role         = (int)($_POST['role'] ?? 1);
 
-        // Server-side validation for registration
         if (empty($name) || empty($email) || empty($password) || empty($phone_number) || empty($country) || empty($city)) {
             echo json_encode(['status' => 'error', 'message' => 'Please fill in all fields']);
             exit;
         }
-
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             echo json_encode(['status' => 'error', 'message' => 'Invalid email format']);
             exit;
         }
-
         if (strlen($password) < 6) {
             echo json_encode(['status' => 'error', 'message' => 'Password must be at least 6 characters long']);
             exit;
         }
-
         if (!preg_match('/^[0-9+\-\s()]+$/', $phone_number)) {
             echo json_encode(['status' => 'error', 'message' => 'Invalid phone number format']);
             exit;
         }
-
-        if (!in_array($role, [1, 2])) {
+        if (!in_array($role, [1, 2], true)) {
             echo json_encode(['status' => 'error', 'message' => 'Invalid role selected']);
             exit;
         }
 
         $res = register_user_ctr($name, $email, $password, $phone_number, $country, $city, $role);
 
-        // Ensure response is always an array
         if (is_bool($res)) {
             $res = $res
                 ? ['status' => 'success', 'message' => 'Registered successfully']

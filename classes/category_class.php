@@ -1,76 +1,111 @@
 <?php
-
-/**
- * Category Class - extends database connection
- * Contains category methods: add category, edit category, delete category, get category, etc.
- */
-
-// Include database connection
-require_once(__DIR__ . '/../settings/db_class.php');
+require_once __DIR__ . '/../settings/db_class.php';
 
 class Category extends db_connection
 {
-
-    /**
-     * Add a new category
-     */
-    public function add_category($category_name, $user_id)
+    public function __construct()
     {
-        // Check if category name already exists for this user
-        $check_sql = "SELECT cat_id FROM categories WHERE cat_name = ? AND user_id = ?";
-        $check_result = $this->db_query($check_sql, $category_name, $user_id);
-
-        if ($this->db_count($check_result) > 0) {
-            return false; // Category already exists
+        if ($this->db === null) {
+            $this->db_connect();
         }
-
-        // Insert new category
-        $sql = "INSERT INTO categories (cat_name, user_id) VALUES (?, ?)";
-        return $this->db_query($sql, $category_name, $user_id);
     }
 
-    /**
-     * Get all categories for a specific user
-     */
-    public function get_user_categories($user_id)
+    private function normalize_name(string $name): string
     {
-        $sql = "SELECT cat_id, cat_name, created_at FROM categories WHERE user_id = ? ORDER BY cat_name ASC";
-        return $this->db_fetch_all($sql, $user_id);
+        $name = trim($name);
+        $name = preg_replace('/\s+/u', ' ', $name);
+        return $name;
     }
 
-    /**
-     * Get a single category by ID
-     */
-    public function get_category($cat_id, $user_id)
+    // Add new category (GLOBAL)
+    public function add_category(string $category_name): array
     {
-        $sql = "SELECT cat_id, cat_name FROM categories WHERE cat_id = ? AND user_id = ?";
-        return $this->db_fetch_one($sql, $cat_id, $user_id);
-    }
+        $category_name = $this->normalize_name($category_name);
+        if ($category_name === '') return ['success' => false, 'code' => 'EMPTY'];
 
-    /**
-     * Update category name
-     */
-    public function update_category($cat_id, $category_name, $user_id)
-    {
-        // Check if new name already exists (excluding current category)
-        $check_sql = "SELECT cat_id FROM categories WHERE cat_name = ? AND user_id = ? AND cat_id != ?";
-        $check_result = $this->db_query($check_sql, $category_name, $user_id, $cat_id);
+        $esc = mysqli_real_escape_string($this->db, $category_name);
 
-        if ($this->db_count($check_result) > 0) {
-            return false; // Category name already exists
+        // Duplicate check (case-insensitive)
+        $sql = "SELECT cat_id
+                  FROM categories
+                 WHERE LOWER(TRIM(cat_name)) = LOWER(TRIM('$esc'))
+                 LIMIT 1";
+        $exists = $this->db_fetch_one($sql);
+        if ($exists) return ['success' => false, 'code' => 'DUPLICATE'];
+
+        $sql = "INSERT INTO categories (cat_name) VALUES ('$esc')";
+        $ok  = $this->db_query($sql);
+
+        if ($ok) {
+            return ['success' => true, 'cat_id' => mysqli_insert_id($this->db)];
         }
-
-        // Update category
-        $sql = "UPDATE categories SET cat_name = ? WHERE cat_id = ? AND user_id = ?";
-        return $this->db_query($sql, $category_name, $cat_id, $user_id);
+        return ['success' => false, 'code' => 'DB'];
     }
 
-    /**
-     * Delete a category
-     */
-    public function delete_category($cat_id, $user_id)
+    // Fetch all categories (GLOBAL)
+    public function get_categories(): array
     {
-        $sql = "DELETE FROM categories WHERE cat_id = ? AND user_id = ?";
-        return $this->db_query($sql, $cat_id, $user_id);
+        $sql = "SELECT cat_id, cat_name FROM categories ORDER BY cat_name ASC";
+        $rows = $this->db_fetch_all($sql);
+        return is_array($rows) ? $rows : [];
+    }
+
+    // Get single category by ID
+    public function get_category(int $cat_id): array
+    {
+        $cat_id = (int)$cat_id;
+        $sql = "SELECT cat_id, cat_name FROM categories WHERE cat_id = $cat_id LIMIT 1";
+        $row = $this->db_fetch_one($sql);
+
+        if ($row) {
+            return ['success' => true, 'data' => $row];
+        }
+        return ['success' => false, 'data' => null, 'code' => 'NOT_FOUND'];
+    }
+
+    // Get user categories (for now, returns all categories since they appear to be global)
+    // You can modify this if categories become user-specific later
+    public function get_user_categories(int $user_id): array
+    {
+        // Since categories appear to be global in your system, 
+        // this just returns all categories for now
+        $rows = $this->get_categories();
+        return $rows;
+    }
+
+    // Update category name (GLOBAL)
+    public function update_category(int $cat_id, string $category_name): array
+    {
+        $category_name = $this->normalize_name($category_name);
+        if ($category_name === '') return ['success' => false, 'code' => 'EMPTY'];
+
+        $cat_id = (int)$cat_id;
+        $esc    = mysqli_real_escape_string($this->db, $category_name);
+
+        // Prevent renaming into an existing name
+        $sql = "SELECT cat_id
+                  FROM categories
+                 WHERE LOWER(TRIM(cat_name)) = LOWER(TRIM('$esc'))
+                   AND cat_id <> $cat_id
+                 LIMIT 1";
+        $exists = $this->db_fetch_one($sql);
+        if ($exists) return ['success' => false, 'code' => 'DUPLICATE'];
+
+        $sql = "UPDATE categories SET cat_name = '$esc' WHERE cat_id = $cat_id";
+        $ok  = $this->db_query($sql);
+
+        if ($ok) return ['success' => true];
+        return ['success' => false, 'code' => 'DB'];
+    }
+
+    // Delete category (GLOBAL)
+    public function delete_category(int $cat_id): array
+    {
+        $cat_id = (int)$cat_id;
+        $sql = "DELETE FROM categories WHERE cat_id = $cat_id";
+        $ok  = $this->db_query($sql);
+
+        if ($ok) return ['success' => true];
+        return ['success' => false, 'code' => 'DB'];
     }
 }
