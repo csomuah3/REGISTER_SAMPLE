@@ -1,205 +1,301 @@
-(function () {
-    function flash(el, text, ok=false) {
-      el.textContent = text || '';
-      el.className = ok ? 'text-success small' : 'text-danger small';
-      if (text) setTimeout(() => { el.textContent = ''; }, 3000);
-    }
-  
-    function safeJson(resp) {
-      // Try to parse JSON; if it fails, throw with response text
-      return resp.text().then(txt => {
-        try { return JSON.parse(txt); }
-        catch (e) { throw new Error('Non-JSON response: ' + txt); }
-      });
-    }
-  
-    function fetchList() {
-      fetch('../actions/fetch_category_action.php', { method: 'GET' })
-        .then(resp => safeJson(resp))
-        .then(res => {
-          const tbody = document.querySelector('#catTable tbody');
-          tbody.innerHTML = '';
-          if (!res.success) {
-            tbody.innerHTML = '<tr><td colspan="2" class="text-danger">Failed to load categories</td></tr>';
-            return;
-          }
-          (res.data || []).forEach(row => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td>
-                <span class="category-name" data-id="${row.cat_id}">${escapeHtml(row.cat_name)}</span>
-                <input class="form-control form-control-sm category-input" value="${escapeHtml(row.cat_name)}" data-id="${row.cat_id}" style="display: none;" />
-              </td>
-              <td>
-                <button class="btn btn-sm btn-success me-2" data-action="edit" data-id="${row.cat_id}">Edit</button>
-                <button class="btn btn-sm btn-primary me-2" data-action="save" data-id="${row.cat_id}" style="display: none;">Save</button>
-                <button class="btn btn-sm btn-secondary me-2" data-action="cancel" data-id="${row.cat_id}" style="display: none;">Cancel</button>
-                <button class="btn btn-sm btn-outline-danger" data-action="delete" data-id="${row.cat_id}">Delete</button>
-              </td>`;
-            tbody.appendChild(tr);
-          });
-        })
-        .catch(err => {
-          console.error('fetchList error:', err);
-          const tbody = document.querySelector('#catTable tbody');
-          tbody.innerHTML = '<tr><td colspan="2" class="text-danger">Error loading categories</td></tr>';
-        });
-    }
+/**
+ * Category Management JavaScript
+ * Works with the clean category.php HTML structure
+ */
 
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
+document.addEventListener('DOMContentLoaded', function() {
+    loadCategories();
+    setupAddForm();
+});
 
-    function enableEdit(id) {
-      const row = document.querySelector(`[data-id="${id}"]`).closest('tr');
-      const nameSpan = row.querySelector('.category-name');
-      const nameInput = row.querySelector('.category-input');
-      const editBtn = row.querySelector('[data-action="edit"]');
-      const saveBtn = row.querySelector('[data-action="save"]');
-      const cancelBtn = row.querySelector('[data-action="cancel"]');
-
-      // Hide read-only elements
-      nameSpan.style.display = 'none';
-      editBtn.style.display = 'none';
-
-      // Show edit elements
-      nameInput.style.display = 'block';
-      nameInput.focus();
-      nameInput.select();
-      saveBtn.style.display = 'inline-block';
-      cancelBtn.style.display = 'inline-block';
-    }
-
-    function cancelEdit(id) {
-      const row = document.querySelector(`[data-id="${id}"]`).closest('tr');
-      const nameSpan = row.querySelector('.category-name');
-      const nameInput = row.querySelector('.category-input');
-      const editBtn = row.querySelector('[data-action="edit"]');
-      const saveBtn = row.querySelector('[data-action="save"]');
-      const cancelBtn = row.querySelector('[data-action="cancel"]');
-
-      // Reset input to original value
-      nameInput.value = nameSpan.textContent;
-
-      // Show read-only elements
-      nameSpan.style.display = 'block';
-      editBtn.style.display = 'inline-block';
-
-      // Hide edit elements
-      nameInput.style.display = 'none';
-      saveBtn.style.display = 'none';
-      cancelBtn.style.display = 'none';
-    }
-  
-    // ADD
-    const addForm = document.getElementById('addForm');
-    if (addForm) {
-      addForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const msg = document.getElementById('addMsg');
-        const fd = new FormData(addForm);
-  
-        fetch('../actions/add_category_action.php', { method: 'POST', body: fd })
-          .then(resp => safeJson(resp))
-          .then(res => {
-            if (res.success) {
-              addForm.reset();
-              flash(msg, 'Added!', true);
-              fetchList();
+/**
+ * Load categories and populate table
+ */
+function loadCategories() {
+    fetch('../actions/fetch_category_action.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                populateTable(data.data);
             } else {
-              flash(msg, res.message || 'Could not add category.');
+                showMessage('Failed to load categories: ' + data.message, 'danger');
             }
-          })
-          .catch(err => {
-            console.error('add error:', err);
-            flash(msg, String(err));
-          });
-      });
+        })
+        .catch(error => {
+            console.error('Error loading categories:', error);
+            showMessage('Error loading categories', 'danger');
+        });
+}
+
+/**
+ * Populate the categories table
+ */
+function populateTable(categories) {
+    const tbody = document.querySelector('#catTable tbody');
+    tbody.innerHTML = '';
+
+    if (!categories || categories.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="2" class="text-muted text-center">No categories yet</td></tr>';
+        return;
     }
-  
-    // EDIT / SAVE / CANCEL / DELETE
-    const table = document.getElementById('catTable');
-    if (table) {
-      table.addEventListener('click', (e) => {
-        const btn = e.target.closest('button');
-        if (!btn) return;
-  
-        const id = btn.getAttribute('data-id');
-        const action = btn.getAttribute('data-action');
 
-        if (action === 'edit') {
-          enableEdit(id);
+    categories.forEach(category => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>
+                <span class="category-name" data-id="${category.cat_id}">${escapeHtml(category.cat_name)}</span>
+                <input type="text" class="form-control edit-input d-none" 
+                       value="${escapeHtml(category.cat_name)}" data-id="${category.cat_id}">
+            </td>
+            <td>
+                <div class="normal-actions">
+                    <button class="btn btn-sm btn-success me-1" onclick="startEdit(${category.cat_id})">Edit</button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteCategory(${category.cat_id}, '${escapeHtml(category.cat_name)}')">Delete</button>
+                </div>
+                <div class="edit-actions d-none">
+                    <button class="btn btn-sm btn-primary me-1" onclick="saveEdit(${category.cat_id})">Save</button>
+                    <button class="btn btn-sm btn-secondary me-1" onclick="cancelEdit(${category.cat_id})">Cancel</button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteCategory(${category.cat_id}, '${escapeHtml(category.cat_name)}')">Delete</button>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+}
 
-        } else if (action === 'cancel') {
-          cancelEdit(id);
-
-        } else if (action === 'save') {
-          const input = btn.closest('tr').querySelector('.category-input');
-          const nameSpan = btn.closest('tr').querySelector('.category-name');
-          const newName = input.value.trim();
-
-          if (newName === '') {
-            alert('Category name cannot be empty');
-            input.focus();
+/**
+ * Setup add category form
+ */
+function setupAddForm() {
+    const form = document.getElementById('addForm');
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const categoryName = formData.get('category_name').trim();
+        
+        // Validate category information, check type
+        if (!validateCategoryName(categoryName)) {
             return;
-          }
-
-          const fd = new FormData();
-          fd.append('cat_id', id);
-          fd.append('category_name', newName);
-  
-          fetch('../actions/update_category_action.php', { method: 'POST', body: fd })
-            .then(resp => safeJson(resp))
-            .then(res => {
-              if (res.success) {
-                // Update the display text
-                nameSpan.textContent = newName;
-                cancelEdit(id);
-              } else {
-                alert(res.message || 'Update failed');
-              }
-            })
-            .catch(err => {
-              console.error('update error:', err);
-              alert('Update failed: ' + err.message);
-            });
-  
-        } else if (action === 'delete') {
-          if (!confirm('Delete this category?')) return;
-          const fd = new FormData();
-          fd.append('cat_id', id);
-  
-          fetch('../actions/delete_category_action.php', { method: 'POST', body: fd })
-            .then(resp => safeJson(resp))
-            .then(res => {
-              if (!res.success) alert(res.message || 'Delete failed');
-              fetchList();
-            })
-            .catch(err => {
-              console.error('delete error:', err);
-              alert('Delete failed: ' + err.message);
-            });
         }
-      });
+        
+        // Disable form during submission
+        const submitBtn = this.querySelector('button');
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Adding...';
+        
+        // Asynchronously invoke add_category_action.php
+        fetch('../actions/add_category_action.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Inform user of success/failure using pop-up/message
+            if (data.success) {
+                showMessage(data.message, 'success');
+                this.reset();
+                loadCategories(); // Refresh table
+            } else {
+                showMessage(data.message, 'danger');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showMessage('Error adding category', 'danger');
+        })
+        .finally(() => {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+        });
+    });
+}
 
-      // Handle Enter key to save, Escape to cancel
-      table.addEventListener('keydown', (e) => {
-        if (e.target.classList.contains('category-input')) {
-          if (e.key === 'Enter') {
-            e.preventDefault();
-            const saveBtn = e.target.closest('tr').querySelector('[data-action="save"]');
-            saveBtn.click();
-          } else if (e.key === 'Escape') {
-            const cancelBtn = e.target.closest('tr').querySelector('[data-action="cancel"]');
-            cancelBtn.click();
-          }
-        }
-      });
+/**
+ * Validate category information, check type
+ */
+function validateCategoryName(name) {
+    if (typeof name !== 'string') {
+        showMessage('Category name must be text', 'danger');
+        return false;
     }
-  
-    // Basic proof JS is loaded
-    console.log('[category.js] loaded');
-    fetchList();
-  })();
+    
+    if (name.length === 0) {
+        showMessage('Category name is required', 'danger');
+        return false;
+    }
+    
+    if (name.length < 2) {
+        showMessage('Category name must be at least 2 characters', 'danger');
+        return false;
+    }
+    
+    if (name.length > 100) {
+        showMessage('Category name too long (max 100 characters)', 'danger');
+        return false;
+    }
+    
+    return true;
+}
+
+/**
+ * Start editing a category
+ */
+function startEdit(categoryId) {
+    console.log('Starting edit for category ID:', categoryId);
+    
+    const row = document.querySelector(`[data-id="${categoryId}"]`).closest('tr');
+    const nameSpan = row.querySelector('.category-name');
+    const editInput = row.querySelector('.edit-input');
+    const normalActions = row.querySelector('.normal-actions');
+    const editActions = row.querySelector('.edit-actions');
+    
+    // Hide name, show input
+    nameSpan.classList.add('d-none');
+    editInput.classList.remove('d-none');
+    editInput.focus();
+    
+    // Hide normal buttons, show edit buttons
+    normalActions.classList.add('d-none');
+    editActions.classList.remove('d-none');
+}
+
+/**
+ * Cancel editing
+ */
+function cancelEdit(categoryId) {
+    console.log('Cancelling edit for category ID:', categoryId);
+    
+    const row = document.querySelector(`[data-id="${categoryId}"]`).closest('tr');
+    const nameSpan = row.querySelector('.category-name');
+    const editInput = row.querySelector('.edit-input');
+    const normalActions = row.querySelector('.normal-actions');
+    const editActions = row.querySelector('.edit-actions');
+    
+    // Reset input value
+    editInput.value = nameSpan.textContent;
+    
+    // Show name, hide input
+    nameSpan.classList.remove('d-none');
+    editInput.classList.add('d-none');
+    
+    // Show normal buttons, hide edit buttons
+    normalActions.classList.remove('d-none');
+    editActions.classList.add('d-none');
+}
+
+/**
+ * Save category edit
+ */
+function saveEdit(categoryId) {
+    console.log('Saving edit for category ID:', categoryId);
+    
+    const row = document.querySelector(`[data-id="${categoryId}"]`).closest('tr');
+    const editInput = row.querySelector('.edit-input');
+    const newName = editInput.value.trim();
+    
+    // Validate new name
+    if (!validateCategoryName(newName)) {
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('category_id', categoryId);
+    formData.append('category_name', newName);
+    
+    console.log('Sending update data:', {category_id: categoryId, category_name: newName});
+    
+    // Asynchronously invoke update_category_action.php
+    fetch('../actions/update_category_action.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Update response:', data);
+        // Inform user of success/failure using pop-up/message
+        if (data.success) {
+            showMessage(data.message, 'success');
+            // Update the display name
+            const nameSpan = row.querySelector('.category-name');
+            nameSpan.textContent = newName;
+            cancelEdit(categoryId);
+        } else {
+            showMessage(data.message, 'danger');
+        }
+    })
+    .catch(error => {
+        console.error('Error updating category:', error);
+        showMessage('Error updating category', 'danger');
+    });
+}
+
+/**
+ * Delete a category
+ */
+function deleteCategory(categoryId, categoryName) {
+    console.log('Deleting category ID:', categoryId, 'Name:', categoryName);
+    
+    // Confirm deletion
+    if (!confirm(`Are you sure you want to delete "${categoryName}"?`)) {
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('category_id', categoryId);
+    
+    console.log('Sending delete for category ID:', categoryId);
+    
+    // Asynchronously invoke delete_category_action.php
+    fetch('../actions/delete_category_action.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Delete response:', data);
+        // Inform user of success/failure using pop-up/message
+        if (data.success) {
+            showMessage(data.message, 'success');
+            loadCategories(); // Refresh table
+        } else {
+            showMessage(data.message, 'danger');
+        }
+    })
+    .catch(error => {
+        console.error('Error deleting category:', error);
+        showMessage('Error deleting category', 'danger');
+    });
+}
+
+/**
+ * Show message to user (pop-up/modal functionality)
+ */
+function showMessage(message, type = 'info') {
+    const msgDiv = document.getElementById('addMsg');
+    const alertClass = type === 'danger' ? 'text-danger' : 
+                       type === 'success' ? 'text-success' : 'text-info';
+    
+    msgDiv.className = `small ${alertClass}`;
+    msgDiv.textContent = message;
+    
+    // Clear message after 5 seconds
+    setTimeout(() => {
+        msgDiv.textContent = '';
+    }, 5000);
+}
+
+/**
+ * Escape HTML to prevent XSS
+ */
+function escapeHtml(text) {
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return text.toString().replace(/[&<>"']/g, function(m) { return map[m]; });
+}
