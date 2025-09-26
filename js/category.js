@@ -26,9 +26,14 @@
           (res.data || []).forEach(row => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
-              <td><input class="form-control form-control-sm" value="${row.cat_name}" data-id="${row.cat_id}" /></td>
               <td>
-                <button class="btn btn-sm btn-success me-2" data-action="save" data-id="${row.cat_id}">Save</button>
+                <span class="category-name" data-id="${row.cat_id}">${escapeHtml(row.cat_name)}</span>
+                <input class="form-control form-control-sm category-input" value="${escapeHtml(row.cat_name)}" data-id="${row.cat_id}" style="display: none;" />
+              </td>
+              <td>
+                <button class="btn btn-sm btn-success me-2" data-action="edit" data-id="${row.cat_id}">Edit</button>
+                <button class="btn btn-sm btn-primary me-2" data-action="save" data-id="${row.cat_id}" style="display: none;">Save</button>
+                <button class="btn btn-sm btn-secondary me-2" data-action="cancel" data-id="${row.cat_id}" style="display: none;">Cancel</button>
                 <button class="btn btn-sm btn-outline-danger" data-action="delete" data-id="${row.cat_id}">Delete</button>
               </td>`;
             tbody.appendChild(tr);
@@ -39,6 +44,53 @@
           const tbody = document.querySelector('#catTable tbody');
           tbody.innerHTML = '<tr><td colspan="2" class="text-danger">Error loading categories</td></tr>';
         });
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function enableEdit(id) {
+      const row = document.querySelector(`[data-id="${id}"]`).closest('tr');
+      const nameSpan = row.querySelector('.category-name');
+      const nameInput = row.querySelector('.category-input');
+      const editBtn = row.querySelector('[data-action="edit"]');
+      const saveBtn = row.querySelector('[data-action="save"]');
+      const cancelBtn = row.querySelector('[data-action="cancel"]');
+
+      // Hide read-only elements
+      nameSpan.style.display = 'none';
+      editBtn.style.display = 'none';
+
+      // Show edit elements
+      nameInput.style.display = 'block';
+      nameInput.focus();
+      nameInput.select();
+      saveBtn.style.display = 'inline-block';
+      cancelBtn.style.display = 'inline-block';
+    }
+
+    function cancelEdit(id) {
+      const row = document.querySelector(`[data-id="${id}"]`).closest('tr');
+      const nameSpan = row.querySelector('.category-name');
+      const nameInput = row.querySelector('.category-input');
+      const editBtn = row.querySelector('[data-action="edit"]');
+      const saveBtn = row.querySelector('[data-action="save"]');
+      const cancelBtn = row.querySelector('[data-action="cancel"]');
+
+      // Reset input to original value
+      nameInput.value = nameSpan.textContent;
+
+      // Show read-only elements
+      nameSpan.style.display = 'block';
+      editBtn.style.display = 'inline-block';
+
+      // Hide edit elements
+      nameInput.style.display = 'none';
+      saveBtn.style.display = 'none';
+      cancelBtn.style.display = 'none';
     }
   
     // ADD
@@ -67,7 +119,7 @@
       });
     }
   
-    // SAVE / DELETE
+    // EDIT / SAVE / CANCEL / DELETE
     const table = document.getElementById('catTable');
     if (table) {
       table.addEventListener('click', (e) => {
@@ -76,18 +128,38 @@
   
         const id = btn.getAttribute('data-id');
         const action = btn.getAttribute('data-action');
-  
-        if (action === 'save') {
-          const input = btn.closest('tr').querySelector('input');
+
+        if (action === 'edit') {
+          enableEdit(id);
+
+        } else if (action === 'cancel') {
+          cancelEdit(id);
+
+        } else if (action === 'save') {
+          const input = btn.closest('tr').querySelector('.category-input');
+          const nameSpan = btn.closest('tr').querySelector('.category-name');
+          const newName = input.value.trim();
+
+          if (newName === '') {
+            alert('Category name cannot be empty');
+            input.focus();
+            return;
+          }
+
           const fd = new FormData();
           fd.append('cat_id', id);
-          fd.append('category_name', input.value);
+          fd.append('category_name', newName);
   
           fetch('../actions/update_category_action.php', { method: 'POST', body: fd })
             .then(resp => safeJson(resp))
             .then(res => {
-              if (!res.success) alert(res.message || 'Update failed');
-              fetchList();
+              if (res.success) {
+                // Update the display text
+                nameSpan.textContent = newName;
+                cancelEdit(id);
+              } else {
+                alert(res.message || 'Update failed');
+              }
             })
             .catch(err => {
               console.error('update error:', err);
@@ -111,10 +183,23 @@
             });
         }
       });
+
+      // Handle Enter key to save, Escape to cancel
+      table.addEventListener('keydown', (e) => {
+        if (e.target.classList.contains('category-input')) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            const saveBtn = e.target.closest('tr').querySelector('[data-action="save"]');
+            saveBtn.click();
+          } else if (e.key === 'Escape') {
+            const cancelBtn = e.target.closest('tr').querySelector('[data-action="cancel"]');
+            cancelBtn.click();
+          }
+        }
+      });
     }
   
     // Basic proof JS is loaded
     console.log('[category.js] loaded');
     fetchList();
   })();
-  
