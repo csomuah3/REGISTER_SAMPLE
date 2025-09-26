@@ -25,10 +25,11 @@ function get_user_categories_ctr(int $user_id): array
     return $c->get_user_categories($user_id);
 }
 
-function update_category_ctr(int $cat_id, string $name): array
+function update_category_ctr(int $cat_id, string $name): bool
 {
     $c = new Category();
-    return $c->update_category($cat_id, $name);
+    $result = $c->update_category($cat_id, $name);
+    return $result['success'] ?? false;
 }
 
 function delete_category_ctr(int $cat_id): array

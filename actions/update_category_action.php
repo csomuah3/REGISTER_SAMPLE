@@ -81,19 +81,19 @@ if (strlen($category_name) > 100) {
 }
 
 try {
-    // Check if category exists and belongs to user (security check)
-    $existing_category = get_category_ctr($category_id, $user_id);
+    // Check if category exists (security check)
+    $existing_category = get_category_ctr($category_id);
 
-    if (!$existing_category) {
+    if (!$existing_category['success']) {
         echo json_encode([
             'success' => false,
-            'message' => 'Category not found or access denied'
+            'message' => 'Category not found'
         ]);
         exit();
     }
 
     // Invoke the relevant function from the category controller
-    $result = update_category_ctr($category_id, $category_name, $user_id);
+    $result = update_category_ctr($category_id, $category_name);
 
     // Return a message to the caller based on the result
     if ($result) {
