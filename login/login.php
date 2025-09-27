@@ -8,7 +8,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <style>
-        /* /* Import Google Fonts */
+        /* Import Google Fonts */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
         /* Reset and Base Styles */
@@ -19,394 +19,525 @@
         }
 
         body {
-            font-family: 'Times New Roman', Times, serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             min-height: 100vh;
-            padding: 20px 20px 40px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: relative;
-            overflow-x: hidden;
-            overflow-y: auto;
+            overflow: hidden;
         }
 
         /* Animated Background Shapes */
-        body::before,
+        body::before {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            top: 10%;
+            left: 10%;
+            animation: float1 6s ease-in-out infinite;
+        }
+
         body::after {
             content: '';
             position: absolute;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 50%;
-            background: linear-gradient(135deg, #48cc6c, #2dd55b);
-            opacity: 0.3;
-            z-index: 600;
+            bottom: 10%;
+            right: 15%;
+            animation: float2 8s ease-in-out infinite reverse;
         }
 
-        body::before {
-            width: 600px;
-            height: 500px;
-            top: -200px;
-            right: -200px;
-            animation: float 4s ease-in-out infinite;
-        }
-
-        body::after {
-            width: 500px;
-            height: 500px;
-            bottom: -170px;
-            left: -150px;
-            animation: float 4s ease-in-out infinite reverse;
-        }
-
-        @keyframes float {
+        @keyframes float1 {
 
             0%,
             100% {
-                transform: translateY(0px) rotate(0deg);
+                transform: translateY(0px) translateX(0px);
+            }
+
+            33% {
+                transform: translateY(-30px) translateX(20px);
+            }
+
+            66% {
+                transform: translateY(20px) translateX(-15px);
+            }
+        }
+
+        @keyframes float2 {
+
+            0%,
+            100% {
+                transform: translateY(0px) translateX(0px);
             }
 
             50% {
-                transform: translateY(-20px) rotate(10deg);
+                transform: translateY(-25px) translateX(25px);
             }
         }
 
         /* Main Container */
-        .login-container,
-        .register-container,
-        .auth-container,
-        form {
-            background: rgba(255, 255, 255, 0.95);
-
+        .login-container {
+            position: absolute;
+            left: 45%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(20px);
             border-radius: 20px;
-            box-shadow: 0 25px 10px rgba(24, 0, 34, 0.1);
-            max-width: 1100px;
-            width: 100%;
-            padding: 30px;
-            margin: 15px auto;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            z-index: 10;
+            padding: 40px 35px;
         }
 
-        /* Form Header */
+        /* Remove form-side since we're using login-container directly */
+        .form-side {
+            display: none;
+        }
+
         .form-header {
-            text-align: left;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
-        .form-title,
-        h2 {
-            font-size: 5rem;
-            font-weight: 700;
-            color: #2d3748;
-            margin-bottom: 8px;
-        }
-
-        .form-subtitle,
-        .subtitle {
-            color: #718096;
-            font-size: 40px;
+        .form-header .circle-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
             margin-bottom: 20px;
         }
 
-        .form-subtitle a,
-        .subtitle a {
-            color: #48cc6c;
+        .form-title {
+            font-size: 1.5rem;
+            color: #8b5fbf;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 400;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px 20px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 1rem;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: #bbb;
+            font-weight: 300;
+            opacity: 0.7;
+        }
+
+        .form-control:focus {
+            border-color: #8b5fbf;
+            box-shadow: 0 0 0 3px rgba(139, 95, 191, 0.1);
+            background: white;
+        }
+
+        /* Remember Me and Forgot Password */
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+            font-size: 1rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+        }
+
+        .remember-me input[type="checkbox"] {
+            accent-color: #8b5fbf;
+        }
+
+        .forgot-password {
+            color: #8b5fbf;
             text-decoration: none;
             font-weight: 500;
         }
 
-        .form-subtitle a:hover,
-        .subtitle a:hover {
+        .forgot-password:hover {
+            text-decoration: underline;
+            color: #764ba2;
+        }
+
+        /* Login Button */
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #8b5fbf, #f093fb);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(139, 95, 191, 0.3);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            transform: none;
+        }
+
+        /* Social Login */
+        .social-divider {
+            text-align: center;
+            margin: 30px 0;
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .social-login {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            color: white;
+        }
+
+        .social-btn.facebook {
+            background: #1877f2;
+        }
+
+        .social-btn.google {
+            background: #ea4335;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+
+        /* Sign Up Link */
+        .signup-link {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .signup-link a {
+            color: #8b5fbf;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .signup-link a:hover {
             text-decoration: underline;
         }
 
-        /* Form Fields */
-        .form-group,
-        .input-group,
-        .form-field {
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .form-group label,
-        .input-group label,
-        .form-field label {
-            display: block;
-            font-size: 1.3rem;
-            font-weight: 500;
-            color: #4a5568;
-            margin-bottom: 8px;
-        }
-
-        .form-group input,
-        .input-group input,
-        .form-field input,
-        input[type="text"],
-        input[type="email"],
-        input[type="password"],
-        input[type="tel"],
-        select {
-            width: 100%;
-            padding: 16px 18px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 1.4rem;
-            font-family: inherit;
-            transition: all 0.3s ease;
-            background: #f8fafc;
-        }
-
-        .form-group input:focus,
-        .input-group input:focus,
-        .form-field input:focus,
-        input[type="text"]:focus,
-        input[type="email"]:focus,
-        input[type="password"]:focus,
-        input[type="tel"]:focus,
-        select:focus {
-            outline: none;
-            border-color: #48cc6c;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(72, 204, 108, 0.1);
-        }
-
-        .form-group input::placeholder,
-        .input-group input::placeholder,
-        .form-field input::placeholder {
-            color: #a0aec0;
-        }
-
-        /* Input Icons */
-        .form-group input[type="text"],
-        .form-group input[type="password"],
-        .form-group input[type="email"],
-        .form-group input[type="tel"] {
-            padding-right: 50px;
-        }
-
-        .form-group::after {
-            content: '👤';
+        /* Right Side - Massive Circle (145% bigger) */
+        .brand-side {
             position: absolute;
-            right: 18px;
-            top: 42px;
-            font-size: 1.3rem;
-            color: #a0aec0;
-            pointer-events: none;
-        }
-
-        .form-group:has(input[type="password"])::after {
-            content: '🔒';
-        }
-
-        .form-group:has(input[type="email"])::after {
-            content: '📧';
-        }
-
-        .form-group:has(input[type="tel"])::after {
-            content: '📱';
-        }
-
-        /* Select Dropdown */
-        select {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 12px center;
-            background-repeat: no-repeat;
-            background-size: 16px;
-            padding-right: 40px;
-        }
-
-        /* Submit Button */
-        .submit-btn,
-        .btn-primary,
-        .sign-up-btn,
-        button[type="submit"] {
-            width: 100%;
-            background: linear-gradient(135deg, #48cc6c, #2dd55b);
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 1.4rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-            text-transform: none;
-        }
-
-        .submit-btn:hover,
-        .btn-primary:hover,
-        .sign-up-btn:hover,
-        button[type="submit"]:hover {
-            background: linear-gradient(135deg, #2dd55b, #48cc6c);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(72, 204, 108, 0.3);
-        }
-
-        /* Radio Button Groups */
-        .radio-group,
-        .register-as-group {
-            margin: 20px 0;
-        }
-
-        .radio-group label,
-        .register-as-group label {
-            display: block;
-            font-size: 1.3rem;
-            font-weight: 500;
-            color: #4a5568;
-            margin-bottom: 12px;
-        }
-
-        .radio-options {
+            right: -450px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1305px;
+            height: 1305px;
+            background: linear-gradient(135deg, #8b5fbf, #f093fb);
+            border-radius: 50%;
             display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            overflow: hidden;
+            z-index: 3;
         }
 
-        .radio-option {
+        /* Animated Circles in Massive Circle */
+        .brand-side::before {
+            content: '';
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            top: 15%;
+            left: 15%;
+            animation: rotate 20s linear infinite;
+        }
+
+        .brand-side::after {
+            content: '';
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            bottom: 25%;
+            right: 25%;
+            animation: rotate 25s linear infinite reverse;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Main Circle Animation inside Massive Circle */
+        .main-circle {
+            width: 280px;
+            height: 280px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            padding: 12px 16px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            background: #f8fafc;
-            transition: all 0.3s ease;
-            flex: 1;
-            min-width: 140px;
-        }
-
-        .radio-option:hover {
-            border-color: #48cc6c;
-            background: #f0fff4;
-        }
-
-        .radio-option input[type="radio"] {
-            width: 18px;
-            height: 18px;
-            margin: 0;
-            accent-color: #48cc6c;
-        }
-
-        .radio-option.selected,
-        .radio-option:has(input:checked) {
-            border-color: #48cc6c;
-            background: #f0fff4;
-            color: #22543d;
-        }
-
-        .radio-option span {
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-
-        /* Password Requirements */
-        .password-requirements {
-            font-size: 1rem;
-            color: #718096;
-            margin-top: 5px;
-            font-style: italic;
-        }
-
-
-        .btn-custom {
-            background-color: #D19C97;
-            border-color: #D19C97;
-            color: #fff;
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-
-        .btn-custom:hover {
-            background-color: #b77a7a;
-            border-color: #b77a7a;
-        }
-
-        .highlight {
-            color: #d1456d;
-            transition: color 0.3s;
-        }
-
-        .highlight:hover {
-            color: #b77a7a;
-        }
-
-
-        .card {
-            border: none;
-            border-radius: 15px;
-            overflow: hidden;
-            padding-right: 0%;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-header {
-            background-color: #D19C97;
-            color: #fff;
-        }
-
-        .animate-pulse-custom {
-            animation: pulse 2s infinite;
+            justify-content: center;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 2;
+            animation: pulse 4s ease-in-out infinite;
         }
 
         @keyframes pulse {
-            0% {
+
+            0%,
+            100% {
                 transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
             }
 
             50% {
                 transform: scale(1.05);
-            }
-
-            100% {
-                transform: scale(1);
+                box-shadow: 0 0 0 20px rgba(255, 255, 255, 0);
             }
         }
 
-        .form-label i {
-            margin-left: 5px;
-            color: #b77a7a;
+        .food-hub-text {
+            font-size: 4.5rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+            line-height: 0.9;
         }
 
+        .brand-description {
+            font-size: 1.6rem;
+            opacity: 0.9;
+            max-width: 450px;
+            line-height: 1.5;
+            position: relative;
+            z-index: 2;
+            margin-bottom: 40px;
+        }
+
+        .learn-more-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 18px 40px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.2rem;
+        }
+
+        .learn-more-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .brand-side {
+                right: -400px;
+                width: 700px;
+                height: 700px;
+            }
+
+            .form-side {
+                padding: 60px 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+                height: auto;
+                min-height: 100vh;
+            }
+
+            .form-side {
+                padding: 40px 30px;
+                background: rgba(255, 255, 255, 0.9);
+                min-height: 100vh;
+                z-index: 10;
+            }
+
+            .brand-side {
+                position: fixed;
+                right: -200px;
+                top: 0;
+                width: 500px;
+                height: 500px;
+                z-index: 1;
+            }
+
+            .main-circle {
+                width: 120px;
+                height: 120px;
+                margin-left: -50px;
+            }
+
+            .food-hub-text {
+                font-size: 1.5rem;
+            }
+
+            .brand-description {
+                font-size: 0.9rem;
+                max-width: 200px;
+                margin-left: -50px;
+            }
+
+            .learn-more-btn {
+                padding: 8px 20px;
+                font-size: 0.8rem;
+                margin-left: -50px;
+            }
+        }
+
+        /* Loading State */
         .spinner-border-sm {
             width: 1rem;
             height: 1rem;
         }
 
-        .btn:disabled {
-            opacity: 0.6;
+        /* Override Bootstrap styles that might conflict */
+        .card,
+        .card-header,
+        .card-body,
+        .card-footer {
+            background: none !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+        .row,
+        .col-md-6 {
+            margin: 0 !important;
+            padding: 0 !important;
+            max-width: none !important;
+            flex: none !important;
         }
     </style>
 </head>
 
 <body>
-    <div class="container login-container">
-        <div class="row justify-content-center animate__animated animate__fadeInDown">
-            <div class="col-md-6">
-                <div class="card animate__animated animate__zoomIn">
-                    <div class="card-header text-center">
-                        <h4>Login</h4>
-                    </div>
-                    <div class="card-body">
-                        <form id="login-form">
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email <i class="fa fa-envelope"></i></label>
-                                <input type="email" id="email" name="email" class="form-control animate__animated animate__fadeInUp" required>
-                            </div>
-                            <div class="mb-4">
-                                <label for="password" class="form-label">Password <i class="fa fa-lock"></i></label>
-                                <input type="password" id="password" name="password" class="form-control animate__animated animate__fadeInUp" required>
-                                <small class="text-muted">Password must be at least 6 characters</small>
-                            </div>
-                            <button type="submit" class="btn btn-custom w-100 animate-pulse-custom">Login</button>
-                        </form>
-                    </div>
-                    <div class="card-footer text-center">
-                        Don't have an account? <a href="register.php" class="highlight">Register here</a>
-                    </div>
-                </div>
-            </div>
+    <!-- Login Form Container (Positioned to almost touch circle) -->
+    <div class="login-container animate__animated animate__fadeIn">
+        <div class="form-header">
+            <div class="circle-icon"></div>
         </div>
+
+        <form id="login-form">
+            <div class="form-group">
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="abc@xyz.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="••••••••••••••" required>
+            </div>
+
+            <div class="form-options">
+                <label class="remember-me">
+                    <input type="checkbox"> Remember me
+                </label>
+                <a href="#" class="forgot-password">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="login-btn">Log in</button>
+        </form>
+
+        <div class="social-divider">or connect with</div>
+
+        <div class="social-login">
+            <a href="#" class="social-btn facebook">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="social-btn google">
+                <i class="fab fa-google"></i>
+            </a>
+        </div>
+
+        <div class="signup-link">
+            Don't have an account? <a href="register.php">Sign up</a>
+        </div>
+    </div>
+
+    <!-- Massive Circle (Right Side) - 145% bigger -->
+    <div class="brand-side">
+        <div class="main-circle">
+            <div class="food-hub-text">Food Hub</div>
+        </div>
+        <p class="brand-description">
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text.
+        </p>
+        <a href="#" class="learn-more-btn">
+            Learn More
+            <i class="fas fa-play"></i>
+        </a>
     </div>
 
     <!-- Scripts -->
@@ -432,7 +563,7 @@
                         title: 'Validation Error',
                         text: 'Please fill in all fields!',
                         icon: 'error',
-                        confirmButtonColor: '#D19C97'
+                        confirmButtonColor: '#8b5fbf'
                     });
                     return;
                 }
@@ -443,7 +574,7 @@
                         title: 'Validation Error',
                         text: 'Please enter a valid email address!',
                         icon: 'error',
-                        confirmButtonColor: '#D19C97'
+                        confirmButtonColor: '#8b5fbf'
                     });
                     return;
                 }
@@ -454,13 +585,13 @@
                         title: 'Validation Error',
                         text: 'Password must be at least 6 characters long!',
                         icon: 'error',
-                        confirmButtonColor: '#D19C97'
+                        confirmButtonColor: '#8b5fbf'
                     });
                     return;
                 }
 
                 // Show loading state
-                var $btn = $('button[type="submit"]');
+                var $btn = $('.login-btn');
                 var originalText = $btn.text();
                 $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2" role="status"></span>Logging in...');
 
@@ -485,7 +616,7 @@
                                 title: 'Success!',
                                 text: response.message,
                                 icon: 'success',
-                                confirmButtonColor: '#D19C97',
+                                confirmButtonColor: '#8b5fbf',
                                 timer: 2000,
                                 timerProgressBar: true
                             }).then(() => {
@@ -496,7 +627,7 @@
                                 title: 'Login Failed',
                                 text: response.message,
                                 icon: 'error',
-                                confirmButtonColor: '#D19C97'
+                                confirmButtonColor: '#8b5fbf'
                             });
                         }
                     },
@@ -511,7 +642,7 @@
                             title: 'Connection Error',
                             text: 'Failed to connect to server. Please try again.',
                             icon: 'error',
-                            confirmButtonColor: '#D19C97'
+                            confirmButtonColor: '#8b5fbf'
                         });
                     },
                     complete: function() {
