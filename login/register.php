@@ -33,12 +33,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <head>
     <meta charset="UTF-8">
-    <title> Register - Taste of Africa </title>
+    <title>Register - Food Hub</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <style>
-        /* /* Import Google Fonts */
+        /* Import Google Fonts */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
         /* Reset and Base Styles */
@@ -49,624 +49,555 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         body {
-            font-family: 'Times New Roman', Times, serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             min-height: 100vh;
-            padding: 20px 20px 40px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: relative;
-            overflow-x: hidden;
-            overflow-y: auto;
+            overflow: hidden;
         }
 
         /* Animated Background Shapes */
-        body::before,
+        body::before {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            top: 10%;
+            left: 10%;
+            animation: float1 6s ease-in-out infinite;
+        }
+
         body::after {
             content: '';
             position: absolute;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 50%;
-            background: linear-gradient(135deg, #48cc6c, #2dd55b);
-            opacity: 0.3;
-            z-index: 600;
+            bottom: 10%;
+            right: 15%;
+            animation: float2 8s ease-in-out infinite reverse;
         }
 
-        body::before {
-            width: 600px;
-            height: 500px;
-            top: -200px;
-            right: -200px;
-            animation: float 4s ease-in-out infinite;
-        }
-
-        body::after {
-            width: 500px;
-            height: 500px;
-            bottom: -170px;
-            left: -150px;
-            animation: float 4s ease-in-out infinite reverse;
-        }
-
-        @keyframes float {
+        @keyframes float1 {
 
             0%,
             100% {
-                transform: translateY(0px) rotate(0deg);
+                transform: translateY(0px) translateX(0px);
+            }
+
+            33% {
+                transform: translateY(-30px) translateX(20px);
+            }
+
+            66% {
+                transform: translateY(20px) translateX(-15px);
+            }
+        }
+
+        @keyframes float2 {
+
+            0%,
+            100% {
+                transform: translateY(0px) translateX(0px);
             }
 
             50% {
-                transform: translateY(-20px) rotate(10deg);
+                transform: translateY(-25px) translateX(25px);
             }
         }
 
         /* Main Container */
-        .login-container,
-        .register-container,
-        .auth-container,
-        form {
-            background: rgba(255, 255, 255, 0.95);
+        .register-container {
+            position: absolute;
+            left: 45%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(20px);
             border-radius: 20px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
-            max-width: 1700px;
-            width: 100%;
-            padding: 40px;
-            margin: 15px auto;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            z-index: 10;
+            padding: 40px 35px;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
-        /* Form Header */
         .form-header {
-            text-align: left;
             margin-bottom: 30px;
         }
 
-        .form-title,
-        h2 {
-            font-size: 5rem;
-            font-weight: 700;
-            color: #2d3748;
-            margin-bottom: 8px;
-        }
-
-        .form-subtitle,
-        .subtitle {
-            color: #718096;
-            font-size: 40px;
+        .form-header .circle-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
             margin-bottom: 20px;
+            opacity: 0.9;
         }
 
-        .form-subtitle a,
-        .subtitle a {
-            color: #48cc6c;
-            text-decoration: none;
-            font-weight: 500;
+        .form-title {
+            font-size: 2rem;
+            color: #8b5fbf;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 400;
         }
 
-        .form-subtitle a:hover,
-        .subtitle a:hover {
-            text-decoration: underline;
-        }
-
-        /* Form Fields */
+        /* Form Styling */
         .form-group,
-        .input-group,
-        .form-field {
-            margin-bottom: 20px;
-            position: relative;
+        .mb-3 {
+            margin-bottom: 18px;
         }
 
         .form-group label,
-        .input-group label,
-        .form-field label {
+        .form-label {
             display: block;
-            font-size: 1.3rem;
-            font-weight: 500;
-            color: #4a5568;
+            font-size: 1rem;
+            color: #666;
             margin-bottom: 8px;
+            font-weight: 400;
         }
 
-        .form-group input,
-        .input-group input,
-        .form-field input,
-        input[type="text"],
-        input[type="email"],
-        input[type="password"],
-        input[type="tel"],
-        select {
+        .form-control {
             width: 100%;
-            padding: 16px 18px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 1.4rem;
-            font-family: inherit;
+            padding: 12px 18px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 1rem;
+            background: #f8f9fa;
             transition: all 0.3s ease;
-            background: #f8fafc;
-        }
-
-        .form-group input:focus,
-        .input-group input:focus,
-        .form-field input:focus,
-        input[type="text"]:focus,
-        input[type="email"]:focus,
-        input[type="password"]:focus,
-        input[type="tel"]:focus,
-        select:focus {
             outline: none;
-            border-color: #48cc6c;
+        }
+
+        .form-control::placeholder {
+            color: #bbb;
+            font-weight: 300;
+            opacity: 0.7;
+        }
+
+        .form-control:focus {
+            border-color: #8b5fbf;
+            box-shadow: 0 0 0 3px rgba(139, 95, 191, 0.1);
             background: white;
-            box-shadow: 0 0 0 3px rgba(72, 204, 108, 0.1);
         }
 
-        .form-group input::placeholder,
-        .input-group input::placeholder,
-        .form-field input::placeholder {
-            color: #a0aec0;
+        /* Radio Button Styling */
+        .form-check {
+            margin-bottom: 10px;
         }
 
-        /* Input Icons */
-        .form-group input[type="text"],
-        .form-group input[type="password"],
-        .form-group input[type="email"],
-        .form-group input[type="tel"] {
-            padding-right: 50px;
+        .form-check-input {
+            accent-color: #8b5fbf;
         }
 
-        .form-group::after {
-            content: '👤';
-            position: absolute;
-            right: 18px;
-            top: 42px;
-            font-size: 1.3rem;
-            color: #a0aec0;
-            pointer-events: none;
-        }
-
-        .form-group:has(input[type="password"])::after {
-            content: '🔒';
-        }
-
-        .form-group:has(input[type="email"])::after {
-            content: '📧';
-        }
-
-        .form-group:has(input[type="tel"])::after {
-            content: '📱';
-        }
-
-        /* Select Dropdown */
-        select {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 12px center;
-            background-repeat: no-repeat;
-            background-size: 16px;
-            padding-right: 40px;
+        .form-check-label {
+            color: #666;
+            font-size: 0.95rem;
+            margin-left: 8px;
         }
 
         /* Submit Button */
-        .submit-btn,
-        .btn-primary,
-        .sign-up-btn,
-        button[type="submit"] {
+        .btn-custom,
+        .register-btn {
             width: 100%;
-            background: linear-gradient(135deg, #48cc6c, #2dd55b);
+            padding: 15px;
+            background: linear-gradient(135deg, #8b5fbf, #f093fb);
             color: white;
             border: none;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 1.4rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-            text-transform: none;
-        }
-
-        .submit-btn:hover,
-        .btn-primary:hover,
-        .sign-up-btn:hover,
-        button[type="submit"]:hover {
-            background: linear-gradient(135deg, #2dd55b, #48cc6c);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(72, 204, 108, 0.3);
-        }
-
-        /* Radio Button Groups */
-        .radio-group,
-        .register-as-group {
-            margin: 20px 0;
-        }
-
-        .radio-group label,
-        .register-as-group label {
-            display: block;
-            font-size: 1.3rem;
-            font-weight: 500;
-            color: #4a5568;
-            margin-bottom: 12px;
-        }
-
-        .radio-options {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .radio-option {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            padding: 12px 16px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            background: #f8fafc;
-            transition: all 0.3s ease;
-            flex: 1;
-            min-width: 140px;
-        }
-
-        .radio-option:hover {
-            border-color: #48cc6c;
-            background: #f0fff4;
-        }
-
-        .radio-option input[type="radio"] {
-            width: 18px;
-            height: 18px;
-            margin: 0;
-            accent-color: #48cc6c;
-        }
-
-        .radio-option.selected,
-        .radio-option:has(input:checked) {
-            border-color: #48cc6c;
-            background: #f0fff4;
-            color: #22543d;
-        }
-
-        .radio-option span {
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-
-        /* Password Requirements */
-        .password-requirements {
+            border-radius: 25px;
             font-size: 1rem;
-            color: #718096;
-            margin-top: 5px;
-            font-style: italic;
-        }
-
-        /* Divider */
-        .divider,
-        .or-divider {
-            display: flex;
-            align-items: center;
-            margin: 25px 0;
-            color: #a0aec0;
-            font-size: 1.2rem;
-        }
-
-        .divider::before,
-        .divider::after,
-        .or-divider::before,
-        .or-divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: #e2e8f0;
-        }
-
-        .divider span,
-        .or-divider span {
-            margin: 0 15px;
-            background: white;
-            padding: 0 10px;
-        }
-
-        /* Social Buttons */
-        .social-login,
-        .social-buttons {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .social-btn,
-        .google-btn,
-        .twitter-btn,
-        .facebook-btn {
-            flex: 1;
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            background: white;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-custom:hover,
+        .register-btn:hover {
+            background: linear-gradient(135deg, #8b5fbf, #f093fb);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(139, 95, 191, 0.3);
+            color: white;
+        }
+
+        .btn-custom:disabled,
+        .register-btn:disabled {
+            opacity: 0.6;
+            transform: none;
+        }
+
+        /* Alert Messages */
+        .alert {
+            border-radius: 12px;
+            border: none;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            color: #065f46;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            color: #991b1b;
+        }
+
+        /* Login Link */
+        .login-link {
+            text-align: center;
+            font-size: 1rem;
+            color: #666;
+            margin-top: 20px;
+        }
+
+        .login-link a,
+        .highlight {
+            color: #8b5fbf;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .login-link a:hover,
+        .highlight:hover {
+            text-decoration: underline;
+            color: #764ba2;
+        }
+
+        /* Right Side - Massive Circle (145% bigger) */
+        .brand-side {
+            position: absolute;
+            right: -450px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1305px;
+            height: 1305px;
+            background: linear-gradient(135deg, #8b5fbf, #f093fb);
+            border-radius: 50%;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            text-decoration: none;
-            color: #4a5568;
-        }
-
-        .social-btn:hover,
-        .google-btn:hover,
-        .twitter-btn:hover,
-        .facebook-btn:hover {
-            border-color: #48cc6c;
-            background: #f0fff4;
-            transform: translateY(-1px);
-        }
-
-        .social-btn svg,
-        .social-btn i {
-            width: 20px;
-            height: 20px;
-        }
-
-        /* Toggle Link */
-        .toggle-form,
-        .switch-form {
             text-align: center;
-            margin-top: 25px;
-            color: #718096;
+            color: white;
+            overflow: hidden;
+            z-index: 3;
+        }
+
+        /* Animated Circles in Massive Circle */
+        .brand-side::before {
+            content: '';
+            position: absolute;
+            width: 450px;
+            height: 350px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            top: 15%;
+            left: 15%;
+            animation: rotate 20s linear infinite;
+        }
+
+        .brand-side::after {
+            content: '';
+            position: absolute;
+            width: 650px;
+            height: 250px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            bottom: 25%;
+            right: 25%;
+            animation: rotate 25s linear infinite reverse;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Main Circle Animation inside Massive Circle */
+        .main-circle {
+            width: 480px;
+            height: 480px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            left: -5%;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 2;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+            }
+
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 20px rgba(255, 255, 255, 0);
+            }
+        }
+
+        .food-hub-text {
+            font-size: 4.5rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+            line-height: 0.9;
+        }
+
+        .brand-description {
+            font-size: 1.6rem;
+            opacity: 0.9;
+            max-width: 450px;
+            left: -5%;
+            line-height: 1.5;
+            position: relative;
+            z-index: 2;
+            margin-bottom: 40px;
+        }
+
+        .learn-more-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 18px 40px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
             font-size: 1.2rem;
         }
 
-        .toggle-form a,
-        .switch-form a {
-            color: #48cc6c;
-            text-decoration: none;
-            font-weight: 500;
+        .learn-more-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            color: white;
         }
 
-        .toggle-form a:hover,
-        .switch-form a:hover {
-            text-decoration: underline;
+        /* Hide Bootstrap card elements */
+        .card,
+        .card-header,
+        .card-body,
+        .card-footer {
+            background: none !important;
+            border: none !important;
+            box-shadow: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
         }
 
-        /* Password Strength Indicator */
-        .password-strength {
-            margin-top: 5px;
-            font-size: 1rem;
+        .container,
+        .row,
+        .col-md-6 {
+            margin: 0 !important;
+            padding: 0 !important;
+            max-width: none !important;
+            flex: none !important;
+            width: auto !important;
         }
 
-        .strength-weak {
-            color: #f56565;
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .brand-side {
+                right: -400px;
+                width: 1000px;
+                height: 1000px;
+            }
+
+            .register-container {
+                width: 550px;
+                padding: 35px 30px;
+            }
         }
 
-        .strength-medium {
-            color: #ed8936;
-        }
-
-        .strength-strong {
-            color: #48cc6c;
-        }
-
-        /* Remember Me */
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin: 15px 0;
-            font-size: 1.1rem;
-            color: #4a5568;
-        }
-
-        .checkbox-group input[type="checkbox"] {
-            width: auto;
-            margin: 0;
-        }
-
-        /* Error Messages */
-        .error-message,
-        .alert-danger {
-            background: #fed7d7;
-            color: #c53030;
-            padding: 12px 15px;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            border: 1px solid #feb2b2;
-        }
-
-        .success-message,
-        .alert-success {
-            background: #c6f6d5;
-            color: #22543d;
-            padding: 12px 15px;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            border: 1px solid #9ae6b4;
-        }
-
-        /* Mobile Responsiveness */
         @media (max-width: 768px) {
-
-            .login-container,
-            .register-container,
-            .auth-container,
-            form {
-                max-width: 90%;
-                padding: 30px 25px;
-                margin: 10px auto;
+            .register-container {
+                position: relative;
+                left: auto;
+                top: auto;
+                transform: none;
+                width: 90%;
+                max-width: 450px;
+                margin: 20px auto;
+                background: rgba(255, 255, 255, 0.9);
+                z-index: 10;
             }
 
-            .form-title,
-            h1,
-            h2,
-            .page-title {
-                font-size: 3rem;
+            .brand-side {
+                position: fixed;
+                right: -200px;
+                top: 0;
+                width: 500px;
+                height: 500px;
+                z-index: 1;
             }
 
-            .form-group label,
-            .input-group label,
-            .form-field label {
-                font-size: 1.1rem;
+            .main-circle {
+                width: 120px;
+                height: 120px;
+                left: -50px;
             }
 
-            .form-group input,
-            .input-group input,
-            .form-field input,
-            input[type="text"],
-            input[type="email"],
-            input[type="password"],
-            input[type="tel"],
-            select {
-                font-size: 1.2rem;
+            .food-hub-text {
+                font-size: 1.5rem;
             }
 
-            .radio-options {
-                flex-direction: column;
-                gap: 12px;
+            .brand-description {
+                font-size: 0.9rem;
+                max-width: 200px;
+                left: -50px;
             }
 
-            .radio-option {
-                min-width: auto;
-            }
-
-            body::before,
-            body::after {
-                display: none;
+            .learn-more-btn {
+                padding: 8px 20px;
+                font-size: 0.8rem;
+                left: -50px;
             }
         }
 
-        @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
+        /* Small form adjustments for better fit */
+        .d-flex.justify-content-start {
+            gap: 20px;
+        }
 
-            .login-container,
-            .register-container,
-            .auth-container,
-            form {
-                padding: 25px 20px;
-                border-radius: 15px;
-            }
+        .text-muted {
+            font-size: 0.85rem;
+            color: #999 !important;
+        }
 
-            .form-title,
-            h1,
-            h2,
-            .page-title {
-                font-size: 2.5rem;
-            }
-
-            .form-group label,
-            .input-group label,
-            .form-field label {
-                font-size: 1rem;
-            }
-
-            .form-group input,
-            .input-group input,
-            .form-field input,
-            input[type="text"],
-            input[type="email"],
-            input[type="password"],
-            input[type="tel"],
-            select {
-                font-size: 1.1rem;
-            }
+        /* Loading State */
+        .spinner-border-sm {
+            width: 1rem;
+            height: 1rem;
         }
     </style>
 </head>
 
 <body>
-    <div class="container register-container">
-        <div class="row justify-content-center animate__animated animate__fadeInDown">
-            <div class="col-md-6">
-                <div class="card animate__animated animate__zoomIn">
-                    <div class="card-header text-center">
-                        <h4>Register</h4>
+    <!-- Register Form Container (Positioned to almost touch circle) -->
+    <div class="register-container animate__animated animate__fadeIn">
+        <div class="form-header">
+            <div class="circle-icon"></div>
+            <div class="form-title">Join Food Hub Today!</div>
+        </div>
+
+        <!-- Server-side alerts -->
+        <?php if (!empty($reg_success)): ?>
+            <div class="alert alert-success text-center" role="alert">
+                <?= htmlspecialchars($reg_success) ?>
+            </div>
+        <?php endif; ?>
+        <?php if (!empty($reg_error)): ?>
+            <div class="alert alert-danger text-center" role="alert">
+                <?= htmlspecialchars($reg_error) ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- Client-side error (inline JS will use this) -->
+        <div id="register-error" class="alert alert-danger text-center" style="display:none;" role="alert"></div>
+
+        <!-- form: now posts to this same file -->
+        <form id="register-form" method="POST" action="">
+            <div class="mb-3">
+                <label for="name" class="form-label">Full Name</label>
+                <input type="text" id="name" name="name" class="form-control" placeholder="Enter your full name" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="text" id="email" name="email" class="form-control" placeholder="your@email.com" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="••••••••••••••" required>
+                <small class="text-muted">Password must be at least 6 characters</small>
+            </div>
+            <div class="mb-3">
+                <label for="phone_number" class="form-label">Phone Number</label>
+                <input type="tel" id="phone_number" name="phone_number" class="form-control" placeholder="+233 55 123 4567" required>
+            </div>
+            <div class="mb-3">
+                <label for="country" class="form-label">Country</label>
+                <select id="country" name="country" class="form-control" required>
+                    <option value="">Select Country</option>
+                    <option value="Ghana" selected>Ghana</option>
+                    <option value="Nigeria">Nigeria</option>
+                    <option value="South Africa">South Africa</option>
+                    <option value="Kenya">Kenya</option>
+                    <option value="Egypt">Egypt</option>
+                    <option value="Morocco">Morocco</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="city" class="form-label">City</label>
+                <input type="text" id="city" name="city" class="form-control" placeholder="e.g. Accra" required>
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Register As</label>
+                <div class="d-flex justify-content-start">
+                    <div class="form-check me-3">
+                        <input class="form-check-input" type="radio" name="role" id="customer" value="1" checked>
+                        <label class="form-check-label" for="customer">Customer</label>
                     </div>
-                    <div class="card-body">
-
-                        <!-- Server-side alerts -->
-                        <?php if (!empty($reg_success)): ?>
-                            <div class="alert alert-success text-center" role="alert">
-                                <?= htmlspecialchars($reg_success) ?>
-                            </div>
-                        <?php endif; ?>
-                        <?php if (!empty($reg_error)): ?>
-                            <div class="alert alert-danger text-center" role="alert">
-                                <?= htmlspecialchars($reg_error) ?>
-                            </div>
-                        <?php endif; ?>
-
-                        <!-- Client-side error (inline JS will use this) -->
-                        <div id="register-error" class="alert alert-danger text-center" style="display:none;" role="alert"></div>
-
-                        <!-- form: now posts to this same file -->
-                        <form id="register-form" method="POST" action="">
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Full Name</label>
-                                <input type="text" id="name" name="name" class="form-control" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="text" id="email" name="email" class="form-control" required>
-
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" id="password" name="password" class="form-control" required>
-                                <small class="text-muted">Password must be at least 6 characters</small>
-                            </div>
-                            <div class="mb-3">
-                                <label for="phone_number" class="form-label">Phone Number</label>
-                                <input type="tel" id="phone_number" name="phone_number" class="form-control" placeholder="e.g. +233 55 123 4567" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="country" class="form-label">Country</label>
-                                <select id="country" name="country" class="form-control" required>
-                                    <option value="">Select Country</option>
-                                    <option value="Ghana" selected>Ghana</option>
-                                    <option value="Nigeria">Nigeria</option>
-                                    <option value="South Africa">South Africa</option>
-                                    <option value="Kenya">Kenya</option>
-                                    <option value="Egypt">Egypt</option>
-                                    <option value="Morocco">Morocco</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="city" class="form-label">City</label>
-                                <input type="text" id="city" name="city" class="form-control" placeholder="e.g. Accra" required>
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label">Register As</label>
-                                <div class="d-flex justify-content-start">
-                                    <div class="form-check me-3">
-                                        <input class="form-check-input" type="radio" name="role" id="customer" value="1" checked>
-                                        <label class="form-check-label" for="customer">Customer</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="role" id="owner" value="2">
-                                        <label class="form-check-label" for="owner">Restaurant Owner</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-custom w-100">Register</button>
-                        </form>
-                    </div>
-                    <div class="card-footer text-center">
-                        Already have an account? <a href="login.php" class="highlight">Login here</a>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="role" id="owner" value="2">
+                        <label class="form-check-label" for="owner">Restaurant Owner</label>
                     </div>
                 </div>
             </div>
+            <button type="submit" class="btn-custom">Create Account</button>
+        </form>
+
+        <div class="login-link">
+            Already have an account? <a href="login.php" class="highlight">Login here</a>
         </div>
+    </div>
+
+    <!-- Massive Circle (Right Side) - 145% bigger -->
+    <div class="brand-side">
+        <div class="main-circle">
+            <div class="food-hub-text">Food Hub</div>
+        </div>
+        <p class="brand-description">
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text.
+        </p>
+        <a href="#" class="learn-more-btn">
+            Learn More
+            <i class="fas fa-play"></i>
+        </a>
     </div>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <!-- Commented out to stop the AJAX error popup; leaving it here (not deleted) -->
-    <!-- <script src="../js/register.js?v=9999"></script> -->
 
     <!-- Inline JS (validation only; normal POST submit to PHP above) -->
     <script>

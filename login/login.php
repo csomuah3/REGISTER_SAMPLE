@@ -87,6 +87,7 @@
             position: absolute;
             left: 45%;
             top: 50%;
+
             transform: translate(-50%, -50%);
             width: 600px;
             background: rgba(255, 255, 255, 0.75);
@@ -112,11 +113,13 @@
             background: linear-gradient(135deg, #667eea, #764ba2);
             border-radius: 50%;
             margin-bottom: 20px;
+            opacity: 0.9;
         }
 
         .form-title {
-            font-size: 1.5rem;
+            font-size: 2rem;
             color: #8b5fbf;
+            text-align: center;
             margin-bottom: 30px;
             font-weight: 400;
         }
@@ -128,7 +131,7 @@
 
         .form-group label {
             display: block;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: #666;
             margin-bottom: 8px;
             font-weight: 400;
@@ -257,7 +260,7 @@
         /* Sign Up Link */
         .signup-link {
             text-align: center;
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: #666;
         }
 
@@ -295,7 +298,7 @@
         .brand-side::before {
             content: '';
             position: absolute;
-            width: 350px;
+            width: 450px;
             height: 350px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
@@ -307,7 +310,7 @@
         .brand-side::after {
             content: '';
             position: absolute;
-            width: 250px;
+            width: 650px;
             height: 250px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 50%;
@@ -328,12 +331,13 @@
 
         /* Main Circle Animation inside Massive Circle */
         .main-circle {
-            width: 280px;
-            height: 280px;
+            width: 480px;
+            height: 480px;
             background: rgba(255, 255, 255, 0.15);
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             display: flex;
+            left: -5%;
             align-items: center;
             justify-content: center;
             margin-bottom: 40px;
@@ -368,6 +372,7 @@
             font-size: 1.6rem;
             opacity: 0.9;
             max-width: 450px;
+            left: -5%;
             line-height: 1.5;
             position: relative;
             z-index: 2;
@@ -487,6 +492,7 @@
     <div class="login-container animate__animated animate__fadeIn">
         <div class="form-header">
             <div class="circle-icon"></div>
+            <div class="form-title">Welcome Back! Please Log In</div>
         </div>
 
         <form id="login-form">
