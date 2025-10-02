@@ -499,6 +499,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     </style>
 </head>
+<?php
+$host = "localhost";  // or "127.0.0.1"
+$username = "chelsea.somuah";
+$password = "Universitygirl@2026";  // Your NEW MySQL password
+$database = "chelsea_somuah";  // Your actual database name
+
+// Connection code
+$conn = mysqli_connect($host, $username, $password, $database);
+?>
 
 <body>
     <!-- Register Form Container (Positioned to almost touch circle) -->
