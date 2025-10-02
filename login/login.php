@@ -487,10 +487,6 @@
     </style>
 </head>
 
-// Connection code
-$conn = mysqli_connect($host, $username, $password, $database);
-?>
-
 <body>
     <!-- Login Form Container (Positioned to almost touch circle) -->
     <div class="login-container animate__animated animate__fadeIn">

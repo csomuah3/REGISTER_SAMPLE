@@ -501,10 +501,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 
-// Connection code
-$conn = mysqli_connect($host, $username, $password, $database);
-?>
-
 <body>
     <!-- Register Form Container (Positioned to almost touch circle) -->
     <div class="register-container animate__animated animate__fadeIn">
