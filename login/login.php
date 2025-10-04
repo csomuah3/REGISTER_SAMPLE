@@ -148,6 +148,32 @@
             outline: none;
         }
 
+        /* Password field with eye icon */
+        .password-container {
+            position: relative;
+        }
+
+        .password-container .form-control {
+            padding-right: 50px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #8b5fbf;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+
+        .password-toggle:hover {
+            color: #764ba2;
+        }
+
         .form-control::placeholder {
             color: #bbb;
             font-weight: 300;
@@ -503,7 +529,12 @@
 
             <div class="form-group">
                 <label for="password">Password:</label>
-                <input type="password" id="password" name="password" class="form-control" placeholder="••••••••••••••" required>
+                <div class="password-container">
+                    <input type="password" id="password" name="password" class="form-control" placeholder="••••••••••••••" required>
+                    <button type="button" class="password-toggle" onclick="togglePassword('password')">
+                        <i class="fas fa-eye" id="password-toggle-icon"></i>
+                    </button>
+                </div>
             </div>
 
             <div class="form-options">
@@ -657,6 +688,22 @@
                 });
             });
         });
+
+        // Password visibility toggle
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            const icon = document.getElementById(fieldId + '-toggle-icon');
+
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                field.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
     </script>
 </body>
 
