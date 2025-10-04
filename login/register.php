@@ -449,78 +449,74 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             width: auto !important;
         }
 
-        /* Responsive Design */
+        /* Responsive Design - Based on howtolook example */
         @media (max-width: 1024px) {
             .brand-side {
-                right: -400px;
+                right: -350px;
                 width: 1000px;
                 height: 1000px;
             }
 
             .register-container {
-                width: 550px;
+                width: 500px;
                 padding: 35px 30px;
+                left: 40%;
             }
         }
 
         @media (max-width: 768px) {
             .register-container {
-                position: relative;
-                left: auto;
-                top: auto;
-                transform: none;
-                width: 90%;
-                max-width: 450px;
-                margin: 20px auto;
-                background: rgba(255, 255, 255, 0.9);
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 420px;
+                padding: 30px 25px;
+                background: rgba(255, 255, 255, 0.95);
                 z-index: 10;
+                max-height: 85vh;
+                overflow-y: auto;
             }
 
             .brand-side {
-                position: fixed;
-                right: -200px;
-                top: 0;
-                width: 500px;
-                height: 500px;
+                right: -300px;
+                width: 800px;
+                height: 800px;
                 z-index: 1;
             }
 
             .main-circle {
-                width: 120px;
-                height: 120px;
-                left: -50px;
+                width: 200px;
+                height: 200px;
+                left: -8%;
             }
 
             .food-hub-text {
-                font-size: 1.5rem;
+                font-size: 2.5rem;
             }
 
             .brand-description {
-                font-size: 0.9rem;
-                max-width: 200px;
-                left: -50px;
+                font-size: 1.1rem;
+                max-width: 300px;
+                left: -8%;
             }
 
             .learn-more-btn {
-                padding: 8px 20px;
-                font-size: 0.8rem;
-                left: -50px;
+                padding: 12px 24px;
+                font-size: 1rem;
+                left: -8%;
             }
         }
 
         @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-
             .register-container {
-                width: 95%;
+                width: 370px;
                 padding: 25px 20px;
-                margin: 10px auto;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                max-height: 90vh;
             }
 
             .form-title {
-                font-size: 1.5rem;
+                font-size: 1.6rem;
                 margin-bottom: 20px;
             }
 
@@ -539,8 +535,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             .btn-custom {
-                padding: 12px;
-                font-size: 0.95rem;
+                padding: 14px;
+                font-size: 1rem;
             }
 
             .d-flex.justify-content-start {
@@ -553,24 +549,72 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 margin-bottom: 8px;
             }
 
+            .mb-3 {
+                margin-bottom: 16px;
+            }
+
             .brand-side {
-                right: -150px;
-                width: 350px;
-                height: 350px;
+                right: -250px;
+                width: 650px;
+                height: 650px;
             }
 
             .main-circle {
-                width: 80px;
-                height: 80px;
+                width: 150px;
+                height: 150px;
+                left: -10%;
             }
 
             .food-hub-text {
-                font-size: 1.2rem;
+                font-size: 2rem;
             }
 
             .brand-description {
-                font-size: 0.8rem;
-                max-width: 150px;
+                font-size: 1rem;
+                max-width: 250px;
+                left: -10%;
+            }
+
+            .learn-more-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+                left: -10%;
+            }
+        }
+
+        @media (max-width: 375px) {
+            .register-container {
+                width: 340px;
+                padding: 20px 18px;
+            }
+
+            .form-title {
+                font-size: 1.4rem;
+            }
+
+            .form-control {
+                padding: 9px 12px;
+                font-size: 0.9rem;
+            }
+
+            .brand-side {
+                right: -200px;
+                width: 550px;
+                height: 550px;
+            }
+
+            .main-circle {
+                width: 120px;
+                height: 120px;
+            }
+
+            .food-hub-text {
+                font-size: 1.6rem;
+            }
+
+            .brand-description {
+                font-size: 0.9rem;
+                max-width: 200px;
             }
         }
 

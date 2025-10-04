@@ -276,30 +276,75 @@ if ($is_logged_in) {
 			margin-top: 20px;
 			position: relative;
 			overflow: hidden;
+			min-height: 100vh;
 		}
 
-		.hero-section::before {
-			content: '';
+		/* Main Semi-Circle Design (like login page) */
+		.hero-circle {
 			position: absolute;
-			top: -50%;
-			right: -20%;
-			width: 600px;
-			height: 600px;
-			background: linear-gradient(135deg, rgba(139, 95, 191, 0.1), rgba(240, 147, 251, 0.1));
+			right: -450px;
+			top: 50%;
+			transform: translateY(-50%);
+			width: 1200px;
+			height: 1200px;
+			background: linear-gradient(135deg, #8b5fbf, #f093fb);
 			border-radius: 50%;
-			animation: float 6s ease-in-out infinite;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			text-align: center;
+			color: white;
+			z-index: 1;
 		}
 
-		.hero-section::after {
-			content: '';
-			position: absolute;
-			bottom: -50%;
-			left: -20%;
-			width: 500px;
-			height: 500px;
-			background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
-			border-radius: 50%;
-			animation: float 6s ease-in-out infinite reverse;
+		.hero-circle-content {
+			position: relative;
+			z-index: 2;
+			left: -15%;
+		}
+
+		.hero-circle-title {
+			font-size: 4.5rem;
+			font-weight: 700;
+			margin-bottom: 20px;
+			line-height: 0.9;
+		}
+
+		.hero-circle-subtitle {
+			font-size: 1.6rem;
+			opacity: 0.9;
+			max-width: 400px;
+			line-height: 1.5;
+			margin-bottom: 30px;
+		}
+
+		.hero-circle-btn {
+			background: rgba(255, 255, 255, 0.2);
+			color: white;
+			border: 2px solid rgba(255, 255, 255, 0.3);
+			padding: 16px 32px;
+			border-radius: 25px;
+			text-decoration: none;
+			font-weight: 500;
+			transition: all 0.3s ease;
+			display: inline-flex;
+			align-items: center;
+			gap: 12px;
+			font-size: 1.1rem;
+		}
+
+		.hero-circle-btn:hover {
+			background: rgba(255, 255, 255, 0.3);
+			transform: translateY(-2px);
+			color: white;
+		}
+
+		/* Main Content Container */
+		.hero-main-content {
+			position: relative;
+			z-index: 10;
+			max-width: 50%;
 		}
 
 		@keyframes float {
@@ -524,69 +569,45 @@ if ($is_logged_in) {
 			transform: translateY(-2px);
 		}
 
-		/* Mobile Responsiveness */
+		/* Mobile Responsiveness - Maintaining desktop layout proportions */
 		@media (max-width: 768px) {
 			.main-header {
-				position: relative;
+				padding: 10px 0;
 			}
 
 			.header-container {
-				flex-direction: column;
-				gap: 16px;
-				position: relative;
-			}
-
-			.header-actions {
 				flex-wrap: wrap;
-				justify-content: center;
 				gap: 12px;
 			}
 
 			.search-container {
-				order: 2;
-				max-width: none;
-				width: 100%;
+				flex: 1;
+				min-width: 300px;
+			}
+
+			.header-actions {
+				gap: 10px;
 			}
 
 			.logo {
-				font-size: 1.5rem;
+				font-size: 1.4rem;
 			}
 
 			.logo .co {
-				font-size: 0.9rem;
+				font-size: 0.85rem;
 			}
 
-			.hero-section {
-				padding: 40px 0;
-				margin-top: 10px;
+			.search-input {
+				padding: 10px 16px 10px 45px;
+				font-size: 0.95rem;
 			}
 
-			.hero-title {
-				font-size: 2.2rem;
-				text-align: center;
-				margin-bottom: 20px;
+			.search-btn {
+				padding: 6px 14px;
 			}
 
-			.hero-subtitle {
-				text-align: center;
-				font-size: 1.1rem;
-				margin-bottom: 20px;
-			}
-
-			.hero-features {
-				justify-content: center;
-				text-align: center;
-			}
-
-			.promo-cards {
-				flex-direction: column;
-				gap: 16px;
-				margin-top: 30px;
-			}
-
-			.category-list {
-				padding: 0 16px;
-				justify-content: flex-start;
+			.category-nav {
+				padding: 10px 0;
 			}
 
 			.category-item {
@@ -594,146 +615,161 @@ if ($is_logged_in) {
 				padding: 6px 12px;
 			}
 
-			.cta-buttons {
-				justify-content: center;
-				gap: 12px;
+			.hero-section {
+				padding: 50px 0;
+				min-height: 85vh;
+			}
+
+			.hero-title {
+				font-size: 2.8rem;
+			}
+
+			.hero-subtitle {
+				font-size: 1.15rem;
+			}
+
+			.hero-features {
+				gap: 20px;
 			}
 
 			.cta-primary,
 			.cta-secondary {
-				padding: 12px 20px;
-				font-size: 0.95rem;
-			}
-
-			.admin-panel {
-				padding: 30px 20px;
-				margin: 40px 0;
-			}
-
-			.admin-panel h3 {
-				font-size: 1.8rem;
-			}
-
-			.admin-panel p {
-				font-size: 1.3rem;
-			}
-
-			.promo-card {
-				padding: 24px;
-				min-height: 200px;
-			}
-
-			.promo-title {
-				font-size: 1.5rem;
-			}
-
-			.promo-subtitle {
-				font-size: 1rem;
-			}
-
-			.container {
-				padding-left: 16px;
-				padding-right: 16px;
-			}
-		}
-
-		@media (max-width: 480px) {
-			.hero-title {
-				font-size: 1.8rem;
-				line-height: 1.3;
-			}
-
-			.hero-subtitle {
-				font-size: 1rem;
-			}
-
-			.hero-features {
-				flex-direction: column;
-				gap: 12px;
-				align-items: center;
-			}
-
-			.feature-item {
-				justify-content: center;
-			}
-
-			.category-nav {
-				top: auto;
-				position: relative;
-				padding: 8px 0;
-			}
-
-			.category-list {
-				gap: 6px;
-				padding: 0 12px;
-			}
-
-			.category-item {
-				font-size: 0.8rem;
-				padding: 6px 10px;
-				min-width: auto;
-			}
-
-			.admin-panel h3 {
-				font-size: 1.5rem;
-			}
-
-			.admin-panel p {
-				font-size: 1.1rem;
-			}
-
-			.admin-btn {
 				padding: 12px 24px;
 				font-size: 1rem;
 			}
 
-			.cta-buttons {
-				flex-direction: column;
-				align-items: center;
-			}
-
-			.cta-primary,
-			.cta-secondary {
-				width: 100%;
-				max-width: 250px;
-				text-align: center;
+			.promo-cards {
+				gap: 15px;
+				margin-top: 35px;
 			}
 
 			.promo-card {
-				padding: 20px;
-				min-height: 180px;
+				padding: 28px;
+				min-height: 240px;
 			}
 
-			.promo-title {
-				font-size: 1.3rem;
+			.admin-panel {
+				padding: 35px 25px;
+				margin: 50px 0;
 			}
 
-			.promo-badge {
-				font-size: 0.9rem;
-				padding: 4px 12px;
+			.admin-panel h3 {
+				font-size: 2rem;
 			}
 
-			.search-input {
-				font-size: 0.95rem;
-				padding: 10px 16px 10px 45px;
+			.admin-panel p {
+				font-size: 1.6rem;
 			}
 
-			.search-btn {
-				padding: 6px 12px;
-				font-size: 0.9rem;
+			.container {
+				padding-left: 15px;
+				padding-right: 15px;
 			}
+		}
 
+		@media (max-width: 480px) {
 			.main-header {
 				padding: 8px 0;
 			}
 
-			.container {
-				padding-left: 12px;
-				padding-right: 12px;
+			.header-container {
+				flex-direction: column;
+				gap: 10px;
+			}
+
+			.search-container {
+				order: 2;
+				width: 100%;
+				min-width: auto;
 			}
 
 			.header-actions {
-				gap: 8px;
+				order: 1;
+				justify-content: space-between;
+				width: 100%;
+			}
+
+			.logo {
+				font-size: 1.2rem;
+			}
+
+			.search-input {
+				padding: 9px 14px 9px 40px;
+				font-size: 0.9rem;
+			}
+
+			.search-btn {
+				padding: 5px 12px;
+				font-size: 0.85rem;
+			}
+
+			.category-item {
+				font-size: 0.8rem;
+				padding: 5px 10px;
+			}
+
+			.hero-section {
+				padding: 40px 0;
+				min-height: 80vh;
+			}
+
+			.hero-title {
+				font-size: 2.2rem;
+				text-align: center;
+			}
+
+			.hero-subtitle {
+				font-size: 1rem;
+				text-align: center;
+			}
+
+			.hero-features {
+				justify-content: center;
+				gap: 15px;
+			}
+
+			.cta-buttons {
+				justify-content: center;
+				gap: 10px;
+			}
+
+			.cta-primary,
+			.cta-secondary {
+				padding: 10px 20px;
+				font-size: 0.9rem;
+			}
+
+			.promo-cards {
+				flex-direction: column;
+				gap: 12px;
+				margin-top: 25px;
+			}
+
+			.promo-card {
+				padding: 22px;
+				min-height: 200px;
+			}
+
+			.promo-title {
+				font-size: 1.4rem;
+			}
+
+			.admin-panel {
+				padding: 25px 20px;
+				margin: 35px 0;
+			}
+
+			.admin-panel h3 {
+				font-size: 1.7rem;
+			}
+
+			.admin-panel p {
+				font-size: 1.3rem;
+			}
+
+			.admin-btn {
+				padding: 12px 28px;
+				font-size: 1rem;
 			}
 
 			.header-icon {
@@ -749,51 +785,71 @@ if ($is_logged_in) {
 				padding: 6px 12px;
 				font-size: 0.8rem;
 			}
+
+			.container {
+				padding-left: 12px;
+				padding-right: 12px;
+			}
 		}
 
 		@media (max-width: 375px) {
-			.hero-title {
-				font-size: 1.6rem;
+			.logo {
+				font-size: 1.1rem;
 			}
 
-			.logo {
-				font-size: 1.3rem;
+			.search-input {
+				padding: 8px 12px 8px 35px;
+				font-size: 0.85rem;
+			}
+
+			.hero-title {
+				font-size: 1.9rem;
+			}
+
+			.hero-subtitle {
+				font-size: 0.95rem;
 			}
 
 			.category-item {
 				font-size: 0.75rem;
-				padding: 5px 8px;
+				padding: 4px 8px;
+			}
+
+			.cta-primary,
+			.cta-secondary {
+				padding: 9px 18px;
+				font-size: 0.85rem;
 			}
 
 			.promo-card {
-				padding: 16px;
-				min-height: 160px;
+				padding: 18px;
+				min-height: 180px;
 			}
 
 			.promo-title {
-				font-size: 1.1rem;
-			}
-
-			.admin-panel {
-				padding: 20px 16px;
+				font-size: 1.2rem;
 			}
 
 			.admin-panel h3 {
-				font-size: 1.3rem;
+				font-size: 1.4rem;
 			}
 
 			.admin-panel p {
-				font-size: 1rem;
+				font-size: 1.1rem;
+			}
+
+			.admin-btn {
+				padding: 10px 24px;
+				font-size: 0.9rem;
 			}
 
 			.header-actions {
-				flex-direction: column;
 				gap: 8px;
-				align-items: center;
 			}
 
-			.search-input {
-				padding: 8px 14px 8px 40px;
+			.container {
+				padding-left: 10px;
+				padding-right: 10px;
 			}
 		}
 
@@ -868,16 +924,16 @@ if ($is_logged_in) {
 					<span class="d-none d-md-inline text-muted">Help</span>
 					<span class="d-none d-md-inline text-muted">Contact</span>
 
-					<!-- Logout (for admin users) -->
-					<?php if ($is_admin): ?>
-						<a href="login/logout.php" class="logout-btn">Logout</a>
-					<?php endif; ?>
-
 					<!-- Cart -->
 					<div class="header-icon">
 						<i class="fas fa-shopping-cart"></i>
 						<span class="cart-badge">0</span>
 					</div>
+
+					<!-- Logout (for both admin and regular users) -->
+					<?php if ($is_logged_in): ?>
+						<a href="login/logout.php" class="logout-btn">Logout</a>
+					<?php endif; ?>
 
 					<!-- User Menu -->
 					<div class="user-menu">
