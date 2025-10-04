@@ -508,6 +508,72 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .register-container {
+                width: 95%;
+                padding: 25px 20px;
+                margin: 10px auto;
+            }
+
+            .form-title {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+            }
+
+            .form-control {
+                padding: 10px 14px;
+                font-size: 0.95rem;
+            }
+
+            .password-container .form-control {
+                padding-right: 45px;
+            }
+
+            .password-toggle {
+                right: 12px;
+                font-size: 1rem;
+            }
+
+            .btn-custom {
+                padding: 12px;
+                font-size: 0.95rem;
+            }
+
+            .d-flex.justify-content-start {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .form-check {
+                margin-bottom: 8px;
+            }
+
+            .brand-side {
+                right: -150px;
+                width: 350px;
+                height: 350px;
+            }
+
+            .main-circle {
+                width: 80px;
+                height: 80px;
+            }
+
+            .food-hub-text {
+                font-size: 1.2rem;
+            }
+
+            .brand-description {
+                font-size: 0.8rem;
+                max-width: 150px;
+            }
+        }
+
         /* Small form adjustments for better fit */
         .d-flex.justify-content-start {
             gap: 20px;

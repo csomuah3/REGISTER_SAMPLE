@@ -432,26 +432,26 @@
         @media (max-width: 1024px) {
             .brand-side {
                 right: -400px;
-                width: 700px;
-                height: 700px;
+                width: 1000px;
+                height: 1000px;
             }
 
-            .form-side {
-                padding: 60px 40px;
+            .login-container {
+                width: 550px;
+                padding: 35px 30px;
             }
         }
 
         @media (max-width: 768px) {
             .login-container {
-                flex-direction: column;
-                height: auto;
-                min-height: 100vh;
-            }
-
-            .form-side {
-                padding: 40px 30px;
+                position: relative;
+                left: auto;
+                top: auto;
+                transform: none;
+                width: 90%;
+                max-width: 450px;
+                margin: 20px auto;
                 background: rgba(255, 255, 255, 0.9);
-                min-height: 100vh;
                 z-index: 10;
             }
 
@@ -467,7 +467,7 @@
             .main-circle {
                 width: 120px;
                 height: 120px;
-                margin-left: -50px;
+                left: -50px;
             }
 
             .food-hub-text {
@@ -477,13 +477,84 @@
             .brand-description {
                 font-size: 0.9rem;
                 max-width: 200px;
-                margin-left: -50px;
+                left: -50px;
             }
 
             .learn-more-btn {
                 padding: 8px 20px;
                 font-size: 0.8rem;
-                margin-left: -50px;
+                left: -50px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .login-container {
+                width: 95%;
+                padding: 25px 20px;
+                margin: 10px auto;
+            }
+
+            .form-title {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+            }
+
+            .form-control {
+                padding: 12px 16px;
+                font-size: 0.95rem;
+            }
+
+            .password-container .form-control {
+                padding-right: 45px;
+            }
+
+            .password-toggle {
+                right: 12px;
+                font-size: 1rem;
+            }
+
+            .login-btn {
+                padding: 12px;
+                font-size: 0.95rem;
+            }
+
+            .form-options {
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+
+            .social-login {
+                gap: 12px;
+            }
+
+            .social-btn {
+                width: 45px;
+                height: 45px;
+            }
+
+            .brand-side {
+                right: -150px;
+                width: 350px;
+                height: 350px;
+            }
+
+            .main-circle {
+                width: 80px;
+                height: 80px;
+            }
+
+            .food-hub-text {
+                font-size: 1.2rem;
+            }
+
+            .brand-description {
+                font-size: 0.8rem;
+                max-width: 150px;
             }
         }
 

@@ -526,6 +526,11 @@ require_admin(); // only admins
             z-index: 999;
             padding: 20px;
             box-shadow: 4px 0 15px rgba(139, 95, 191, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.sidebar-hidden {
+            transform: translateX(-100%);
         }
 
         .sidebar-header {
@@ -581,6 +586,40 @@ require_admin(); // only admins
             margin-left: 320px;
             position: relative;
             z-index: 10;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content.sidebar-hidden {
+            margin-left: 0;
+        }
+
+        /* Sidebar Toggle Button */
+        .sidebar-toggle {
+            position: fixed;
+            top: 90px;
+            left: 10px;
+            background: linear-gradient(135deg, #8b5fbf, #f093fb);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            z-index: 1001;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(139, 95, 191, 0.3);
+        }
+
+        .sidebar-toggle:hover {
+            background: linear-gradient(135deg, #764ba2, #8b5fbf);
+            transform: scale(1.05);
+        }
+
+        .sidebar-toggle.sidebar-hidden {
+            left: 10px;
         }
 
         .container {
@@ -713,10 +752,15 @@ require_admin(); // only admins
         @media (max-width: 768px) {
             .sidebar {
                 width: 280px;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.sidebar-visible {
+                transform: translateX(0);
             }
 
             .main-content {
-                margin-left: 280px;
+                margin-left: 0;
             }
 
             .header-container {
@@ -733,15 +777,15 @@ require_admin(); // only admins
                 margin: 1rem;
                 padding: 1rem !important;
             }
+
+            .sidebar-toggle {
+                display: flex;
+            }
         }
 
         @media (max-width: 600px) {
             .sidebar {
-                width: 220px;
-            }
-
-            .main-content {
-                margin-left: 220px;
+                width: 250px;
             }
 
             .sidebar-header h3 {
@@ -755,6 +799,12 @@ require_admin(); // only admins
             .sidebar-menu a {
                 font-size: 1rem;
                 padding: 12px 14px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .sidebar-toggle {
+                display: none;
             }
         }
     </style>
@@ -785,6 +835,11 @@ require_admin(); // only admins
     <div class="bg-circle big-bubble-8"></div>
     <div class="bg-circle big-bubble-9"></div>
     <div class="bg-circle big-bubble-10"></div>
+
+    <!-- Sidebar Toggle Button -->
+    <button class="sidebar-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
 
     <!-- Sidebar - Always Visible -->
     <div class="sidebar">
@@ -908,6 +963,78 @@ require_admin(); // only admins
                 alert('Search functionality will be implemented here: ' + query);
             }
         }
+
+        // Sidebar toggle functionality
+        let sidebarHidden = false;
+
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const mainContent = document.querySelector('.main-content');
+            const toggleBtn = document.querySelector('.sidebar-toggle');
+            const toggleIcon = toggleBtn.querySelector('i');
+
+            if (window.innerWidth <= 768) {
+                // Mobile behavior: show/hide sidebar
+                sidebar.classList.toggle('sidebar-visible');
+                if (sidebar.classList.contains('sidebar-visible')) {
+                    toggleIcon.classList.remove('fa-bars');
+                    toggleIcon.classList.add('fa-times');
+                } else {
+                    toggleIcon.classList.remove('fa-times');
+                    toggleIcon.classList.add('fa-bars');
+                }
+            } else {
+                // Desktop behavior: slide sidebar and adjust content
+                sidebarHidden = !sidebarHidden;
+
+                if (sidebarHidden) {
+                    sidebar.classList.add('sidebar-hidden');
+                    mainContent.classList.add('sidebar-hidden');
+                    toggleBtn.classList.add('sidebar-hidden');
+                    toggleIcon.classList.remove('fa-bars');
+                    toggleIcon.classList.add('fa-chevron-right');
+                } else {
+                    sidebar.classList.remove('sidebar-hidden');
+                    mainContent.classList.remove('sidebar-hidden');
+                    toggleBtn.classList.remove('sidebar-hidden');
+                    toggleIcon.classList.remove('fa-chevron-right');
+                    toggleIcon.classList.add('fa-bars');
+                }
+            }
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            const sidebar = document.querySelector('.sidebar');
+            const mainContent = document.querySelector('.main-content');
+            const toggleBtn = document.querySelector('.sidebar-toggle');
+            const toggleIcon = toggleBtn.querySelector('i');
+
+            if (window.innerWidth > 768) {
+                // Desktop: restore sidebar based on sidebarHidden state
+                sidebar.classList.remove('sidebar-visible');
+                if (sidebarHidden) {
+                    sidebar.classList.add('sidebar-hidden');
+                    mainContent.classList.add('sidebar-hidden');
+                    toggleIcon.classList.remove('fa-bars', 'fa-times');
+                    toggleIcon.classList.add('fa-chevron-right');
+                } else {
+                    sidebar.classList.remove('sidebar-hidden');
+                    mainContent.classList.remove('sidebar-hidden');
+                    toggleIcon.classList.remove('fa-chevron-right', 'fa-times');
+                    toggleIcon.classList.add('fa-bars');
+                }
+            } else {
+                // Mobile: reset desktop states and use mobile behavior
+                sidebar.classList.remove('sidebar-hidden');
+                mainContent.classList.remove('sidebar-hidden');
+                toggleBtn.classList.remove('sidebar-hidden');
+                if (!sidebar.classList.contains('sidebar-visible')) {
+                    toggleIcon.classList.remove('fa-chevron-right', 'fa-times');
+                    toggleIcon.classList.add('fa-bars');
+                }
+            }
+        });
     </script>
 </body>
 

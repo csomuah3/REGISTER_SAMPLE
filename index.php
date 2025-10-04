@@ -526,58 +526,274 @@ if ($is_logged_in) {
 
 		/* Mobile Responsiveness */
 		@media (max-width: 768px) {
+			.main-header {
+				position: relative;
+			}
+
 			.header-container {
 				flex-direction: column;
 				gap: 16px;
+				position: relative;
+			}
+
+			.header-actions {
+				flex-wrap: wrap;
+				justify-content: center;
+				gap: 12px;
 			}
 
 			.search-container {
-				order: 3;
+				order: 2;
 				max-width: none;
+				width: 100%;
+			}
+
+			.logo {
+				font-size: 1.5rem;
+			}
+
+			.logo .co {
+				font-size: 0.9rem;
+			}
+
+			.hero-section {
+				padding: 40px 0;
+				margin-top: 10px;
 			}
 
 			.hero-title {
-				font-size: 2.5rem;
+				font-size: 2.2rem;
+				text-align: center;
+				margin-bottom: 20px;
+			}
+
+			.hero-subtitle {
+				text-align: center;
+				font-size: 1.1rem;
+				margin-bottom: 20px;
+			}
+
+			.hero-features {
+				justify-content: center;
+				text-align: center;
 			}
 
 			.promo-cards {
 				flex-direction: column;
+				gap: 16px;
+				margin-top: 30px;
 			}
 
 			.category-list {
 				padding: 0 16px;
+				justify-content: flex-start;
+			}
+
+			.category-item {
+				font-size: 0.85rem;
+				padding: 6px 12px;
 			}
 
 			.cta-buttons {
 				justify-content: center;
+				gap: 12px;
+			}
+
+			.cta-primary,
+			.cta-secondary {
+				padding: 12px 20px;
+				font-size: 0.95rem;
+			}
+
+			.admin-panel {
+				padding: 30px 20px;
+				margin: 40px 0;
+			}
+
+			.admin-panel h3 {
+				font-size: 1.8rem;
 			}
 
 			.admin-panel p {
-				font-size: 1.4rem;
+				font-size: 1.3rem;
 			}
 
 			.promo-card {
 				padding: 24px;
-				min-height: 220px;
+				min-height: 200px;
+			}
+
+			.promo-title {
+				font-size: 1.5rem;
+			}
+
+			.promo-subtitle {
+				font-size: 1rem;
+			}
+
+			.container {
+				padding-left: 16px;
+				padding-right: 16px;
 			}
 		}
 
 		@media (max-width: 480px) {
 			.hero-title {
-				font-size: 2rem;
+				font-size: 1.8rem;
+				line-height: 1.3;
+			}
+
+			.hero-subtitle {
+				font-size: 1rem;
 			}
 
 			.hero-features {
 				flex-direction: column;
 				gap: 12px;
+				align-items: center;
+			}
+
+			.feature-item {
+				justify-content: center;
 			}
 
 			.category-nav {
-				top: 140px;
+				top: auto;
+				position: relative;
+				padding: 8px 0;
+			}
+
+			.category-list {
+				gap: 6px;
+				padding: 0 12px;
+			}
+
+			.category-item {
+				font-size: 0.8rem;
+				padding: 6px 10px;
+				min-width: auto;
+			}
+
+			.admin-panel h3 {
+				font-size: 1.5rem;
 			}
 
 			.admin-panel p {
-				font-size: 1.2rem;
+				font-size: 1.1rem;
+			}
+
+			.admin-btn {
+				padding: 12px 24px;
+				font-size: 1rem;
+			}
+
+			.cta-buttons {
+				flex-direction: column;
+				align-items: center;
+			}
+
+			.cta-primary,
+			.cta-secondary {
+				width: 100%;
+				max-width: 250px;
+				text-align: center;
+			}
+
+			.promo-card {
+				padding: 20px;
+				min-height: 180px;
+			}
+
+			.promo-title {
+				font-size: 1.3rem;
+			}
+
+			.promo-badge {
+				font-size: 0.9rem;
+				padding: 4px 12px;
+			}
+
+			.search-input {
+				font-size: 0.95rem;
+				padding: 10px 16px 10px 45px;
+			}
+
+			.search-btn {
+				padding: 6px 12px;
+				font-size: 0.9rem;
+			}
+
+			.main-header {
+				padding: 8px 0;
+			}
+
+			.container {
+				padding-left: 12px;
+				padding-right: 12px;
+			}
+
+			.header-actions {
+				gap: 8px;
+			}
+
+			.header-icon {
+				padding: 6px;
+			}
+
+			.login-btn {
+				padding: 8px 16px;
+				font-size: 0.9rem;
+			}
+
+			.logout-btn {
+				padding: 6px 12px;
+				font-size: 0.8rem;
+			}
+		}
+
+		@media (max-width: 375px) {
+			.hero-title {
+				font-size: 1.6rem;
+			}
+
+			.logo {
+				font-size: 1.3rem;
+			}
+
+			.category-item {
+				font-size: 0.75rem;
+				padding: 5px 8px;
+			}
+
+			.promo-card {
+				padding: 16px;
+				min-height: 160px;
+			}
+
+			.promo-title {
+				font-size: 1.1rem;
+			}
+
+			.admin-panel {
+				padding: 20px 16px;
+			}
+
+			.admin-panel h3 {
+				font-size: 1.3rem;
+			}
+
+			.admin-panel p {
+				font-size: 1rem;
+			}
+
+			.header-actions {
+				flex-direction: column;
+				gap: 8px;
+				align-items: center;
+			}
+
+			.search-input {
+				padding: 8px 14px 8px 40px;
 			}
 		}
 
