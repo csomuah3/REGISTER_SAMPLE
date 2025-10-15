@@ -23,14 +23,19 @@ class Brand extends db_connection {
     public function add_brand($brand_name, $category_id, $user_id) {
         $this->check_table_structure();
 
+        // Escape values for safety
+        $brand_name = mysqli_real_escape_string($this->db, $brand_name);
+        $category_id = (int)$category_id;
+        $user_id = (int)$user_id;
+
         // Check if columns exist by trying different queries
         try {
-            $sql = "INSERT INTO brands (brand_name, category_id, user_id) VALUES (?, ?, ?)";
-            return $this->db_query($sql, $brand_name, $category_id, $user_id);
+            $sql = "INSERT INTO brands (brand_name, category_id, user_id) VALUES ('$brand_name', $category_id, $user_id)";
+            return $this->db_query($sql);
         } catch (Exception $e) {
             // Fallback to basic structure
-            $sql = "INSERT INTO brands (brand_name) VALUES (?)";
-            return $this->db_query($sql, $brand_name);
+            $sql = "INSERT INTO brands (brand_name) VALUES ('$brand_name')";
+            return $this->db_query($sql);
         }
     }
 
@@ -71,31 +76,39 @@ class Brand extends db_connection {
 
     // Update a brand
     public function update_brand($brand_id, $brand_name, $category_id) {
+        // Escape values for safety
+        $brand_name = mysqli_real_escape_string($this->db, $brand_name);
+        $category_id = (int)$category_id;
+        $brand_id = (int)$brand_id;
+
         try {
-            $sql = "UPDATE brands SET brand_name = ?, category_id = ? WHERE brand_id = ?";
-            return $this->db_query($sql, $brand_name, $category_id, $brand_id);
+            $sql = "UPDATE brands SET brand_name = '$brand_name', category_id = $category_id WHERE brand_id = $brand_id";
+            return $this->db_query($sql);
         } catch (Exception $e) {
             // Fallback to basic update
-            $sql = "UPDATE brands SET brand_name = ? WHERE brand_id = ?";
-            return $this->db_query($sql, $brand_name, $brand_id);
+            $sql = "UPDATE brands SET brand_name = '$brand_name' WHERE brand_id = $brand_id";
+            return $this->db_query($sql);
         }
     }
 
     // Delete a brand
     public function delete_brand($brand_id) {
-        $sql = "DELETE FROM brands WHERE brand_id = ?";
-        return $this->db_query($sql, $brand_id);
+        $brand_id = (int)$brand_id;
+        $sql = "DELETE FROM brands WHERE brand_id = $brand_id";
+        return $this->db_query($sql);
     }
 
     // Check if brand name exists
     public function check_brand_exists($brand_name, $category_id = null, $user_id = null, $brand_id = null) {
         try {
+            $brand_name = mysqli_real_escape_string($this->db, $brand_name);
             if ($brand_id) {
-                $sql = "SELECT brand_id FROM brands WHERE brand_name = ? AND brand_id != ?";
-                return $this->db_fetch_one($sql, $brand_name, $brand_id);
+                $brand_id = (int)$brand_id;
+                $sql = "SELECT brand_id FROM brands WHERE brand_name = '$brand_name' AND brand_id != $brand_id";
+                return $this->db_fetch_one($sql);
             } else {
-                $sql = "SELECT brand_id FROM brands WHERE brand_name = ?";
-                return $this->db_fetch_one($sql, $brand_name);
+                $sql = "SELECT brand_id FROM brands WHERE brand_name = '$brand_name'";
+                return $this->db_fetch_one($sql);
             }
         } catch (Exception $e) {
             return false;
