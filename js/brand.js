@@ -222,12 +222,33 @@ function loadCategories() {
         type: 'GET',
         dataType: 'json',
         success: function(response) {
-            if (response.status === 'success') {
+            console.log('Categories response:', response); // Debug log
+
+            // Handle both response formats
+            if (response.status === 'success' || response.success === true) {
                 populateCategoryDropdowns(response.data);
+            } else {
+                console.error('Failed to load categories:', response.message);
+                // Try to show a user-friendly message
+                Swal.fire({
+                    title: 'Warning',
+                    text: 'Could not load categories. You may need to create categories first.',
+                    icon: 'warning',
+                    confirmButtonColor: '#8b5fbf'
+                });
             }
         },
         error: function(xhr, status, error) {
             console.error('Error loading categories:', error);
+            console.error('Response:', xhr.responseText);
+
+            // Show user-friendly error
+            Swal.fire({
+                title: 'Error',
+                text: 'Failed to load categories. Please check if categories exist.',
+                icon: 'error',
+                confirmButtonColor: '#8b5fbf'
+            });
         }
     });
 }
@@ -240,11 +261,26 @@ function populateCategoryDropdowns(categories) {
     addSelect.empty().append('<option value="">Select Category</option>');
     editSelect.empty().append('<option value="">Select Category</option>');
 
-    categories.forEach(function(category) {
-        var option = '<option value="' + category.cat_id + '">' + category.cat_name + '</option>';
-        addSelect.append(option);
-        editSelect.append(option);
-    });
+    if (categories && categories.length > 0) {
+        categories.forEach(function(category) {
+            // Handle different data structures
+            var catId = category.cat_id || category.category_id || category.id;
+            var catName = category.cat_name || category.category_name || category.name;
+
+            if (catId && catName) {
+                var option = '<option value="' + catId + '">' + catName + '</option>';
+                addSelect.append(option);
+                editSelect.append(option);
+            }
+        });
+
+        console.log('Populated dropdowns with', categories.length, 'categories');
+    } else {
+        console.log('No categories found to populate');
+        // Add a message to dropdowns
+        addSelect.append('<option disabled>No categories available</option>');
+        editSelect.append('<option disabled>No categories available</option>');
+    }
 }
 
 // Edit brand
