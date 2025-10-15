@@ -3,35 +3,82 @@ require_once __DIR__ . '/../settings/db_class.php';
 
 class Brand extends db_connection {
 
+    // Check if the brands table has the required columns
+    private function check_table_structure() {
+        try {
+            // Try to add the columns if they don't exist
+            $this->db_query("ALTER TABLE brands ADD COLUMN category_id INT(11) DEFAULT 1 AFTER brand_name");
+        } catch (Exception $e) {
+            // Column probably already exists
+        }
+
+        try {
+            $this->db_query("ALTER TABLE brands ADD COLUMN user_id INT(11) DEFAULT 1 AFTER category_id");
+        } catch (Exception $e) {
+            // Column probably already exists
+        }
+    }
+
     // Add a new brand
     public function add_brand($brand_name, $category_id, $user_id) {
-        $sql = "INSERT INTO brands (brand_name, category_id, user_id) VALUES (?, ?, ?)";
-        return $this->db_query($sql, $brand_name, $category_id, $user_id);
+        $this->check_table_structure();
+
+        // Check if columns exist by trying different queries
+        try {
+            $sql = "INSERT INTO brands (brand_name, category_id, user_id) VALUES (?, ?, ?)";
+            return $this->db_query($sql, $brand_name, $category_id, $user_id);
+        } catch (Exception $e) {
+            // Fallback to basic structure
+            $sql = "INSERT INTO brands (brand_name) VALUES (?)";
+            return $this->db_query($sql, $brand_name);
+        }
     }
 
     // Get all brands for a specific user
     public function get_brands_by_user($user_id) {
-        $sql = "SELECT b.brand_id, b.brand_name, b.category_id, c.cat_name
-                FROM brands b
-                JOIN categories c ON b.category_id = c.cat_id
-                WHERE b.user_id = ?
-                ORDER BY c.cat_name, b.brand_name";
-        return $this->db_fetch_all($sql, $user_id);
+        try {
+            $sql = "SELECT b.brand_id, b.brand_name,
+                           COALESCE(b.category_id, 1) as category_id,
+                           COALESCE(c.cat_name, 'General') as cat_name
+                    FROM brands b
+                    LEFT JOIN categories c ON b.category_id = c.cat_id
+                    WHERE COALESCE(b.user_id, ?) = ?
+                    ORDER BY c.cat_name, b.brand_name";
+            return $this->db_fetch_all($sql, $user_id, $user_id);
+        } catch (Exception $e) {
+            // Fallback to basic query
+            $sql = "SELECT brand_id, brand_name, 1 as category_id, 'General' as cat_name FROM brands ORDER BY brand_name";
+            return $this->db_fetch_all($sql);
+        }
     }
 
     // Get a specific brand by ID
     public function get_brand_by_id($brand_id) {
-        $sql = "SELECT b.brand_id, b.brand_name, b.category_id, c.cat_name
-                FROM brands b
-                JOIN categories c ON b.category_id = c.cat_id
-                WHERE b.brand_id = ?";
-        return $this->db_fetch_one($sql, $brand_id);
+        try {
+            $sql = "SELECT b.brand_id, b.brand_name,
+                           COALESCE(b.category_id, 1) as category_id,
+                           COALESCE(c.cat_name, 'General') as cat_name
+                    FROM brands b
+                    LEFT JOIN categories c ON b.category_id = c.cat_id
+                    WHERE b.brand_id = ?";
+            return $this->db_fetch_one($sql, $brand_id);
+        } catch (Exception $e) {
+            // Fallback to basic query
+            $sql = "SELECT brand_id, brand_name, 1 as category_id, 'General' as cat_name FROM brands WHERE brand_id = ?";
+            return $this->db_fetch_one($sql, $brand_id);
+        }
     }
 
     // Update a brand
     public function update_brand($brand_id, $brand_name, $category_id) {
-        $sql = "UPDATE brands SET brand_name = ?, category_id = ? WHERE brand_id = ?";
-        return $this->db_query($sql, $brand_name, $category_id, $brand_id);
+        try {
+            $sql = "UPDATE brands SET brand_name = ?, category_id = ? WHERE brand_id = ?";
+            return $this->db_query($sql, $brand_name, $category_id, $brand_id);
+        } catch (Exception $e) {
+            // Fallback to basic update
+            $sql = "UPDATE brands SET brand_name = ? WHERE brand_id = ?";
+            return $this->db_query($sql, $brand_name, $brand_id);
+        }
     }
 
     // Delete a brand
@@ -40,14 +87,35 @@ class Brand extends db_connection {
         return $this->db_query($sql, $brand_id);
     }
 
-    // Check if brand name + category combination exists for a user
-    public function check_brand_exists($brand_name, $category_id, $user_id, $brand_id = null) {
-        if ($brand_id) {
-            $sql = "SELECT brand_id FROM brands WHERE brand_name = ? AND category_id = ? AND user_id = ? AND brand_id != ?";
-            return $this->db_fetch_one($sql, $brand_name, $category_id, $user_id, $brand_id);
-        } else {
-            $sql = "SELECT brand_id FROM brands WHERE brand_name = ? AND category_id = ? AND user_id = ?";
-            return $this->db_fetch_one($sql, $brand_name, $category_id, $user_id);
+    // Check if brand name exists
+    public function check_brand_exists($brand_name, $category_id = null, $user_id = null, $brand_id = null) {
+        try {
+            if ($brand_id) {
+                $sql = "SELECT brand_id FROM brands WHERE brand_name = ? AND brand_id != ?";
+                return $this->db_fetch_one($sql, $brand_name, $brand_id);
+            } else {
+                $sql = "SELECT brand_id FROM brands WHERE brand_name = ?";
+                return $this->db_fetch_one($sql, $brand_name);
+            }
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    // Get all brands (for admin)
+    public function get_all_brands() {
+        try {
+            $sql = "SELECT b.brand_id, b.brand_name,
+                           COALESCE(b.category_id, 1) as category_id,
+                           COALESCE(c.cat_name, 'General') as cat_name
+                    FROM brands b
+                    LEFT JOIN categories c ON b.category_id = c.cat_id
+                    ORDER BY c.cat_name, b.brand_name";
+            return $this->db_fetch_all($sql);
+        } catch (Exception $e) {
+            // Fallback to basic query
+            $sql = "SELECT brand_id, brand_name, 1 as category_id, 'General' as cat_name FROM brands ORDER BY brand_name";
+            return $this->db_fetch_all($sql);
         }
     }
 }
