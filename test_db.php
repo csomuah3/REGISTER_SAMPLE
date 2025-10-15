@@ -1,20 +1,45 @@
 <?php
-// Simple DB connection test
 require_once __DIR__ . '/settings/db_class.php';
 
-$db = new db_connection();
+echo "<h2>Database Connection Test</h2>";
 
-if ($db->db_connect()) {
-    echo "<h2 style='color:green'>✅ Database connection successful!</h2>";
+try {
+    $db = new db_connection();
+    echo "Database class instantiated successfully<br>";
 
-    // Try a simple query on customer table
-    $sql = "SELECT COUNT(*) AS total FROM customer";
-    if ($db->db_query($sql)) {
-        $row = mysqli_fetch_assoc($db->results);
-        echo "<p>Customer rows in table: <b>" . $row['total'] . "</b></p>";
+    $connection = $db->db_connect();
+    if ($connection) {
+        echo "✅ Database connection successful<br>";
+
+        // Test a simple query
+        $result = $db->db_query("SELECT 1 as test");
+        if ($result) {
+            echo "✅ Query execution successful<br>";
+        } else {
+            echo "❌ Query execution failed<br>";
+        }
+
+        // Test brands table
+        $brands = $db->db_query("SELECT * FROM brands LIMIT 1");
+        if ($brands) {
+            echo "✅ Brands table accessible<br>";
+        } else {
+            echo "❌ Brands table not accessible<br>";
+        }
+
     } else {
-        echo "<p style='color:orange'>⚠️ Query failed. Check if table 'customer' exists.</p>";
+        echo "❌ Database connection failed<br>";
+        echo "MySQL Error: " . mysqli_connect_error() . "<br>";
     }
-} else {
-    echo "<h2 style='color:red'>❌ Database connection failed.</h2>";
+
+} catch (Exception $e) {
+    echo "❌ Exception: " . $e->getMessage() . "<br>";
+} catch (Error $e) {
+    echo "❌ Fatal Error: " . $e->getMessage() . "<br>";
 }
+
+echo "<br><h3>Database Constants:</h3>";
+echo "SERVER: " . (defined('SERVER') ? SERVER : 'NOT DEFINED') . "<br>";
+echo "USERNAME: " . (defined('USERNAME') ? USERNAME : 'NOT DEFINED') . "<br>";
+echo "DATABASE: " . (defined('DATABASE') ? DATABASE : 'NOT DEFINED') . "<br>";
+?>
