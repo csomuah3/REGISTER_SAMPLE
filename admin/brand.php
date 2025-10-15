@@ -400,7 +400,7 @@ require_admin(); // only admins
             <div class="d-flex align-items-center justify-content-between">
                 <!-- Logo -->
                 <a href="../index.php" class="logo">
-                    TechRevive<span class="co">co</span>
+                    FlavourHub<span class="co">co</span>
                 </a>
 
                 <!-- Header Actions -->

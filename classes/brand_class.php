@@ -7,13 +7,13 @@ class Brand extends db_connection {
     private function check_table_structure() {
         try {
             // Try to add the columns if they don't exist
-            $this->db_query("ALTER TABLE brands ADD COLUMN category_id INT(11) DEFAULT 1 AFTER brand_name");
+            $this->db_write_query("ALTER TABLE brands ADD COLUMN category_id INT(11) DEFAULT 1 AFTER brand_name");
         } catch (Exception $e) {
             // Column probably already exists
         }
 
         try {
-            $this->db_query("ALTER TABLE brands ADD COLUMN user_id INT(11) DEFAULT 1 AFTER category_id");
+            $this->db_write_query("ALTER TABLE brands ADD COLUMN user_id INT(11) DEFAULT 1 AFTER category_id");
         } catch (Exception $e) {
             // Column probably already exists
         }
@@ -31,11 +31,11 @@ class Brand extends db_connection {
         // Check if columns exist by trying different queries
         try {
             $sql = "INSERT INTO brands (brand_name, category_id, user_id) VALUES ('$brand_name', $category_id, $user_id)";
-            return $this->db_query($sql);
+            return $this->db_write_query($sql);
         } catch (Exception $e) {
             // Fallback to basic structure
             $sql = "INSERT INTO brands (brand_name) VALUES ('$brand_name')";
-            return $this->db_query($sql);
+            return $this->db_write_query($sql);
         }
     }
 
@@ -83,11 +83,11 @@ class Brand extends db_connection {
 
         try {
             $sql = "UPDATE brands SET brand_name = '$brand_name', category_id = $category_id WHERE brand_id = $brand_id";
-            return $this->db_query($sql);
+            return $this->db_write_query($sql);
         } catch (Exception $e) {
             // Fallback to basic update
             $sql = "UPDATE brands SET brand_name = '$brand_name' WHERE brand_id = $brand_id";
-            return $this->db_query($sql);
+            return $this->db_write_query($sql);
         }
     }
 
@@ -95,7 +95,7 @@ class Brand extends db_connection {
     public function delete_brand($brand_id) {
         $brand_id = (int)$brand_id;
         $sql = "DELETE FROM brands WHERE brand_id = $brand_id";
-        return $this->db_query($sql);
+        return $this->db_write_query($sql);
     }
 
     // Check if brand name exists
