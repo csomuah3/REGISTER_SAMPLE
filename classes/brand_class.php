@@ -3,8 +3,19 @@ require_once __DIR__ . '/../settings/db_class.php';
 
 class Brand extends db_connection {
 
+    public function __construct() {
+        if ($this->db === null) {
+            $this->db_connect();
+        }
+    }
+
     // Check if the brands table has the required columns
     private function check_table_structure() {
+        // Ensure database connection
+        if ($this->db === null) {
+            $this->db_connect();
+        }
+
         try {
             // Try to add the columns if they don't exist
             $this->db_write_query("ALTER TABLE brands ADD COLUMN category_id INT(11) DEFAULT 1 AFTER brand_name");
@@ -21,6 +32,11 @@ class Brand extends db_connection {
 
     // Add a new brand
     public function add_brand($brand_name, $category_id, $user_id) {
+        // Ensure database connection
+        if ($this->db === null) {
+            $this->db_connect();
+        }
+
         $this->check_table_structure();
 
         // Escape values for safety

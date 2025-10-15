@@ -30,7 +30,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $result = add_brand_ctr($brand_name, $category_id, $user_id);
         echo json_encode($result);
     } catch (Exception $e) {
+        error_log("Brand creation error: " . $e->getMessage());
         echo json_encode(['status' => 'error', 'message' => 'Failed to add brand: ' . $e->getMessage()]);
+    } catch (Error $e) {
+        error_log("Brand creation fatal error: " . $e->getMessage());
+        echo json_encode(['status' => 'error', 'message' => 'Database connection failed: ' . $e->getMessage()]);
     }
 } else {
     echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);

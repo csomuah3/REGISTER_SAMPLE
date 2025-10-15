@@ -1,25 +1,18 @@
 <?php
 
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'ecommerce_2025A_chelsea_somuah');
-define('DB_USER', 'Chelsea.somuah');
-define('DB_PASS', 'Universitygirl@2026');        
-
-
-/*if (!defined("SERVER")) {
+// Database credentials that work with your existing database
+if (!defined("SERVER")) {
     define("SERVER", "localhost");
 }
 
 if (!defined("USERNAME")) {
-    define("USERNAME", "root");
+    define("USERNAME", "Chelsea.somuah");
 }
 
 if (!defined("PASSWD")) {
-    define("PASSWD", "");
+    define("PASSWD", "Universitygirl@2026");
 }
 
 if (!defined("DATABASE")) {
-    // Use the database name from the provided SQL dump
-    define("DATABASE", "shoppn");
+    define("DATABASE", "ecommerce_2025A_chelsea_somuah");
 }
-    */
