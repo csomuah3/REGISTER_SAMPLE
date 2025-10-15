@@ -914,39 +914,33 @@ if ($is_logged_in) {
 
 				<!-- Header Actions -->
 				<div class="header-actions">
-					<!-- Notifications -->
-					<div class="header-icon">
-						<i class="fas fa-bell"></i>
-					</div>
-
-					<!-- About/Help -->
-					<span class="d-none d-md-inline text-muted">About</span>
-					<span class="d-none d-md-inline text-muted">Help</span>
-					<span class="d-none d-md-inline text-muted">Contact</span>
-
-					<!-- Cart -->
-					<div class="header-icon">
-						<i class="fas fa-shopping-cart"></i>
-						<span class="cart-badge">0</span>
-					</div>
-
-					<!-- Logout (for both admin and regular users) -->
-					<?php if ($is_logged_in): ?>
+					<!-- Navigation based on login and admin status -->
+					<?php if (!$is_logged_in): ?>
+						<!-- Not logged in: Register | Login -->
+						<a href="login/register.php" class="login-btn me-2">Register</a>
+						<a href="login/login.php" class="login-btn">Login</a>
+					<?php elseif ($is_admin): ?>
+						<!-- Admin logged in: Logout | Category | Brand -->
+						<a href="admin/category.php" class="login-btn me-2">Category</a>
+						<a href="admin/brand.php" class="login-btn me-2">Brand</a>
+						<a href="login/logout.php" class="logout-btn">Logout</a>
+					<?php else: ?>
+						<!-- Regular user logged in: Logout -->
+						<div class="header-icon me-2">
+							<i class="fas fa-shopping-cart"></i>
+							<span class="cart-badge">0</span>
+						</div>
 						<a href="login/logout.php" class="logout-btn">Logout</a>
 					<?php endif; ?>
 
-					<!-- User Menu -->
-					<div class="user-menu">
-						<?php if (!$is_logged_in): ?>
-							<a href="login/login.php" class="login-btn">Login</a>
-						<?php else: ?>
-							<div class="user-dropdown">
-								<div class="user-avatar" title="<?= htmlspecialchars($_SESSION['name'] ?? 'User') ?>">
-									<?= strtoupper(substr($_SESSION['name'] ?? 'U', 0, 1)) ?>
-								</div>
+					<!-- User Avatar (if logged in) -->
+					<?php if ($is_logged_in): ?>
+						<div class="user-dropdown ms-2">
+							<div class="user-avatar" title="<?= htmlspecialchars($_SESSION['name'] ?? 'User') ?>">
+								<?= strtoupper(substr($_SESSION['name'] ?? 'U', 0, 1)) ?>
 							</div>
-						<?php endif; ?>
-					</div>
+						</div>
+					<?php endif; ?>
 				</div>
 			</div>
 		</div>
