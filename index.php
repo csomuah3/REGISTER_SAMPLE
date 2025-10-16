@@ -10,15 +10,17 @@ $user_profile_image = null;
 if ($is_logged_in) {
 	$is_admin = check_admin();
 
-	// Get user profile image if logged in
+	// Get user profile image if logged in and database is available
 	$user_id = $_SESSION['user_id'] ?? 0;
-	try {
-		$stmt = $pdo->prepare("SELECT profile_image FROM users WHERE user_id = ?");
-		$stmt->execute([$user_id]);
-		$user_data = $stmt->fetch(PDO::FETCH_ASSOC);
-		$user_profile_image = $user_data['profile_image'] ?? null;
-	} catch (Exception $e) {
-		// Handle error silently
+	if ($pdo && $user_id) {
+		try {
+			$stmt = $pdo->prepare("SELECT profile_image FROM users WHERE user_id = ?");
+			$stmt->execute([$user_id]);
+			$user_data = $stmt->fetch(PDO::FETCH_ASSOC);
+			$user_profile_image = $user_data['profile_image'] ?? null;
+		} catch (Exception $e) {
+			// Handle error silently, keep $user_profile_image as null
+		}
 	}
 }
 ?>
