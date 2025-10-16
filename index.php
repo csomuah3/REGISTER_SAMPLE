@@ -1029,8 +1029,8 @@ if ($is_logged_in) {
 			<?php if ($is_admin): ?>
 				<div class="admin-panel animate__animated animate__zoomIn">
 					<h3>Chef Dashboard</h3>
-					<p>Welcome back, <?= htmlspecialchars($_SESSION['name'] ?? 'Chef') ?>! Manage your kitchen categories and menu items.</p>
-					<a href="admin/category.php" class="admin-btn">Manage Categories</a>
+					<p>Welcome back, <?= htmlspecialchars($_SESSION['name'] ?? 'Chef') ?>! Manage your kitchen.</p>
+					<a href="admin/category.php" class="admin-btn">Manage Kitchen</a>
 				</div>
 			<?php endif; ?>
 		</div>
