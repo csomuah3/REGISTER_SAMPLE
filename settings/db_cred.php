@@ -6,13 +6,13 @@ if (!defined("SERVER")) {
 }
 
 if (!defined("USERNAME")) {
-    define("USERNAME", "root");
+    define("USERNAME", "chelsea.somuah");
 }
 
 if (!defined("PASSWD")) {
-    define("PASSWD", "");
+    define("PASSWD", "Universitygirl@2026");
 }
 
 if (!defined("DATABASE")) {
-    define("DATABASE", "shoppn");
+    define("DATABASE", "ecommerce_2025A_chelsea_somuah");
 }
