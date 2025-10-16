@@ -313,91 +313,113 @@ require_admin(); // only admins
         }
 
         /* Layout */
-        .main-container {
-            display: flex;
-            min-height: 100vh;
-            position: relative;
-            z-index: 2;
-        }
 
         /* Sidebar */
         .sidebar {
-            width: 280px;
-            background: linear-gradient(180deg, #8b5fbf 0%, #6366f1 50%, #a855f7 100%);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
             position: fixed;
-            height: 100vh;
+            left: 0;
+            top: 80px;
+            width: 320px;
+            height: calc(100vh - 80px);
+            background: linear-gradient(135deg, #8b5fbf, #f093fb);
+            color: white;
+            padding: 30px 20px;
+            z-index: 999;
+            transition: transform 0.3s ease;
             overflow-y: auto;
-            z-index: 1000;
-            box-shadow: 4px 0 24px rgba(139, 95, 191, 0.15);
+        }
+
+        .sidebar.sidebar-hidden {
+            transform: translateX(-100%);
         }
 
         .sidebar-header {
-            padding: 2rem 1.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.05);
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .sidebar-title {
-            color: #e2e8f0;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        .sidebar-header h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 5px;
         }
 
-        .sidebar-subtitle {
-            color: rgba(226, 232, 240, 0.8);
-            font-size: 0.875rem;
-            font-weight: 400;
+        .sidebar-header p {
+            font-size: 1.1rem;
+            opacity: 0.8;
         }
 
-        .sidebar-nav {
-            padding: 1.5rem 0;
+        .sidebar-menu {
+            list-style: none;
         }
 
-        .nav-item {
-            margin-bottom: 0.5rem;
+        .sidebar-menu li {
+            margin-bottom: 10px;
         }
 
-        .nav-link {
+        .sidebar-menu a {
             display: flex;
             align-items: center;
-            padding: 0.875rem 1.5rem;
-            color: rgba(226, 232, 240, 0.8);
+            gap: 12px;
+            padding: 14px 18px;
+            color: white;
             text-decoration: none;
+            border-radius: 8px;
             transition: all 0.3s ease;
-            border-radius: 0;
-            font-weight: 500;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nav-link:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            transform: translateX(4px);
-        }
-
-        .nav-link.active {
-            background: rgba(255, 255, 255, 0.15);
-            color: #ffffff;
-            border-right: 3px solid #ffffff;
-        }
-
-        .nav-link i {
-            margin-right: 0.75rem;
             font-size: 1.1rem;
-            width: 20px;
-            text-align: center;
+            font-weight: 500;
         }
 
-        /* Main Content */
+        .sidebar-menu a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .sidebar-menu a.active {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        /* Main Content - Adjusted for wider sidebar */
         .main-content {
-            flex: 1;
-            margin-left: 280px;
-            background: transparent;
+            margin-left: 320px;
+            position: relative;
+            z-index: 10;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content.sidebar-hidden {
+            margin-left: 0;
+        }
+
+        /* Sidebar Toggle Button */
+        .sidebar-toggle {
+            position: fixed;
+            top: 90px;
+            left: 10px;
+            background: linear-gradient(135deg, #8b5fbf, #f093fb);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1001;
+            box-shadow: 0 4px 15px rgba(139, 95, 191, 0.3);
+        }
+
+        .sidebar-toggle:hover {
+            background: linear-gradient(135deg, #764ba2, #8b5fbf);
+            transform: scale(1.05);
+        }
+
+        .sidebar-toggle.sidebar-hidden {
+            left: 10px;
         }
 
         /* Header */
@@ -689,11 +711,11 @@ require_admin(); // only admins
         /* Responsive */
         @media (max-width: 768px) {
             .sidebar {
+                width: 280px;
                 transform: translateX(-100%);
-                transition: transform 0.3s ease;
             }
 
-            .sidebar.show {
+            .sidebar.sidebar-visible {
                 transform: translateX(0);
             }
 
@@ -707,6 +729,35 @@ require_admin(); // only admins
 
             .page-title {
                 font-size: 2rem;
+            }
+
+            .sidebar-toggle {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .sidebar {
+                width: 250px;
+            }
+
+            .sidebar-header h3 {
+                font-size: 1.4rem;
+            }
+
+            .sidebar-header p {
+                font-size: 0.9rem;
+            }
+
+            .sidebar-menu a {
+                font-size: 1rem;
+                padding: 12px 14px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .sidebar-toggle {
+                display: none;
             }
         }
     </style>
@@ -738,67 +789,31 @@ require_admin(); // only admins
     <div class="bg-circle big-bubble-9"></div>
     <div class="bg-circle big-bubble-10"></div>
 
-    <div class="main-container">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <div class="sidebar-header">
-                <h1 class="sidebar-title">Admin Panel</h1>
-                <p class="sidebar-subtitle">Manage your products</p>
-            </div>
-            <nav class="sidebar-nav">
-                <div class="nav-item">
-                    <a href="../index.php" class="nav-link">
-                        <i class="fas fa-home"></i>
-                        Dashboard
-                    </a>
-                </div>
-                <div class="nav-item">
-                    <a href="category.php" class="nav-link">
-                        <i class="fas fa-list"></i>
-                        Categories
-                    </a>
-                </div>
-                <div class="nav-item">
-                    <a href="brand.php" class="nav-link">
-                        <i class="fas fa-tags"></i>
-                        Brands
-                    </a>
-                </div>
-                <div class="nav-item">
-                    <a href="product.php" class="nav-link active">
-                        <i class="fas fa-box"></i>
-                        Products
-                    </a>
-                </div>
-                <div class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-shopping-cart"></i>
-                        Orders
-                    </a>
-                </div>
-                <div class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-users"></i>
-                        Customers
-                    </a>
-                </div>
-                <div class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-chart-bar"></i>
-                        Analytics
-                    </a>
-                </div>
-                <div class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-cog"></i>
-                        Settings
-                    </a>
-                </div>
-            </nav>
-        </div>
+    <!-- Sidebar Toggle Button -->
+    <button class="sidebar-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
 
-        <!-- Main Content -->
-        <div class="main-content">
+    <!-- Sidebar - Always Visible -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3>Admin Panel</h3>
+            <p>Manage your products</p>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="../index.php"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="category.php"><i class="fas fa-list"></i> Categories</a></li>
+            <li><a href="brand.php"><i class="fas fa-tags"></i> Brands</a></li>
+            <li><a href="#" class="active"><i class="fas fa-box"></i> Products</a></li>
+            <li><a href="#"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+            <li><a href="#"><i class="fas fa-users"></i> Customers</a></li>
+            <li><a href="#"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+            <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
             <!-- Header -->
             <header class="main-header">
                 <div class="container-fluid px-4">
@@ -1019,6 +1034,78 @@ require_admin(); // only admins
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../js/product.js"></script>
+    <script>
+        let sidebarHidden = false;
+
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const mainContent = document.querySelector('.main-content');
+            const toggleBtn = document.querySelector('.sidebar-toggle');
+            const toggleIcon = toggleBtn.querySelector('i');
+
+            if (window.innerWidth <= 768) {
+                // Mobile behavior: show/hide sidebar
+                sidebar.classList.toggle('sidebar-visible');
+                if (sidebar.classList.contains('sidebar-visible')) {
+                    toggleIcon.classList.remove('fa-bars');
+                    toggleIcon.classList.add('fa-times');
+                } else {
+                    toggleIcon.classList.remove('fa-times');
+                    toggleIcon.classList.add('fa-bars');
+                }
+            } else {
+                // Desktop behavior: slide sidebar and adjust content
+                sidebarHidden = !sidebarHidden;
+
+                if (sidebarHidden) {
+                    sidebar.classList.add('sidebar-hidden');
+                    mainContent.classList.add('sidebar-hidden');
+                    toggleBtn.classList.add('sidebar-hidden');
+                    toggleIcon.classList.remove('fa-bars');
+                    toggleIcon.classList.add('fa-chevron-right');
+                } else {
+                    sidebar.classList.remove('sidebar-hidden');
+                    mainContent.classList.remove('sidebar-hidden');
+                    toggleBtn.classList.remove('sidebar-hidden');
+                    toggleIcon.classList.remove('fa-chevron-right');
+                    toggleIcon.classList.add('fa-bars');
+                }
+            }
+        }
+
+        // Handle window resize to ensure proper behavior across different screen sizes
+        window.addEventListener('resize', function() {
+            const sidebar = document.querySelector('.sidebar');
+            const mainContent = document.querySelector('.main-content');
+            const toggleBtn = document.querySelector('.sidebar-toggle');
+            const toggleIcon = toggleBtn.querySelector('i');
+
+            if (window.innerWidth > 768) {
+                // Desktop: restore sidebar based on sidebarHidden state
+                sidebar.classList.remove('sidebar-visible');
+                if (sidebarHidden) {
+                    sidebar.classList.add('sidebar-hidden');
+                    mainContent.classList.add('sidebar-hidden');
+                    toggleIcon.classList.remove('fa-bars', 'fa-times');
+                    toggleIcon.classList.add('fa-chevron-right');
+                } else {
+                    sidebar.classList.remove('sidebar-hidden');
+                    mainContent.classList.remove('sidebar-hidden');
+                    toggleIcon.classList.remove('fa-chevron-right', 'fa-times');
+                    toggleIcon.classList.add('fa-bars');
+                }
+            } else {
+                // Mobile: reset desktop states and use mobile behavior
+                sidebar.classList.remove('sidebar-hidden');
+                mainContent.classList.remove('sidebar-hidden');
+                toggleBtn.classList.remove('sidebar-hidden');
+                if (!sidebar.classList.contains('sidebar-visible')) {
+                    toggleIcon.classList.remove('fa-chevron-right', 'fa-times');
+                    toggleIcon.classList.add('fa-bars');
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>
