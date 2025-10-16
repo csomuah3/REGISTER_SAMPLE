@@ -5,23 +5,9 @@ require_once(__DIR__ . '/settings/core.php');
 // Check login status and admin status
 $is_logged_in = check_login();
 $is_admin = false;
-$user_profile_image = null;
 
 if ($is_logged_in) {
 	$is_admin = check_admin();
-
-	// Get user profile image if logged in and database is available
-	$user_id = $_SESSION['user_id'] ?? 0;
-	if ($pdo && $user_id) {
-		try {
-			$stmt = $pdo->prepare("SELECT profile_image FROM users WHERE user_id = ?");
-			$stmt->execute([$user_id]);
-			$user_data = $stmt->fetch(PDO::FETCH_ASSOC);
-			$user_profile_image = $user_data['profile_image'] ?? null;
-		} catch (Exception $e) {
-			// Handle error silently, keep $user_profile_image as null
-		}
-	}
 }
 ?>
 
@@ -900,19 +886,6 @@ if ($is_logged_in) {
 			}
 		}
 
-		/* Progress Bar Styles */
-		.progress {
-			height: 10px;
-			border-radius: 5px;
-			background: rgba(255, 255, 255, 0.3);
-			overflow: hidden;
-		}
-
-		.progress-bar {
-			background: linear-gradient(135deg, #ffffff, #f8f9ff);
-			transition: width 0.3s ease;
-		}
-
 		/* Legacy menu tray (hidden) */
 		.menu-tray {
 			display: none;
@@ -963,13 +936,9 @@ if ($is_logged_in) {
 					<!-- User Avatar (if logged in) -->
 					<?php if ($is_logged_in): ?>
 						<div class="user-dropdown ms-2">
-							<?php if ($user_profile_image): ?>
-								<img src="<?= htmlspecialchars($user_profile_image) ?>" alt="Profile" class="user-avatar" title="<?= htmlspecialchars($_SESSION['name'] ?? 'User') ?>" style="object-fit: cover;">
-							<?php else: ?>
-								<div class="user-avatar" title="<?= htmlspecialchars($_SESSION['name'] ?? 'User') ?>">
-									<?= strtoupper(substr($_SESSION['name'] ?? 'U', 0, 1)) ?>
-								</div>
-							<?php endif; ?>
+							<div class="user-avatar" title="<?= htmlspecialchars($_SESSION['name'] ?? 'User') ?>">
+								<?= strtoupper(substr($_SESSION['name'] ?? 'U', 0, 1)) ?>
+							</div>
 						</div>
 					<?php endif; ?>
 				</div>
@@ -1064,31 +1033,11 @@ if ($is_logged_in) {
 					<a href="admin/category.php" class="admin-btn">Manage Categories</a>
 				</div>
 			<?php endif; ?>
-
-			<!-- Profile Picture Upload (visible to all logged-in users) -->
-			<?php if ($is_logged_in && !$user_profile_image): ?>
-				<div class="admin-panel animate__animated animate__zoomIn" style="background: linear-gradient(135deg, #06b6d4, #0891b2); margin-top: 40px;">
-					<h3>Complete Your Profile</h3>
-					<p>Upload a profile picture to personalize your FlavourHub experience!</p>
-					<div style="position: relative; display: inline-block;">
-						<input type="file" id="profilePictureInput" accept="image/*" style="display: none;" onchange="uploadProfilePicture()">
-						<button class="admin-btn" onclick="document.getElementById('profilePictureInput').click()">
-							<i class="fas fa-camera me-2"></i>Upload Profile Picture
-						</button>
-					</div>
-					<div id="upload-progress" style="display: none; margin-top: 1rem; max-width: 300px; margin-left: auto; margin-right: auto;">
-						<div class="progress">
-							<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
-						</div>
-					</div>
-				</div>
-			<?php endif; ?>
 		</div>
 	</section>
 
 	<!-- Scripts -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script>
 		// Search functionality
 		document.querySelector('.search-input').addEventListener('keypress', function(e) {
@@ -1158,102 +1107,6 @@ if ($is_logged_in) {
 		document.querySelectorAll('.promo-card, .hero-content').forEach(el => {
 			observer.observe(el);
 		});
-
-		// Profile Picture Upload Function
-		function uploadProfilePicture() {
-			const fileInput = document.getElementById('profilePictureInput');
-			const file = fileInput.files[0];
-
-			if (!file) return;
-
-			// Validate file type
-			const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
-			if (!allowedTypes.includes(file.type)) {
-				Swal.fire({
-					icon: 'error',
-					title: 'Invalid File Type',
-					text: 'Please select a valid image file (JPG, PNG, GIF, WEBP)'
-				});
-				return;
-			}
-
-			// Validate file size (5MB max)
-			if (file.size > 5 * 1024 * 1024) {
-				Swal.fire({
-					icon: 'error',
-					title: 'File Too Large',
-					text: 'Please select an image smaller than 5MB'
-				});
-				return;
-			}
-
-			const formData = new FormData();
-			formData.append('profile_picture', file);
-
-			const progressContainer = document.getElementById('upload-progress');
-			const progressBar = progressContainer.querySelector('.progress-bar');
-
-			progressContainer.style.display = 'block';
-			progressBar.style.width = '0%';
-
-			// Create XMLHttpRequest for upload progress
-			const xhr = new XMLHttpRequest();
-
-			xhr.upload.addEventListener('progress', function(e) {
-				if (e.lengthComputable) {
-					const percentComplete = (e.loaded / e.total) * 100;
-					progressBar.style.width = percentComplete + '%';
-				}
-			});
-
-			xhr.addEventListener('load', function() {
-				progressContainer.style.display = 'none';
-
-				if (xhr.status === 200) {
-					try {
-						const response = JSON.parse(xhr.responseText);
-						if (response.status === 'success') {
-							Swal.fire({
-								icon: 'success',
-								title: 'Success!',
-								text: 'Profile picture updated successfully. Refreshing page...',
-								timer: 2000,
-								showConfirmButton: false
-							}).then(() => {
-								// Refresh the page to show the new profile picture
-								window.location.reload();
-							});
-						} else {
-							throw new Error(response.message || 'Upload failed');
-						}
-					} catch (e) {
-						Swal.fire({
-							icon: 'error',
-							title: 'Upload Failed',
-							text: e.message || 'Something went wrong'
-						});
-					}
-				} else {
-					Swal.fire({
-						icon: 'error',
-						title: 'Upload Failed',
-						text: 'Server error occurred'
-					});
-				}
-			});
-
-			xhr.addEventListener('error', function() {
-				progressContainer.style.display = 'none';
-				Swal.fire({
-					icon: 'error',
-					title: 'Upload Failed',
-					text: 'Network error occurred'
-				});
-			});
-
-			xhr.open('POST', 'actions/upload_profile_picture_action.php');
-			xhr.send(formData);
-		}
 	</script>
 </body>
 

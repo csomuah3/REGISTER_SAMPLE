@@ -491,7 +491,7 @@ require_admin(); // only admins
             </div>
             <nav class="sidebar-nav">
                 <div class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="../index.php" class="nav-link">
                         <i class="fas fa-home"></i>
                         Dashboard
                     </a>
