@@ -47,8 +47,6 @@ try {
     echo "<pre>";
     print_r($tables);
     echo "</pre>";
-
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
 }
-?>
