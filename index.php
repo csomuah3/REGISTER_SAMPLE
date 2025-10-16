@@ -921,8 +921,7 @@ if ($is_logged_in) {
 						<a href="login/login.php" class="login-btn">Login</a>
 					<?php elseif ($is_admin): ?>
 						<!-- Admin logged in: Category | Brand | Logout -->
-						<a href="admin/category.php" class="login-btn me-2">Category</a>
-						<a href="admin/brand.php" class="login-btn me-2">Brand</a>
+
 						<a href="login/logout.php" class="logout-btn">Logout</a>
 					<?php else: ?>
 						<!-- Regular user logged in: Cart | Logout -->
