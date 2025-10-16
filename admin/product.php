@@ -49,31 +49,267 @@ require_admin(); // only admins
             height: 200px;
             background: linear-gradient(135deg, rgba(139, 95, 191, 0.1), rgba(240, 147, 251, 0.1));
             top: 10%;
-            left: -5%;
-            animation: float 6s ease-in-out infinite;
+            right: 15%;
+            animation: float1 8s ease-in-out infinite;
         }
 
         .bg-circle-2 {
             width: 150px;
             height: 150px;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
-            top: 70%;
-            right: -5%;
-            animation: float 8s ease-in-out infinite reverse;
+            background: linear-gradient(135deg, rgba(240, 147, 251, 0.08), rgba(139, 95, 191, 0.08));
+            bottom: 20%;
+            left: 10%;
+            animation: float2 10s ease-in-out infinite reverse;
         }
 
         .bg-circle-3 {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(251, 113, 133, 0.1));
-            top: 40%;
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, rgba(139, 95, 191, 0.06), rgba(240, 147, 251, 0.06));
+            top: 60%;
             left: 70%;
-            animation: float 7s ease-in-out infinite;
+            animation: float3 12s ease-in-out infinite;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
+        .bg-circle-4 {
+            width: 180px;
+            height: 180px;
+            background: linear-gradient(135deg, rgba(139, 95, 191, 0.09), rgba(240, 147, 251, 0.09));
+            top: 30%;
+            left: 50%;
+            animation: float1 14s ease-in-out infinite reverse;
+        }
+
+        .bg-circle-5 {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, rgba(240, 147, 251, 0.07), rgba(139, 95, 191, 0.07));
+            bottom: 40%;
+            right: 25%;
+            animation: float2 9s ease-in-out infinite;
+        }
+
+        .bg-circle-6 {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, rgba(139, 95, 191, 0.05), rgba(240, 147, 251, 0.05));
+            top: 80%;
+            left: 80%;
+            animation: float3 11s ease-in-out infinite reverse;
+        }
+
+        .bg-circle-7 {
+            width: 160px;
+            height: 160px;
+            background: linear-gradient(135deg, rgba(240, 147, 251, 0.08), rgba(139, 95, 191, 0.08));
+            top: 5%;
+            left: 30%;
+            animation: float1 13s ease-in-out infinite;
+        }
+
+        .bg-circle-8 {
+            width: 110px;
+            height: 110px;
+            background: linear-gradient(135deg, rgba(139, 95, 191, 0.06), rgba(240, 147, 251, 0.06));
+            bottom: 60%;
+            right: 40%;
+            animation: float2 15s ease-in-out infinite reverse;
+        }
+
+        .bg-circle-9 {
+            width: 130px;
+            height: 130px;
+            background: linear-gradient(135deg, rgba(240, 147, 251, 0.07), rgba(139, 95, 191, 0.07));
+            top: 45%;
+            right: 5%;
+            animation: float3 10s ease-in-out infinite;
+        }
+
+        .bg-circle-10 {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(139, 95, 191, 0.04), rgba(240, 147, 251, 0.04));
+            bottom: 10%;
+            left: 40%;
+            animation: float1 16s ease-in-out infinite reverse;
+        }
+
+        .bg-circle-11 {
+            width: 140px;
+            height: 140px;
+            background: linear-gradient(135deg, rgba(240, 147, 251, 0.09), rgba(139, 95, 191, 0.09));
+            top: 70%;
+            left: 25%;
+            animation: float2 12s ease-in-out infinite;
+        }
+
+        /* Big Animated Bubbles */
+        .big-bubble-1 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, rgba(139, 95, 191, 0.12), rgba(240, 147, 251, 0.12));
+            top: 5%;
+            right: 5%;
+            animation: bigFloat1 18s ease-in-out infinite;
+        }
+
+        .big-bubble-2 {
+            width: 250px;
+            height: 250px;
+            background: linear-gradient(135deg, rgba(240, 147, 251, 0.10), rgba(139, 95, 191, 0.10));
+            bottom: 15%;
+            left: 5%;
+            animation: bigFloat2 20s ease-in-out infinite reverse;
+        }
+
+        .big-bubble-3 {
+            width: 280px;
+            height: 280px;
+            background: linear-gradient(135deg, rgba(139, 95, 191, 0.11), rgba(240, 147, 251, 0.11));
+            top: 25%;
+            left: 75%;
+            animation: bigFloat3 16s ease-in-out infinite;
+        }
+
+        .big-bubble-4 {
+            width: 220px;
+            height: 220px;
+            background: linear-gradient(135deg, rgba(240, 147, 251, 0.09), rgba(139, 95, 191, 0.09));
+            top: 55%;
+            right: 10%;
+            animation: bigFloat1 22s ease-in-out infinite reverse;
+        }
+
+        .big-bubble-5 {
+            width: 260px;
+            height: 260px;
+            background: linear-gradient(135deg, rgba(139, 95, 191, 0.08), rgba(240, 147, 251, 0.08));
+            bottom: 45%;
+            left: 60%;
+            animation: bigFloat2 19s ease-in-out infinite;
+        }
+
+        .big-bubble-6 {
+            width: 240px;
+            height: 240px;
+            background: linear-gradient(135deg, rgba(240, 147, 251, 0.07), rgba(139, 95, 191, 0.07));
+            top: 40%;
+            left: 40%;
+            animation: bigFloat3 17s ease-in-out infinite reverse;
+        }
+
+        .big-bubble-7 {
+            width: 290px;
+            height: 290px;
+            background: linear-gradient(135deg, rgba(139, 95, 191, 0.10), rgba(240, 147, 251, 0.10));
+            top: 75%;
+            right: 30%;
+            animation: bigFloat1 21s ease-in-out infinite;
+        }
+
+        .big-bubble-8 {
+            width: 230px;
+            height: 230px;
+            background: linear-gradient(135deg, rgba(240, 147, 251, 0.08), rgba(139, 95, 191, 0.08));
+            bottom: 70%;
+            left: 20%;
+            animation: bigFloat2 15s ease-in-out infinite reverse;
+        }
+
+        .big-bubble-9 {
+            width: 270px;
+            height: 270px;
+            background: linear-gradient(135deg, rgba(139, 95, 191, 0.09), rgba(240, 147, 251, 0.09));
+            top: 10%;
+            left: 50%;
+            animation: bigFloat3 23s ease-in-out infinite;
+        }
+
+        .big-bubble-10 {
+            width: 210px;
+            height: 210px;
+            background: linear-gradient(135deg, rgba(240, 147, 251, 0.06), rgba(139, 95, 191, 0.06));
+            bottom: 25%;
+            right: 50%;
+            animation: bigFloat1 14s ease-in-out infinite reverse;
+        }
+
+        @keyframes bigFloat1 {
+            0%, 100% {
+                transform: translateY(0px) translateX(0px) rotate(0deg) scale(1);
+            }
+            25% {
+                transform: translateY(-40px) translateX(30px) rotate(90deg) scale(1.1);
+            }
+            50% {
+                transform: translateY(-20px) translateX(-25px) rotate(180deg) scale(0.9);
+            }
+            75% {
+                transform: translateY(35px) translateX(20px) rotate(270deg) scale(1.05);
+            }
+        }
+
+        @keyframes bigFloat2 {
+            0%, 100% {
+                transform: translateY(0px) translateX(0px) scale(1);
+            }
+            33% {
+                transform: translateY(-50px) translateX(40px) scale(1.15);
+            }
+            66% {
+                transform: translateY(30px) translateX(-30px) scale(0.85);
+            }
+        }
+
+        @keyframes bigFloat3 {
+            0%, 100% {
+                transform: translateY(0px) translateX(0px) rotate(0deg);
+            }
+            20% {
+                transform: translateY(25px) translateX(-35px) rotate(72deg);
+            }
+            40% {
+                transform: translateY(-35px) translateX(15px) rotate(144deg);
+            }
+            60% {
+                transform: translateY(20px) translateX(40px) rotate(216deg);
+            }
+            80% {
+                transform: translateY(-15px) translateX(-20px) rotate(288deg);
+            }
+        }
+
+        @keyframes float1 {
+            0%, 100% {
+                transform: translateY(0px) translateX(0px) rotate(0deg);
+            }
+            33% {
+                transform: translateY(-30px) translateX(20px) rotate(120deg);
+            }
+            66% {
+                transform: translateY(20px) translateX(-15px) rotate(240deg);
+            }
+        }
+
+        @keyframes float2 {
+            0%, 100% {
+                transform: translateY(0px) translateX(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-25px) translateX(25px) rotate(180deg);
+            }
+        }
+
+        @keyframes float3 {
+            0%, 100% {
+                transform: translateY(0px) translateX(0px) scale(1);
+            }
+            33% {
+                transform: translateY(15px) translateX(-20px) scale(1.1);
+            }
+            66% {
+                transform: translateY(-20px) translateX(10px) scale(0.9);
+            }
         }
 
         /* Layout */
@@ -481,6 +717,26 @@ require_admin(); // only admins
     <div class="bg-circle bg-circle-1"></div>
     <div class="bg-circle bg-circle-2"></div>
     <div class="bg-circle bg-circle-3"></div>
+    <div class="bg-circle bg-circle-4"></div>
+    <div class="bg-circle bg-circle-5"></div>
+    <div class="bg-circle bg-circle-6"></div>
+    <div class="bg-circle bg-circle-7"></div>
+    <div class="bg-circle bg-circle-8"></div>
+    <div class="bg-circle bg-circle-9"></div>
+    <div class="bg-circle bg-circle-10"></div>
+    <div class="bg-circle bg-circle-11"></div>
+
+    <!-- Big Animated Bubbles -->
+    <div class="bg-circle big-bubble-1"></div>
+    <div class="bg-circle big-bubble-2"></div>
+    <div class="bg-circle big-bubble-3"></div>
+    <div class="bg-circle big-bubble-4"></div>
+    <div class="bg-circle big-bubble-5"></div>
+    <div class="bg-circle big-bubble-6"></div>
+    <div class="bg-circle big-bubble-7"></div>
+    <div class="bg-circle big-bubble-8"></div>
+    <div class="bg-circle big-bubble-9"></div>
+    <div class="bg-circle big-bubble-10"></div>
 
     <div class="main-container">
         <!-- Sidebar -->
