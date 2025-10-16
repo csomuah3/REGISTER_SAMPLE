@@ -5,9 +5,21 @@ require_once(__DIR__ . '/settings/core.php');
 // Check login status and admin status
 $is_logged_in = check_login();
 $is_admin = false;
+$user_profile_image = null;
 
 if ($is_logged_in) {
 	$is_admin = check_admin();
+
+	// Get user profile image if logged in
+	$user_id = $_SESSION['user_id'] ?? 0;
+	try {
+		$stmt = $pdo->prepare("SELECT profile_image FROM users WHERE user_id = ?");
+		$stmt->execute([$user_id]);
+		$user_data = $stmt->fetch(PDO::FETCH_ASSOC);
+		$user_profile_image = $user_data['profile_image'] ?? null;
+	} catch (Exception $e) {
+		// Handle error silently
+	}
 }
 ?>
 
@@ -920,12 +932,14 @@ if ($is_logged_in) {
 						<a href="login/register.php" class="login-btn me-2">Register</a>
 						<a href="login/login.php" class="login-btn">Login</a>
 					<?php elseif ($is_admin): ?>
-						<!-- Admin logged in: Logout | Category | Brand -->
+						<!-- Admin logged in: Dashboard | Category | Brand | Logout -->
+						<a href="dashboard.php" class="login-btn me-2">Dashboard</a>
 						<a href="admin/category.php" class="login-btn me-2">Category</a>
 						<a href="admin/brand.php" class="login-btn me-2">Brand</a>
 						<a href="login/logout.php" class="logout-btn">Logout</a>
 					<?php else: ?>
-						<!-- Regular user logged in: Logout -->
+						<!-- Regular user logged in: Dashboard | Cart | Logout -->
+						<a href="dashboard.php" class="login-btn me-2">Dashboard</a>
 						<div class="header-icon me-2">
 							<i class="fas fa-shopping-cart"></i>
 							<span class="cart-badge">0</span>
@@ -936,9 +950,15 @@ if ($is_logged_in) {
 					<!-- User Avatar (if logged in) -->
 					<?php if ($is_logged_in): ?>
 						<div class="user-dropdown ms-2">
-							<div class="user-avatar" title="<?= htmlspecialchars($_SESSION['name'] ?? 'User') ?>">
-								<?= strtoupper(substr($_SESSION['name'] ?? 'U', 0, 1)) ?>
-							</div>
+							<a href="dashboard.php" class="text-decoration-none">
+								<?php if ($user_profile_image): ?>
+									<img src="<?= htmlspecialchars($user_profile_image) ?>" alt="Profile" class="user-avatar" title="<?= htmlspecialchars($_SESSION['name'] ?? 'User') ?>" style="object-fit: cover;">
+								<?php else: ?>
+									<div class="user-avatar" title="<?= htmlspecialchars($_SESSION['name'] ?? 'User') ?>">
+										<?= strtoupper(substr($_SESSION['name'] ?? 'U', 0, 1)) ?>
+									</div>
+								<?php endif; ?>
+							</a>
 						</div>
 					<?php endif; ?>
 				</div>

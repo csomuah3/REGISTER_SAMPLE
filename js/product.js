@@ -25,6 +25,12 @@ $(document).ready(function() {
             formData.append('images[]', files[i]);
         }
 
+        // Add image prefix if provided
+        var imagePrefix = $('#image_prefix').val().trim();
+        if (imagePrefix) {
+            formData.append('image_prefix', imagePrefix);
+        }
+
         // Show progress
         $('#upload-progress').show();
         var $btn = $('#bulkUploadForm button[type="submit"]');
@@ -175,6 +181,7 @@ $(document).ready(function() {
         var productKeywords = $('#product_keywords').val().trim();
         var categoryId = $('#category_id').val();
         var brandId = $('#brand_id').val();
+        var promoPercentage = $('#promo_percentage').val() || 0;
 
         // Validate input
         if (productTitle === '') {
@@ -234,7 +241,8 @@ $(document).ready(function() {
                 product_image: productImage,
                 product_keywords: productKeywords,
                 category_id: categoryId,
-                brand_id: brandId
+                brand_id: brandId,
+                promo_percentage: promoPercentage
             },
             success: function(response) {
                 if (response.status === 'success') {
@@ -415,10 +423,15 @@ function displayProducts(products) {
             '<img src="' + product.product_image + '" alt="' + product.product_title + '" class="product-image" onerror="this.src=\'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yNSAyMEMyNyAyMCAyOC41IDIxLjUgMjguNSAyMy41QzI4LjUgMjUuNSAyNyAyNyAyNSAyN0MyMyAyNyAyMS41IDI1LjUgMjEuNSAyMy41QzIxLjUgMjEuNSAyMyAyMCAyNSAyMFoiIGZpbGw9IiM5Q0E0QUYiLz4KPHBhdGggZD0iTTE3IDM1SDE2VjMzSDM0VjM1SDMzVjM0SDE3VjM1WiIgZmlsbD0iIzlDQTRBRiIvPgo8L3N2Zz4K\';">' :
             '<div class="product-image d-flex align-items-center justify-content-center bg-light"><i class="fas fa-image text-muted"></i></div>';
 
+        var priceDisplay = 'GH₵' + parseFloat(product.product_price).toFixed(2);
+        if (product.promo_percentage && product.promo_percentage > 0) {
+            priceDisplay += ' <span class="badge bg-success">' + product.promo_percentage + '% OFF</span>';
+        }
+
         var row = '<tr>' +
             '<td>' + imageHtml + '</td>' +
             '<td><strong>' + product.product_title + '</strong></td>' +
-            '<td>$' + parseFloat(product.product_price).toFixed(2) + '</td>' +
+            '<td>' + priceDisplay + '</td>' +
             '<td>' + (product.cat_name || 'N/A') + '</td>' +
             '<td>' + (product.brand_name || 'N/A') + '</td>' +
             '<td>' +
@@ -430,7 +443,8 @@ function displayProducts(products) {
                     (product.product_image || '').replace(/'/g, "\\'") + '\', \'' +
                     (product.product_keywords || '').replace(/'/g, "\\'") + '\', ' +
                     product.product_cat + ', ' +
-                    product.product_brand + ')">Edit</button>' +
+                    product.product_brand + ', ' +
+                    (product.promo_percentage || 0) + ')">Edit</button>' +
                 '<button class="btn btn-delete btn-sm" onclick="deleteProduct(' +
                     product.product_id + ', \'' +
                     product.product_title.replace(/'/g, "\\'") + '\')">Delete</button>' +
@@ -632,29 +646,32 @@ function deleteProduct(productId, productTitle) {
     });
 }
 
-// Display uploaded images in grid
+// Display uploaded images as a list
 function displayUploadedImages(files) {
     var container = $('#uploaded-images');
     container.empty();
 
     if (files && files.length > 0) {
+        var listHtml = '<div class="uploaded-files-list"><h6 class="mb-3">Uploaded Images (' + files.length + '):</h6>';
+
         files.forEach(function(file) {
-            var imageHtml =
-                '<div class="col-md-3 col-sm-4 col-6">' +
-                    '<div class="uploaded-image-item">' +
-                        '<img src="' + file.full_url + '" alt="' + file.original_name + '" class="uploaded-image">' +
-                        '<div class="image-overlay">' +
-                            '<div class="text-center">' +
-                                '<div class="mb-2"><strong>' + file.original_name + '</strong></div>' +
-                                '<button class="copy-url-btn" onclick="copyImageUrl(\'' + file.full_url + '\')">' +
-                                    '<i class="fas fa-copy me-1"></i>Copy URL' +
-                                '</button>' +
-                            '</div>' +
-                        '</div>' +
+            listHtml +=
+                '<div class="uploaded-file-item d-flex justify-content-between align-items-center mb-2 p-2 border rounded">' +
+                    '<div class="file-info">' +
+                        '<i class="fas fa-image text-success me-2"></i>' +
+                        '<strong>' + file.file_name + '</strong>' +
+                        '<br><small class="text-muted">Original: ' + file.original_name + '</small>' +
+                    '</div>' +
+                    '<div class="file-actions">' +
+                        '<button class="btn btn-sm btn-outline-primary" onclick="copyImageUrl(\'' + file.full_url + '\')">' +
+                            '<i class="fas fa-copy me-1"></i>Copy URL' +
+                        '</button>' +
                     '</div>' +
                 '</div>';
-            container.append(imageHtml);
         });
+
+        listHtml += '</div>';
+        container.html(listHtml);
     }
 }
 

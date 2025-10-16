@@ -21,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $webPath = '../uploads/products/';
         $uploadedFiles = [];
         $errors = [];
+        $imagePrefix = trim($_POST['image_prefix'] ?? '');
 
         // Ensure upload directory exists
         if (!file_exists($uploadDir)) {
@@ -58,8 +59,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 continue;
             }
 
-            // Generate unique filename
-            $uniqueName = uniqid() . '_' . time() . '.' . $fileExtension;
+            // Generate unique filename with optional prefix
+            $baseName = pathinfo($fileName, PATHINFO_FILENAME);
+            $prefix = !empty($imagePrefix) ? $imagePrefix . '_' : '';
+            $uniqueName = $prefix . $baseName . '_' . time() . '.' . $fileExtension;
             $uploadPath = $uploadDir . $uniqueName;
 
             // Move uploaded file

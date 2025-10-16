@@ -23,6 +23,7 @@ try {
                 product_id INT(11) NOT NULL AUTO_INCREMENT,
                 product_title VARCHAR(255) NOT NULL,
                 product_price DECIMAL(10,2) NOT NULL,
+                promo_percentage INT(3) DEFAULT 0,
                 product_desc TEXT,
                 product_image VARCHAR(255),
                 product_keywords VARCHAR(255),

@@ -9,7 +9,7 @@ class Product extends db_connection {
     }
 
     // Add a new product
-    public function add_product($product_title, $product_price, $product_desc, $product_image, $product_keywords, $category_id, $brand_id) {
+    public function add_product($product_title, $product_price, $product_desc, $product_image, $product_keywords, $category_id, $brand_id, $promo_percentage = 0) {
         // Sanitize inputs
         $product_title = trim($product_title);
         $product_price = (float)$product_price;
@@ -18,6 +18,7 @@ class Product extends db_connection {
         $product_keywords = trim($product_keywords);
         $category_id = (int)$category_id;
         $brand_id = (int)$brand_id;
+        $promo_percentage = (int)$promo_percentage;
 
         // Validate inputs
         if (empty($product_title) || $product_price <= 0) {
@@ -25,15 +26,15 @@ class Product extends db_connection {
         }
 
         // Simple INSERT query
-        $sql = "INSERT INTO products (product_title, product_price, product_desc, product_image, product_keywords, product_cat, product_brand)
-                VALUES ('$product_title', $product_price, '$product_desc', '$product_image', '$product_keywords', $category_id, $brand_id)";
+        $sql = "INSERT INTO products (product_title, product_price, promo_percentage, product_desc, product_image, product_keywords, product_cat, product_brand)
+                VALUES ('$product_title', $product_price, $promo_percentage, '$product_desc', '$product_image', '$product_keywords', $category_id, $brand_id)";
 
         return $this->db_write_query($sql);
     }
 
     // Get all products
     public function get_all_products() {
-        $sql = "SELECT p.product_id, p.product_title, p.product_price, p.product_desc, p.product_image, p.product_keywords,
+        $sql = "SELECT p.product_id, p.product_title, p.product_price, p.promo_percentage, p.product_desc, p.product_image, p.product_keywords,
                        p.product_cat, p.product_brand,
                        c.cat_name, b.brand_name
                 FROM products p
@@ -92,7 +93,7 @@ class Product extends db_connection {
     }
 
     // Update a product
-    public function update_product($product_id, $product_title, $product_price, $product_desc, $product_image, $product_keywords, $category_id, $brand_id) {
+    public function update_product($product_id, $product_title, $product_price, $product_desc, $product_image, $product_keywords, $category_id, $brand_id, $promo_percentage = 0) {
         $product_id = (int)$product_id;
         $product_title = trim($product_title);
         $product_price = (float)$product_price;
@@ -101,6 +102,7 @@ class Product extends db_connection {
         $product_keywords = trim($product_keywords);
         $category_id = (int)$category_id;
         $brand_id = (int)$brand_id;
+        $promo_percentage = (int)$promo_percentage;
 
         if (empty($product_title) || $product_price <= 0) {
             return false;
@@ -109,6 +111,7 @@ class Product extends db_connection {
         $sql = "UPDATE products SET
                 product_title = '$product_title',
                 product_price = $product_price,
+                promo_percentage = $promo_percentage,
                 product_desc = '$product_desc',
                 product_image = '$product_image',
                 product_keywords = '$product_keywords',

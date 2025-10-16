@@ -566,57 +566,35 @@ require_admin(); // only admins
             <div class="content-area">
                 <h1 class="page-title">Product Management</h1>
 
-                <!-- Upload Features Row -->
-                <div class="row mb-4">
-                    <!-- Bulk Image Upload -->
-                    <div class="col-md-8">
-                        <div class="admin-card">
-                            <div class="card-header">
-                                <i class="fas fa-images me-2"></i>Bulk Image Upload for Products
-                            </div>
-                            <div class="card-body">
-                                <form id="bulkUploadForm" enctype="multipart/form-data">
-                                    <div class="mb-3">
-                                        <label for="bulk_images" class="form-label">Select Product Images</label>
-                                        <input type="file" class="form-control" id="bulk_images" name="images[]" multiple accept="image/*" required>
-                                        <div class="form-text">Select multiple images (JPG, PNG, GIF, WEBP). Max 5MB per file.</div>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-upload me-2"></i>Upload Images
-                                    </button>
-                                </form>
-                                <div id="upload-progress" class="mt-3" style="display: none;">
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
-                                    </div>
-                                </div>
-                                <div id="uploaded-images" class="mt-3 row"></div>
-                            </div>
-                        </div>
+                <!-- Bulk Image Upload -->
+                <div class="admin-card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-images me-2"></i>Bulk Image Upload for Products
                     </div>
-
-                    <!-- Profile Picture Upload -->
-                    <div class="col-md-4">
-                        <div class="admin-card">
-                            <div class="card-header">
-                                <i class="fas fa-user-circle me-2"></i>Profile Picture
-                            </div>
-                            <div class="card-body text-center">
-                                <div class="profile-picture-container mb-3">
-                                    <img id="current-profile" src="https://via.placeholder.com/120x120/8b5fbf/ffffff?text=<?= substr(htmlspecialchars($_SESSION['name'] ?? 'Admin'), 0, 1) ?>"
-                                         alt="Profile Picture" class="rounded-circle profile-img">
+                    <div class="card-body">
+                        <form id="bulkUploadForm" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <label for="bulk_images" class="form-label">Select Product Images</label>
+                                    <input type="file" class="form-control" id="bulk_images" name="images[]" multiple accept="image/*" required>
+                                    <div class="form-text">Select multiple images (JPG, PNG, GIF, WEBP). Max 5MB per file.</div>
                                 </div>
-                                <form id="profileUploadForm" enctype="multipart/form-data">
-                                    <div class="mb-3">
-                                        <input type="file" class="form-control" id="profile_image" name="profile_image" accept="image/*" required>
-                                        <div class="form-text">JPG, PNG, GIF only. Max 2MB.</div>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary btn-sm">
-                                        <i class="fas fa-camera me-2"></i>Update Photo
-                                    </button>
-                                </form>
+                                <div class="col-md-4">
+                                    <label for="image_prefix" class="form-label">Image Name Prefix</label>
+                                    <input type="text" class="form-control" id="image_prefix" placeholder="e.g. product_main">
+                                    <div class="form-text">Optional: Add prefix to organize images</div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-3">
+                                <i class="fas fa-upload me-2"></i>Upload Images
+                            </button>
+                        </form>
+                        <div id="upload-progress" class="mt-3" style="display: none;">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
                             </div>
                         </div>
+                        <div id="uploaded-images" class="mt-3"></div>
                     </div>
                 </div>
 
@@ -632,9 +610,13 @@ require_admin(); // only admins
                                     <label for="product_title" class="form-label">Product Title</label>
                                     <input type="text" class="form-control" id="product_title" name="product_title" required>
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="product_price" class="form-label">Price ($)</label>
+                                <div class="col-md-4 mb-3">
+                                    <label for="product_price" class="form-label">Price (GH₵)</label>
                                     <input type="number" step="0.01" min="0" class="form-control" id="product_price" name="product_price" required>
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    <label for="promo_percentage" class="form-label">Promo %</label>
+                                    <input type="number" min="0" max="100" class="form-control" id="promo_percentage" name="promo_percentage" placeholder="0">
                                 </div>
                             </div>
 
@@ -726,8 +708,12 @@ require_admin(); // only admins
                                 <input type="text" class="form-control" id="edit_product_title" name="product_title" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="edit_product_price" class="form-label">Price ($)</label>
+                                <label for="edit_product_price" class="form-label">Price (GH₵)</label>
                                 <input type="number" step="0.01" min="0" class="form-control" id="edit_product_price" name="product_price" required>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label for="edit_promo_percentage" class="form-label">Promo %</label>
+                                <input type="number" min="0" max="100" class="form-control" id="edit_promo_percentage" name="promo_percentage" placeholder="0">
                             </div>
                         </div>
 

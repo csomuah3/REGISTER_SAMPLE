@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../classes/product_class.php';
 
 // Add product
-function add_product_ctr($product_title, $product_price, $product_desc, $product_image, $product_keywords, $category_id, $brand_id) {
+function add_product_ctr($product_title, $product_price, $product_desc, $product_image, $product_keywords, $category_id, $brand_id, $promo_percentage = 0) {
     $product = new Product();
 
     // Check if product title already exists
@@ -11,7 +11,7 @@ function add_product_ctr($product_title, $product_price, $product_desc, $product
         return ['status' => 'error', 'message' => 'Product title already exists'];
     }
 
-    $result = $product->add_product($product_title, $product_price, $product_desc, $product_image, $product_keywords, $category_id, $brand_id);
+    $result = $product->add_product($product_title, $product_price, $product_desc, $product_image, $product_keywords, $category_id, $brand_id, $promo_percentage);
     if ($result) {
         return ['status' => 'success', 'message' => 'Product added successfully'];
     } else {
@@ -44,7 +44,7 @@ function get_product_by_id_ctr($product_id) {
 }
 
 // Update product
-function update_product_ctr($product_id, $product_title, $product_price, $product_desc, $product_image, $product_keywords, $category_id, $brand_id) {
+function update_product_ctr($product_id, $product_title, $product_price, $product_desc, $product_image, $product_keywords, $category_id, $brand_id, $promo_percentage = 0) {
     $product = new Product();
 
     // Check if product title already exists (excluding current product)
@@ -53,7 +53,7 @@ function update_product_ctr($product_id, $product_title, $product_price, $produc
         return ['status' => 'error', 'message' => 'Product title already exists'];
     }
 
-    $result = $product->update_product($product_id, $product_title, $product_price, $product_desc, $product_image, $product_keywords, $category_id, $brand_id);
+    $result = $product->update_product($product_id, $product_title, $product_price, $product_desc, $product_image, $product_keywords, $category_id, $brand_id, $promo_percentage);
     if ($result) {
         return ['status' => 'success', 'message' => 'Product updated successfully'];
     } else {
