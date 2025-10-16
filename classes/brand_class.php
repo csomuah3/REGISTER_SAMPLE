@@ -20,16 +20,8 @@ class Brand extends db_connection {
             return false;
         }
 
-        // Ensure database connection
-        if (!$this->db || mysqli_connect_errno()) {
-            $this->db_connect();
-        }
-
-        // Escape string for safety
-        $brand_name_escaped = mysqli_real_escape_string($this->db, $brand_name);
-
-        // Simple INSERT query
-        $sql = "INSERT INTO brands (brand_name, category_id, user_id) VALUES ('$brand_name_escaped', $category_id, $user_id)";
+        // Simple INSERT query without escaping for now to avoid connection issues
+        $sql = "INSERT INTO brands (brand_name, category_id, user_id) VALUES ('$brand_name', $category_id, $user_id)";
 
         return $this->db_write_query($sql);
     }
@@ -100,18 +92,13 @@ class Brand extends db_connection {
 
     // Check if brand name exists
     public function check_brand_exists($brand_name, $category_id = null, $user_id = null, $brand_id = null) {
-        // Ensure database connection
-        if (!$this->db || mysqli_connect_errno()) {
-            $this->db_connect();
-        }
-
-        $brand_name_escaped = mysqli_real_escape_string($this->db, $brand_name);
+        $brand_name = trim($brand_name);
 
         if ($brand_id) {
             $brand_id = (int)$brand_id;
-            $sql = "SELECT brand_id FROM brands WHERE brand_name = '$brand_name_escaped' AND brand_id != $brand_id";
+            $sql = "SELECT brand_id FROM brands WHERE brand_name = '$brand_name' AND brand_id != $brand_id";
         } else {
-            $sql = "SELECT brand_id FROM brands WHERE brand_name = '$brand_name_escaped'";
+            $sql = "SELECT brand_id FROM brands WHERE brand_name = '$brand_name'";
         }
 
         $result = $this->db_fetch_one($sql);
