@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Move uploaded file
         if (move_uploaded_file($file['tmp_name'], $uploadPath)) {
-            $fullUrl = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['REQUEST_URI']) . '/' . $webPath . $fileName;
+            $fullUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/REGISTER_SAMPLE/uploads/profiles/' . $fileName;
 
             // TODO: Update user profile in database with new image path
             // For now, we'll just return the file info

@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'original_name' => $fileName,
                     'file_name' => $uniqueName,
                     'web_path' => $webPath . $uniqueName,
-                    'full_url' => 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['REQUEST_URI']) . '/' . $webPath . $uniqueName
+                    'full_url' => 'http://' . $_SERVER['HTTP_HOST'] . '/REGISTER_SAMPLE/uploads/products/' . $uniqueName
                 ];
             } else {
                 $errors[] = "Failed to upload $fileName";
