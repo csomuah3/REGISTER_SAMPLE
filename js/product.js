@@ -3,6 +3,167 @@ $(document).ready(function() {
     loadCategories();
     loadBrands();
 
+    // Bulk upload form submission
+    $('#bulkUploadForm').submit(function(e) {
+        e.preventDefault();
+
+        var formData = new FormData();
+        var files = $('#bulk_images')[0].files;
+
+        if (files.length === 0) {
+            Swal.fire({
+                title: 'Validation Error',
+                text: 'Please select at least one image!',
+                icon: 'error',
+                confirmButtonColor: '#8b5fbf'
+            });
+            return;
+        }
+
+        // Append files to FormData
+        for (var i = 0; i < files.length; i++) {
+            formData.append('images[]', files[i]);
+        }
+
+        // Show progress
+        $('#upload-progress').show();
+        var $btn = $('#bulkUploadForm button[type="submit"]');
+        var originalText = $btn.text();
+        $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2" role="status"></span>Uploading...');
+
+        // AJAX upload
+        $.ajax({
+            url: '../actions/bulk_upload_action.php',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            xhr: function() {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function(evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = (evt.loaded / evt.total) * 100;
+                        $('.progress-bar').css('width', percentComplete + '%');
+                    }
+                }, false);
+                return xhr;
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: response.message,
+                        icon: 'success',
+                        confirmButtonColor: '#8b5fbf',
+                        timer: 2000,
+                        timerProgressBar: true
+                    });
+
+                    // Display uploaded images
+                    displayUploadedImages(response.files);
+                    $('#bulkUploadForm')[0].reset();
+
+                    if (response.warnings && response.warnings.length > 0) {
+                        setTimeout(function() {
+                            Swal.fire({
+                                title: 'Some files had issues',
+                                html: response.warnings.join('<br>'),
+                                icon: 'warning',
+                                confirmButtonColor: '#8b5fbf'
+                            });
+                        }, 2500);
+                    }
+                } else {
+                    Swal.fire({
+                        title: 'Upload Failed',
+                        text: response.message,
+                        icon: 'error',
+                        confirmButtonColor: '#8b5fbf'
+                    });
+                }
+            },
+            error: function() {
+                Swal.fire({
+                    title: 'Upload Error',
+                    text: 'Failed to upload images. Please try again.',
+                    icon: 'error',
+                    confirmButtonColor: '#8b5fbf'
+                });
+            },
+            complete: function() {
+                $('#upload-progress').hide();
+                $('.progress-bar').css('width', '0%');
+                $btn.prop('disabled', false).text(originalText);
+            }
+        });
+    });
+
+    // Profile upload form submission
+    $('#profileUploadForm').submit(function(e) {
+        e.preventDefault();
+
+        var formData = new FormData();
+        var file = $('#profile_image')[0].files[0];
+
+        if (!file) {
+            Swal.fire({
+                title: 'Validation Error',
+                text: 'Please select a profile picture!',
+                icon: 'error',
+                confirmButtonColor: '#8b5fbf'
+            });
+            return;
+        }
+
+        formData.append('profile_image', file);
+
+        var $btn = $('#profileUploadForm button[type="submit"]');
+        var originalText = $btn.text();
+        $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2" role="status"></span>Uploading...');
+
+        $.ajax({
+            url: '../actions/profile_upload_action.php',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.status === 'success') {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: response.message,
+                        icon: 'success',
+                        confirmButtonColor: '#8b5fbf',
+                        timer: 2000,
+                        timerProgressBar: true
+                    });
+
+                    // Update profile image
+                    $('#current-profile').attr('src', response.full_url + '?t=' + new Date().getTime());
+                    $('#profileUploadForm')[0].reset();
+                } else {
+                    Swal.fire({
+                        title: 'Upload Failed',
+                        text: response.message,
+                        icon: 'error',
+                        confirmButtonColor: '#8b5fbf'
+                    });
+                }
+            },
+            error: function() {
+                Swal.fire({
+                    title: 'Upload Error',
+                    text: 'Failed to upload profile picture. Please try again.',
+                    icon: 'error',
+                    confirmButtonColor: '#8b5fbf'
+                });
+            },
+            complete: function() {
+                $btn.prop('disabled', false).text(originalText);
+            }
+        });
+    });
+
     // Add product form submission
     $('#addProductForm').submit(function(e) {
         e.preventDefault();
@@ -468,5 +629,62 @@ function deleteProduct(productId, productTitle) {
                 }
             });
         }
+    });
+}
+
+// Display uploaded images in grid
+function displayUploadedImages(files) {
+    var container = $('#uploaded-images');
+    container.empty();
+
+    if (files && files.length > 0) {
+        files.forEach(function(file) {
+            var imageHtml =
+                '<div class="col-md-3 col-sm-4 col-6">' +
+                    '<div class="uploaded-image-item">' +
+                        '<img src="' + file.full_url + '" alt="' + file.original_name + '" class="uploaded-image">' +
+                        '<div class="image-overlay">' +
+                            '<div class="text-center">' +
+                                '<div class="mb-2"><strong>' + file.original_name + '</strong></div>' +
+                                '<button class="copy-url-btn" onclick="copyImageUrl(\'' + file.full_url + '\')">' +
+                                    '<i class="fas fa-copy me-1"></i>Copy URL' +
+                                '</button>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+            container.append(imageHtml);
+        });
+    }
+}
+
+// Copy image URL to clipboard
+function copyImageUrl(url) {
+    navigator.clipboard.writeText(url).then(function() {
+        Swal.fire({
+            title: 'Copied!',
+            text: 'Image URL copied to clipboard',
+            icon: 'success',
+            confirmButtonColor: '#8b5fbf',
+            timer: 1500,
+            timerProgressBar: true
+        });
+    }).catch(function() {
+        // Fallback for older browsers
+        var textArea = document.createElement("textarea");
+        textArea.value = url;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+
+        Swal.fire({
+            title: 'Copied!',
+            text: 'Image URL copied to clipboard',
+            icon: 'success',
+            confirmButtonColor: '#8b5fbf',
+            timer: 1500,
+            timerProgressBar: true
+        });
     });
 }

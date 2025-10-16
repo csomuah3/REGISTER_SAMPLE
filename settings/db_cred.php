@@ -6,7 +6,7 @@ if (!defined("SERVER")) {
 }
 
 if (!defined("USERNAME")) {
-    define("USERNAME", "Chelsea.somuah");
+    define("USERNAME", "chelsea.somuah");
 }
 
 if (!defined("PASSWD")) {

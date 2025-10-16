@@ -372,6 +372,84 @@ require_admin(); // only admins
             border: 2px solid #e5e7eb;
         }
 
+        /* Upload Features */
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border: 4px solid #8b5fbf;
+            transition: all 0.3s ease;
+        }
+
+        .profile-img:hover {
+            transform: scale(1.05);
+            border-color: #6366f1;
+        }
+
+        .uploaded-image-item {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .uploaded-image {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .uploaded-image:hover {
+            border-color: #8b5fbf;
+            transform: scale(1.02);
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(139, 95, 191, 0.8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+
+        .uploaded-image-item:hover .image-overlay {
+            opacity: 1;
+        }
+
+        .copy-url-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            border-radius: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .copy-url-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        .progress {
+            height: 10px;
+            border-radius: 5px;
+            background: #f3f4f6;
+        }
+
+        .progress-bar {
+            background: linear-gradient(135deg, #8b5fbf, #6366f1);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .sidebar {
@@ -487,6 +565,60 @@ require_admin(); // only admins
             <!-- Content Area -->
             <div class="content-area">
                 <h1 class="page-title">Product Management</h1>
+
+                <!-- Upload Features Row -->
+                <div class="row mb-4">
+                    <!-- Bulk Image Upload -->
+                    <div class="col-md-8">
+                        <div class="admin-card">
+                            <div class="card-header">
+                                <i class="fas fa-images me-2"></i>Bulk Image Upload for Products
+                            </div>
+                            <div class="card-body">
+                                <form id="bulkUploadForm" enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="bulk_images" class="form-label">Select Product Images</label>
+                                        <input type="file" class="form-control" id="bulk_images" name="images[]" multiple accept="image/*" required>
+                                        <div class="form-text">Select multiple images (JPG, PNG, GIF, WEBP). Max 5MB per file.</div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-upload me-2"></i>Upload Images
+                                    </button>
+                                </form>
+                                <div id="upload-progress" class="mt-3" style="display: none;">
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                                <div id="uploaded-images" class="mt-3 row"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profile Picture Upload -->
+                    <div class="col-md-4">
+                        <div class="admin-card">
+                            <div class="card-header">
+                                <i class="fas fa-user-circle me-2"></i>Profile Picture
+                            </div>
+                            <div class="card-body text-center">
+                                <div class="profile-picture-container mb-3">
+                                    <img id="current-profile" src="https://via.placeholder.com/120x120/8b5fbf/ffffff?text=<?= substr(htmlspecialchars($_SESSION['name'] ?? 'Admin'), 0, 1) ?>"
+                                         alt="Profile Picture" class="rounded-circle profile-img">
+                                </div>
+                                <form id="profileUploadForm" enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <input type="file" class="form-control" id="profile_image" name="profile_image" accept="image/*" required>
+                                        <div class="form-text">JPG, PNG, GIF only. Max 2MB.</div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-camera me-2"></i>Update Photo
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Add Product Form -->
                 <div class="admin-card">
