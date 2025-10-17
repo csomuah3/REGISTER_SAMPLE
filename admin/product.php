@@ -920,10 +920,6 @@ require_admin(); // only admins
                                     <label for="product_price" class="form-label">Price (GH₵)</label>
                                     <input type="number" step="0.01" min="0" class="form-control" id="product_price" name="product_price" required>
                                 </div>
-                                <div class="col-md-2 mb-3">
-                                    <label for="promo_percentage" class="form-label">Promo %</label>
-                                    <input type="number" min="0" max="100" class="form-control" id="promo_percentage" name="promo_percentage" placeholder="0">
-                                </div>
                             </div>
 
                             <div class="row">
@@ -948,8 +944,8 @@ require_admin(); // only admins
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="product_image" class="form-label">Image URL</label>
-                                    <input type="url" class="form-control" id="product_image" name="product_image">
+                                    <label for="product_image" class="form-label">Product Image</label>
+                                    <input type="file" class="form-control" id="product_image" name="product_image" accept="image/*">
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="product_keywords" class="form-label">Keywords</label>
@@ -1017,10 +1013,6 @@ require_admin(); // only admins
                                 <label for="edit_product_price" class="form-label">Price (GH₵)</label>
                                 <input type="number" step="0.01" min="0" class="form-control" id="edit_product_price" name="product_price" required>
                             </div>
-                            <div class="col-md-2 mb-3">
-                                <label for="edit_promo_percentage" class="form-label">Promo %</label>
-                                <input type="number" min="0" max="100" class="form-control" id="edit_promo_percentage" name="promo_percentage" placeholder="0">
-                            </div>
                         </div>
 
                         <div class="row">
@@ -1045,8 +1037,8 @@ require_admin(); // only admins
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="edit_product_image" class="form-label">Image URL</label>
-                                <input type="url" class="form-control" id="edit_product_image" name="product_image">
+                                <label for="edit_product_image" class="form-label">Product Image</label>
+                                <input type="file" class="form-control" id="edit_product_image" name="product_image" accept="image/*">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="edit_product_keywords" class="form-label">Keywords</label>
