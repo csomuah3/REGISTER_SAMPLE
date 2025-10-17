@@ -177,7 +177,7 @@ $(document).ready(function() {
         var productTitle = $('#product_title').val().trim();
         var productPrice = $('#product_price').val();
         var productDesc = $('#product_desc').val().trim();
-        var productImage = $('#product_image').val().trim();
+        var productImage = $('#product_image')[0].files[0];
         var productKeywords = $('#product_keywords').val().trim();
         var categoryId = $('#category_id').val();
         var brandId = $('#brand_id').val();
@@ -228,20 +228,27 @@ $(document).ready(function() {
         var originalText = $btn.text();
         $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2" role="status"></span>Adding...');
 
+        // Create FormData for file upload
+        var formData = new FormData();
+        formData.append('product_title', productTitle);
+        formData.append('product_price', productPrice);
+        formData.append('product_desc', productDesc);
+        formData.append('product_keywords', productKeywords);
+        formData.append('category_id', categoryId);
+        formData.append('brand_id', brandId);
+
+        if (productImage) {
+            formData.append('product_image', productImage);
+        }
+
         // AJAX request
         $.ajax({
             url: '../actions/add_product_action.php',
             type: 'POST',
             dataType: 'json',
-            data: {
-                product_title: productTitle,
-                product_price: productPrice,
-                product_desc: productDesc,
-                product_image: productImage,
-                product_keywords: productKeywords,
-                category_id: categoryId,
-                brand_id: brandId
-            },
+            data: formData,
+            processData: false,
+            contentType: false,
             success: function(response) {
                 if (response.status === 'success') {
                     Swal.fire({

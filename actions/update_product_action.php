@@ -19,7 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $product_keywords = trim($_POST['product_keywords'] ?? '');
     $category_id = (int)($_POST['category_id'] ?? 0);
     $brand_id = (int)($_POST['brand_id'] ?? 0);
-    $promo_percentage = (int)($_POST['promo_percentage'] ?? 0);
 
     // Validate input
     if ($product_id <= 0) {
@@ -48,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     try {
-        $result = update_product_ctr($product_id, $product_title, $product_price, $product_desc, $product_image, $product_keywords, $category_id, $brand_id, $promo_percentage);
+        $result = update_product_ctr($product_id, $product_title, $product_price, $product_desc, $product_image, $product_keywords, $category_id, $brand_id);
         echo json_encode($result);
     } catch (Exception $e) {
         echo json_encode(['status' => 'error', 'message' => 'Failed to update product: ' . $e->getMessage()]);

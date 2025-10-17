@@ -910,7 +910,7 @@ require_admin(); // only admins
                         Add New Product
                     </div>
                     <div class="card-body">
-                        <form id="addProductForm">
+                        <form id="addProductForm" enctype="multipart/form-data">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="product_title" class="form-label">Product Title</label>
