@@ -333,6 +333,36 @@ require_admin(); // only admins
             transform: translateX(-100%);
         }
 
+        .sidebar-logo {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .logo-link {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .logo-link:hover {
+            color: rgba(255, 255, 255, 0.8);
+            transform: scale(1.05);
+        }
+
+        .logo-link .co {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            margin-left: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
         .sidebar-header {
             text-align: center;
             margin-bottom: 30px;
@@ -796,6 +826,11 @@ require_admin(); // only admins
 
     <!-- Sidebar - Always Visible -->
     <div class="sidebar">
+        <div class="sidebar-logo">
+            <a href="../index.php" class="logo-link">
+                FlavourHub<span class="co">co</span>
+            </a>
+        </div>
         <div class="sidebar-header">
             <h3>Admin Panel</h3>
             <p>Manage your products</p>

@@ -291,6 +291,7 @@ $(document).ready(function() {
         var productKeywords = $('#edit_product_keywords').val().trim();
         var categoryId = $('#edit_category_id').val();
         var brandId = $('#edit_brand_id').val();
+        var promoPercentage = $('#edit_promo_percentage').val() || 0;
 
         // Validate input
         if (productTitle === '') {
@@ -351,7 +352,8 @@ $(document).ready(function() {
                 product_image: productImage,
                 product_keywords: productKeywords,
                 category_id: categoryId,
-                brand_id: brandId
+                brand_id: brandId,
+                promo_percentage: promoPercentage
             },
             success: function(response) {
                 if (response.status === 'success') {
@@ -420,7 +422,12 @@ function displayProducts(products) {
 
     products.forEach(function(product) {
         var imageHtml = product.product_image ?
-            '<img src="' + product.product_image + '" alt="' + product.product_title + '" class="product-image" onerror="this.src=\'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yNSAyMEMyNyAyMCAyOC41IDIxLjUgMjguNSAyMy41QzI4LjUgMjUuNSAyNyAyNyAyNSAyN0MyMyAyNyAyMS41IDI1LjUgMjEuNSAyMy41QzIxLjUgMjEuNSAyMyAyMCAyNSAyMFoiIGZpbGw9IiM5Q0E0QUYiLz4KPHBhdGggZD0iTTE3IDM1SDE2VjMzSDM0VjM1SDMzVjM0SDE3VjM1WiIgZmlsbD0iIzlDQTRBRiIvPgo8L3N2Zz4K\';">' :
+            '<div class="position-relative">' +
+                '<img src="' + product.product_image + '" alt="' + product.product_title + '" class="product-image" onerror="this.src=\'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yNSAyMEMyNyAyMCAyOC41IDIxLjUgMjguNSAyMy41QzI4LjUgMjUuNSAyNyAyNyAyNSAyN0MyMyAyNyAyMS41IDI1LjUgMjEuNSAyMy41QzIxLjUgMjEuNSAyMyAyMCAyNSAyMFoiIGZpbGw9IiM5Q0E0QUYiLz4KPHBhdGggZD0iTTE3IDM1SDE2VjMzSDM0VjM1SDMzVjM0SDE3VjM1WiIgZmlsbD0iIzlDQTRBRiIvPgo8L3N2Zz4K\';">' +
+                '<button class="btn btn-sm btn-outline-primary position-absolute" style="top: 2px; right: 2px; padding: 2px 6px; font-size: 10px;" onclick="copyImageUrl(\'' + product.product_image + '\')" title="Copy URL">' +
+                    '<i class="fas fa-copy"></i>' +
+                '</button>' +
+            '</div>' :
             '<div class="product-image d-flex align-items-center justify-content-center bg-light"><i class="fas fa-image text-muted"></i></div>';
 
         var priceDisplay = 'GH₵' + parseFloat(product.product_price).toFixed(2);
@@ -582,7 +589,7 @@ function populateBrandDropdowns(brands) {
 }
 
 // Edit product
-function editProduct(productId, productTitle, productPrice, productDesc, productImage, productKeywords, categoryId, brandId) {
+function editProduct(productId, productTitle, productPrice, productDesc, productImage, productKeywords, categoryId, brandId, promoPercentage) {
     $('#edit_product_id').val(productId);
     $('#edit_product_title').val(productTitle);
     $('#edit_product_price').val(productPrice);
@@ -591,6 +598,7 @@ function editProduct(productId, productTitle, productPrice, productDesc, product
     $('#edit_product_keywords').val(productKeywords);
     $('#edit_category_id').val(categoryId);
     $('#edit_brand_id').val(brandId);
+    $('#edit_promo_percentage').val(promoPercentage || 0);
     $('#editProductModal').modal('show');
 }
 
