@@ -1440,9 +1440,9 @@ try {
 	</section>
 
 	<!-- Top Picks Section -->
-	<section class="top-picks-section py-5">
+	<section class="top-picks-section py-2">
 		<div class="container">
-			<div class="text-center mb-5">
+			<div class="text-center mb-3">
 				<h2 class="section-title">FlavorHub's Top Picks for You</h2>
 				<p class="section-subtitle">Discover our most popular and trending products this week</p>
 			</div>
