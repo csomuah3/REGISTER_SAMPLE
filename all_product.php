@@ -804,9 +804,16 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
                     `;
                 } else {
                     productGrid.innerHTML = products.map(product => {
-                        const imagePath = product.product_image ?
-                            (product.product_image.includes('uploads/') ? product.product_image : 'uploads/' + product.product_image) :
-                            \`https://via.placeholder.com/320x240/8b5fbf/ffffff?text=\${encodeURIComponent(product.product_title)}\`;
+                        let imagePath = '';
+                        if (product.product_image) {
+                            if (product.product_image.startsWith('uploads/') || product.product_image.startsWith('images/')) {
+                                imagePath = product.product_image;
+                            } else {
+                                imagePath = 'uploads/' + product.product_image;
+                            }
+                        } else {
+                            imagePath = \`https://via.placeholder.com/320x240/8b5fbf/ffffff?text=\${encodeURIComponent(product.product_title)}\`;
+                        }
 
                         return \`
                         <div class="product-card" onclick="viewProduct(\${product.product_id})">

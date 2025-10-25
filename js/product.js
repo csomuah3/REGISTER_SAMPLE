@@ -424,9 +424,27 @@ function displayProducts(products) {
     }
 
     products.forEach(function(product) {
-        var imageHtml = product.product_image ?
-            '<img src="' + product.product_image + '" alt="' + product.product_title + '" class="product-image" onerror="this.src=\'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yNSAyMEMyNyAyMCAyOC41IDIxLjUgMjguNSAyMy41QzI4LjUgMjUuNSAyNyAyNyAyNSAyN0MyMyAyNyAyMS41IDI1LjUgMjEuNSAyMy41QzIxLjUgMjEuNSAyMyAyMCAyNSAyMFoiIGZpbGw9IiM5Q0E0QUYiLz4KPHBhdGggZD0iTTE3IDM1SDE2VjMzSDM0VjM1SDMzVjM0SDE3VjM1WiIgZmlsbD0iIzlDQTRBRiIvPgo8L3N2Zz4K\';">' :
-            '<div class="product-image d-flex align-items-center justify-content-center bg-light"><i class="fas fa-image text-muted"></i></div>';
+        var imageHtml;
+        if (product.product_image) {
+            // Determine the correct image path
+            var imagePath = product.product_image;
+
+            // If the image path doesn't start with uploads/ or images/, add the correct prefix
+            if (!imagePath.startsWith('uploads/') && !imagePath.startsWith('images/') && !imagePath.startsWith('http')) {
+                // Assume it's a filename only, add uploads path
+                imagePath = '../uploads/' + imagePath;
+            } else if (imagePath.startsWith('uploads/') || imagePath.startsWith('images/')) {
+                // Add ../ for admin panel relative path
+                imagePath = '../' + imagePath;
+            }
+
+            var placeholderImage = 'https://via.placeholder.com/50x50/8b5fbf/ffffff?text=' + encodeURIComponent(product.product_title.substring(0, 2));
+
+            imageHtml = '<img src="' + imagePath + '" alt="' + product.product_title + '" class="product-image" onerror="this.src=\'' + placeholderImage + '\';">';
+        } else {
+            var placeholderImage = 'https://via.placeholder.com/50x50/8b5fbf/ffffff?text=' + encodeURIComponent(product.product_title.substring(0, 2));
+            imageHtml = '<img src="' + placeholderImage + '" alt="' + product.product_title + '" class="product-image">';
+        }
 
         var priceDisplay = 'GH₵' + parseFloat(product.product_price).toFixed(2);
 
