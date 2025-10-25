@@ -314,10 +314,28 @@ if (!$product) {
         <div class="product-container">
             <div class="row g-0">
                 <div class="col-lg-6">
-                    <img src="<?php echo !empty($product['product_image']) ? 'images/' . htmlspecialchars($product['product_image']) : 'images/no-image.jpg'; ?>"
+                    <?php
+                    $image_path = '';
+                    if (!empty($product['product_image'])) {
+                        // Check if image exists in uploads directory first
+                        if (file_exists(__DIR__ . '/uploads/' . $product['product_image'])) {
+                            $image_path = 'uploads/' . htmlspecialchars($product['product_image']);
+                        }
+                        // Then check images directory
+                        elseif (file_exists(__DIR__ . '/images/' . $product['product_image'])) {
+                            $image_path = 'images/' . htmlspecialchars($product['product_image']);
+                        }
+                    }
+
+                    // Use placeholder if no image found
+                    if (empty($image_path)) {
+                        $image_path = 'https://via.placeholder.com/600x400/8b5fbf/ffffff?text=' . urlencode($product['product_title']);
+                    }
+                    ?>
+                    <img src="<?php echo $image_path; ?>"
                          alt="<?php echo htmlspecialchars($product['product_title']); ?>"
                          class="product-image"
-                         onerror="this.src='images/no-image.jpg'">
+                         onerror="this.src='https://via.placeholder.com/600x400/8b5fbf/ffffff?text=<?php echo urlencode($product['product_title']); ?>'">
                 </div>
                 <div class="col-lg-6">
                     <div class="product-details">
