@@ -158,5 +158,22 @@ class Product extends db_connection {
 
         return $this->db_fetch_all($sql);
     }
+
+    // Required method aliases for assignment compliance
+    public function view_all_products() {
+        return $this->get_all_products();
+    }
+
+    public function filter_products_by_category($cat_id) {
+        return $this->get_products_by_category($cat_id);
+    }
+
+    public function filter_products_by_brand($brand_id) {
+        return $this->get_products_by_brand($brand_id);
+    }
+
+    public function view_single_product($id) {
+        return $this->get_product_by_id($id);
+    }
 }
 ?>

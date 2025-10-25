@@ -1,6 +1,8 @@
 <?php
 // Start session and include core functions
 require_once(__DIR__ . '/settings/core.php');
+require_once(__DIR__ . '/controllers/category_controller.php');
+require_once(__DIR__ . '/controllers/brand_controller.php');
 
 // Check login status and admin status
 $is_logged_in = check_login();
@@ -9,6 +11,10 @@ $is_admin = false;
 if ($is_logged_in) {
 	$is_admin = check_admin();
 }
+
+// Get categories and brands for navigation
+$categories = get_all_categories_ctr();
+$brands = get_all_brands_ctr();
 ?>
 
 <!DOCTYPE html>
@@ -904,16 +910,22 @@ if ($is_logged_in) {
 				</a>
 
 				<!-- Search Bar -->
-				<div class="search-container">
+				<form class="search-container" method="GET" action="product_search_result.php">
 					<i class="fas fa-search search-icon"></i>
-					<input type="text" class="search-input" placeholder="Search food in FlavorHub">
-					<button class="search-btn">
+					<input type="text" name="query" class="search-input" placeholder="Search products in FlavorHub" required>
+					<button type="submit" class="search-btn">
 						<i class="fas fa-search"></i>
 					</button>
-				</div>
+				</form>
 
 				<!-- Header Actions -->
 				<div class="header-actions">
+					<!-- All Products Link -->
+					<a href="all_product.php" class="header-icon me-3" title="All Products">
+						<i class="fas fa-th-large"></i>
+						<span class="d-none d-md-inline ms-1">Products</span>
+					</a>
+
 					<!-- Navigation based on login and admin status -->
 					<?php if (!$is_logged_in): ?>
 						<!-- Not logged in: Register | Login -->
@@ -949,15 +961,30 @@ if ($is_logged_in) {
 	<nav class="category-nav animate__animated animate__fadeInUp">
 		<div class="container">
 			<div class="category-list">
-				<a href="#" class="category-item featured">All Categories</a>
-				<a href="#" class="category-item active">All Discount</a>
-				<a href="#" class="category-item">Fresh Produce</a>
-				<a href="#" class="category-item">Dairy & Eggs</a>
-				<a href="#" class="category-item">Meat & Seafood</a>
-				<a href="#" class="category-item">Bakery</a>
-				<a href="#" class="category-item">Beverages</a>
-				<a href="#" class="category-item">Snacks</a>
-				<a href="#" class="category-item">Frozen Foods</a>
+				<a href="all_product.php" class="category-item featured">All Products</a>
+				<?php if (!empty($categories)): ?>
+					<?php foreach (array_slice($categories, 0, 6) as $category): ?>
+						<a href="all_product.php?cat_id=<?php echo $category['cat_id']; ?>" class="category-item">
+							<?php echo htmlspecialchars($category['cat_name']); ?>
+						</a>
+					<?php endforeach; ?>
+				<?php endif; ?>
+
+				<!-- Brand Dropdown -->
+				<div class="dropdown">
+					<a href="#" class="category-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+						Brands <i class="fas fa-chevron-down ms-1"></i>
+					</a>
+					<ul class="dropdown-menu">
+						<?php if (!empty($brands)): ?>
+							<?php foreach ($brands as $brand): ?>
+								<li><a class="dropdown-item" href="all_product.php?brand_id=<?php echo $brand['brand_id']; ?>">
+									<?php echo htmlspecialchars($brand['brand_name']); ?>
+								</a></li>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</ul>
+				</div>
 			</div>
 		</div>
 	</nav>
