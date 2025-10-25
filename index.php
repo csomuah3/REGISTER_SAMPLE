@@ -504,14 +504,14 @@ try {
 		}
 
 		body.dark-mode .promo-card {
-			background: rgba(45, 55, 72, 0.8);
+			background: rgba(70, 80, 100, 0.9);
 			backdrop-filter: blur(20px);
-			border: 1px solid rgba(139, 95, 191, 0.2);
+			border: 1px solid rgba(139, 95, 191, 0.4);
 		}
 
 		body.dark-mode .dropdown-menu-custom {
-			background: rgba(45, 55, 72, 0.95);
-			border-color: rgba(139, 95, 191, 0.3);
+			background: rgba(70, 80, 100, 0.95);
+			border-color: rgba(139, 95, 191, 0.5);
 		}
 
 		body.dark-mode .dropdown-item-custom {
@@ -574,11 +574,33 @@ try {
 
 		/* Dark mode bubble adjustments */
 		body.dark-mode .bubble {
-			background: linear-gradient(135deg, rgba(139, 95, 191, 0.2), rgba(240, 147, 251, 0.1));
+			background: linear-gradient(135deg, rgba(139, 95, 191, 0.4), rgba(240, 147, 251, 0.3));
+			box-shadow: 0 0 20px rgba(139, 95, 191, 0.3);
 		}
 
 		body.dark-mode .bubble:nth-child(odd) {
-			background: linear-gradient(135deg, rgba(240, 147, 251, 0.2), rgba(139, 95, 191, 0.1));
+			background: linear-gradient(135deg, rgba(240, 147, 251, 0.4), rgba(139, 95, 191, 0.3));
+			box-shadow: 0 0 20px rgba(240, 147, 251, 0.3);
+		}
+
+		body.dark-mode .bubble:nth-child(3n) {
+			background: linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(139, 95, 191, 0.3));
+			box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+		}
+
+		body.dark-mode .bubble:nth-child(5n) {
+			background: linear-gradient(135deg, rgba(236, 72, 153, 0.4), rgba(240, 147, 251, 0.3));
+			box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
+		}
+
+		/* Dark mode top picks section */
+		body.dark-mode .top-picks-section {
+			background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+		}
+
+		body.dark-mode .top-pick-card {
+			background: rgba(70, 80, 100, 0.9);
+			border: 1px solid rgba(139, 95, 191, 0.3);
 		}
 
 		/* Category Navigation */
@@ -1480,9 +1502,8 @@ try {
 		function performSearch() {
 			const query = document.querySelector('.search-input').value.trim();
 			if (query) {
-				// Add your search logic here
-				console.log('Searching for:', query);
-				alert('Search functionality will be implemented here: ' + query);
+				// Redirect to search results page
+				window.location.href = 'product_search_result.php?query=' + encodeURIComponent(query);
 			}
 		}
 
@@ -1565,7 +1586,7 @@ try {
 			localStorage.setItem('selectedLanguage', language);
 			console.log('Language changed to:', language);
 			// Here you would implement actual language switching
-			alert('Language changed to: ' + language);
+			// Language change is silent now - no notification
 		}
 
 		// Theme toggle functionality
@@ -1609,30 +1630,59 @@ try {
 		// Create 40+ floating bubbles with different sizes and animations
 		function createFloatingBubbles() {
 			const bubblesContainer = document.getElementById('floatingBubbles');
-			const bubbleCount = 45; // Create 45 bubbles
+			const bubbleCount = 50; // Create 50 bubbles
 
 			for (let i = 0; i < bubbleCount; i++) {
 				const bubble = document.createElement('div');
 				bubble.className = 'bubble';
 
-				// Random size between 10px and 80px
-				const size = Math.random() * 70 + 10;
+				// Create distinct size categories: small, medium, large
+				let size;
+				const sizeCategory = Math.random();
+				if (sizeCategory < 0.5) {
+					// 50% small bubbles (15-35px)
+					size = Math.random() * 20 + 15;
+					bubble.classList.add('bubble-small');
+				} else if (sizeCategory < 0.8) {
+					// 30% medium bubbles (35-60px)
+					size = Math.random() * 25 + 35;
+					bubble.classList.add('bubble-medium');
+				} else {
+					// 20% large bubbles (60-90px)
+					size = Math.random() * 30 + 60;
+					bubble.classList.add('bubble-large');
+				}
+
 				bubble.style.width = size + 'px';
 				bubble.style.height = size + 'px';
 
 				// Random horizontal position
 				bubble.style.left = Math.random() * 100 + '%';
 
-				// Random animation duration between 8s and 20s
-				const duration = Math.random() * 12 + 8;
+				// Animation duration based on size (larger bubbles float slower)
+				let duration;
+				if (size < 35) {
+					duration = Math.random() * 8 + 12; // Small: 12-20s
+				} else if (size < 60) {
+					duration = Math.random() * 6 + 15; // Medium: 15-21s
+				} else {
+					duration = Math.random() * 4 + 18; // Large: 18-22s
+				}
 				bubble.style.animationDuration = duration + 's';
 
-				// Random delay between 0s and 10s
-				const delay = Math.random() * 10;
+				// Random delay between 0s and 15s
+				const delay = Math.random() * 15;
 				bubble.style.animationDelay = delay + 's';
 
-				// Random opacity between 0.3 and 0.8
-				const opacity = Math.random() * 0.5 + 0.3;
+				// Opacity based on size (larger bubbles slightly more visible)
+				let opacity;
+				if (size < 35) {
+					opacity = Math.random() * 0.3 + 0.4; // Small: 0.4-0.7
+				} else if (size < 60) {
+					opacity = Math.random() * 0.3 + 0.5; // Medium: 0.5-0.8
+				} else {
+					opacity = Math.random() * 0.2 + 0.6; // Large: 0.6-0.8
+				}
 				bubble.style.opacity = opacity;
 
 				bubblesContainer.appendChild(bubble);
