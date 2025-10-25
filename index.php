@@ -1,20 +1,45 @@
 <?php
-// Start session and include core functions
-require_once(__DIR__ . '/settings/core.php');
-require_once(__DIR__ . '/controllers/category_controller.php');
-require_once(__DIR__ . '/controllers/brand_controller.php');
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-// Check login status and admin status
-$is_logged_in = check_login();
-$is_admin = false;
+try {
+    // Start session and include core functions
+    require_once(__DIR__ . '/settings/core.php');
 
-if ($is_logged_in) {
-	$is_admin = check_admin();
+    // Check login status and admin status
+    $is_logged_in = check_login();
+    $is_admin = false;
+
+    if ($is_logged_in) {
+        $is_admin = check_admin();
+    }
+
+    // Initialize arrays for navigation
+    $categories = [];
+    $brands = [];
+
+    // Try to load categories and brands safely
+    try {
+        require_once(__DIR__ . '/controllers/category_controller.php');
+        $categories = get_all_categories_ctr();
+    } catch (Exception $e) {
+        // If categories fail to load, continue with empty array
+        error_log("Failed to load categories: " . $e->getMessage());
+    }
+
+    try {
+        require_once(__DIR__ . '/controllers/brand_controller.php');
+        $brands = get_all_brands_ctr();
+    } catch (Exception $e) {
+        // If brands fail to load, continue with empty array
+        error_log("Failed to load brands: " . $e->getMessage());
+    }
+
+} catch (Exception $e) {
+    // If core fails, show error
+    die("Critical error: " . $e->getMessage());
 }
-
-// Get categories and brands for navigation
-$categories = get_all_categories_ctr();
-$brands = get_all_brands_ctr();
 ?>
 
 <!DOCTYPE html>

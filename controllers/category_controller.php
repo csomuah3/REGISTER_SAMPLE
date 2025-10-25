@@ -37,3 +37,9 @@ function delete_category_ctr(int $cat_id): array
     $c = new Category();
     return $c->delete_category($cat_id);
 }
+
+function get_all_categories_ctr(): array
+{
+    $c = new Category();
+    return $c->get_categories();
+}
