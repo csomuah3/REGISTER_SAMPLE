@@ -455,6 +455,154 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
             box-shadow: 0 8px 25px rgba(139, 95, 191, 0.4);
         }
 
+        .hero-bar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 25px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(139, 95, 191, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .hero-actions .btn {
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-weight: 600;
+            border-width: 2px;
+        }
+
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(139, 95, 191, 0.15);
+            z-index: 1000;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 5px;
+        }
+
+        .suggestion-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f1f5f9;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .suggestion-item:hover {
+            background: linear-gradient(135deg, #f8f9ff, #f0f2ff);
+            color: #8b5fbf;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-icon {
+            color: #8b5fbf;
+            font-size: 0.9rem;
+        }
+
+        .checkbox-dropdown {
+            position: relative;
+            width: 100%;
+        }
+
+        .dropdown-toggle {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1rem;
+            color: #4a5568;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-toggle:hover {
+            border-color: #8b5fbf;
+            box-shadow: 0 0 0 3px rgba(139, 95, 191, 0.1);
+        }
+
+        .dropdown-toggle.active {
+            border-color: #8b5fbf;
+            box-shadow: 0 0 0 3px rgba(139, 95, 191, 0.1);
+        }
+
+        .dropdown-arrow {
+            transition: transform 0.3s ease;
+            color: #8b5fbf;
+        }
+
+        .dropdown-toggle.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-content {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(139, 95, 191, 0.15);
+            z-index: 1000;
+            max-height: 250px;
+            overflow-y: auto;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .dropdown-content.show {
+            display: block;
+        }
+
+        .checkbox-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid #f1f5f9;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-item:hover {
+            background: linear-gradient(135deg, #f8f9ff, #f0f2ff);
+        }
+
+        .checkbox-item:last-child {
+            border-bottom: none;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 10px;
+            width: 16px;
+            height: 16px;
+            accent-color: #8b5fbf;
+            cursor: pointer;
+        }
+
+        .checkbox-item label {
+            cursor: pointer;
+            color: #4a5568;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .checkbox-item:hover label {
+            color: #8b5fbf;
+        }
+
         .floating-elements {
             position: fixed;
             top: 0;
@@ -549,11 +697,21 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
                     <h1 class="mb-0" style="color: #8b5fbf; font-weight: 700;">All Products</h1>
                 </div>
                 <div class="col-lg-2 text-end">
-                    <?php if ($is_logged_in): ?>
-                        <a href="login/logout.php" class="btn btn-outline-danger">Logout</a>
-                    <?php else: ?>
-                        <a href="login/login.php" class="btn btn-outline-primary">Login</a>
-                    <?php endif; ?>
+                    <div class="d-flex align-items-center justify-content-end gap-3">
+                        <!-- Cart Icon -->
+                        <a href="#" class="cart-icon position-relative" onclick="showCart()">
+                            <i class="fas fa-shopping-cart" style="font-size: 1.5rem; color: #8b5fbf;"></i>
+                            <span class="cart-badge position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cartCount">
+                                0
+                            </span>
+                        </a>
+
+                        <?php if ($is_logged_in): ?>
+                            <a href="login/logout.php" class="btn btn-outline-danger">Logout</a>
+                        <?php else: ?>
+                            <a href="login/login.php" class="btn btn-outline-primary">Login</a>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
         </div>
@@ -568,46 +726,80 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
     </div>
 
     <div class="container mt-4">
-        <a href="index.php" class="back-btn">
-            <i class="fas fa-arrow-left"></i>
-            Back to Home
-        </a>
+        <!-- Hero Bar -->
+        <div class="hero-bar">
+            <div class="d-flex align-items-center justify-content-between">
+                <a href="index.php" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Home
+                </a>
+                <h1 class="page-title mb-0">All Products</h1>
+                <div class="hero-actions">
+                    <button class="btn btn-outline-primary" onclick="window.location.href='#filters'">
+                        <i class="fas fa-filter"></i>
+                        Filters
+                    </button>
+                </div>
+            </div>
+        </div>
 
-        <h1 class="page-title">All Products</h1>
-
-        <div class="filters-section">
+        <div class="filters-section" id="filters">
             <h3 class="filter-title">Filter Products</h3>
             <div class="row">
                 <div class="col-md-4">
                     <div class="filter-group">
                         <label class="filter-label">Filter by Category</label>
-                        <select class="filter-select" id="categoryFilter">
-                            <option value="">All Categories</option>
-                            <?php foreach ($categories as $category): ?>
-                                <option value="<?php echo $category['cat_id']; ?>">
-                                    <?php echo htmlspecialchars($category['cat_name']); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
+                        <div class="checkbox-dropdown" id="categoryDropdown">
+                            <button type="button" class="dropdown-toggle" data-target="categoryCheckboxes">
+                                <span class="dropdown-text">All Categories</span>
+                                <i class="fas fa-chevron-down dropdown-arrow"></i>
+                            </button>
+                            <div class="dropdown-content" id="categoryCheckboxes">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="category_all" value="" checked>
+                                    <label for="category_all">All Categories</label>
+                                </div>
+                                <?php foreach ($categories as $category): ?>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="category_<?php echo $category['cat_id']; ?>" value="<?php echo $category['cat_id']; ?>" class="category-checkbox">
+                                        <label for="category_<?php echo $category['cat_id']; ?>"><?php echo htmlspecialchars($category['cat_name']); ?></label>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="filter-group">
                         <label class="filter-label">Filter by Brand</label>
-                        <select class="filter-select" id="brandFilter">
-                            <option value="">All Brands</option>
-                            <?php foreach ($brands as $brand): ?>
-                                <option value="<?php echo $brand['brand_id']; ?>">
-                                    <?php echo htmlspecialchars($brand['brand_name']); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
+                        <div class="checkbox-dropdown" id="brandDropdown">
+                            <button type="button" class="dropdown-toggle" data-target="brandCheckboxes">
+                                <span class="dropdown-text">All Brands</span>
+                                <i class="fas fa-chevron-down dropdown-arrow"></i>
+                            </button>
+                            <div class="dropdown-content" id="brandCheckboxes">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="brand_all" value="" checked>
+                                    <label for="brand_all">All Brands</label>
+                                </div>
+                                <?php foreach ($brands as $brand): ?>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="brand_<?php echo $brand['brand_id']; ?>" value="<?php echo $brand['brand_id']; ?>" class="brand-checkbox">
+                                        <label for="brand_<?php echo $brand['brand_id']; ?>"><?php echo htmlspecialchars($brand['brand_name']); ?></label>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="filter-group">
                         <label class="filter-label">Search Products</label>
-                        <input type="text" class="filter-input" id="searchInput" placeholder="Search by name or keywords...">
+                        <div class="search-autocomplete-container position-relative">
+                            <input type="text" class="filter-input" id="searchInput" placeholder="Search by name or keywords..." autocomplete="off">
+                            <i class="fas fa-search search-icon" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #8b5fbf; cursor: pointer;" onclick="performInstantSearch()"></i>
+                            <div id="searchSuggestions" class="search-suggestions" style="display: none;"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -741,6 +933,20 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
 
             // Here you would normally send AJAX request to add to cart
             console.log('Add to cart functionality - Product ID: ' + productId);
+
+            // Update cart count
+            updateCartCount();
+        }
+
+        function showCart() {
+            alert('Cart functionality will be implemented soon!\nThis will show your cart items.');
+        }
+
+        function updateCartCount() {
+            // This would normally get the actual cart count from storage/database
+            const cartCountElement = document.getElementById('cartCount');
+            let currentCount = parseInt(cartCountElement.textContent);
+            cartCountElement.textContent = currentCount + 1;
         }
 
         function toggleView(viewType) {
@@ -759,21 +965,219 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
             }
         }
 
+        // Autocomplete functionality
+        let allProducts = <?php echo json_encode($products); ?>;
+
+        function showSearchSuggestions(query) {
+            const suggestions = document.getElementById('searchSuggestions');
+            const filteredProducts = allProducts.filter(product =>
+                product.product_title.toLowerCase().includes(query.toLowerCase()) ||
+                (product.product_keywords && product.product_keywords.toLowerCase().includes(query.toLowerCase()))
+            ).slice(0, 5); // Show only top 5 suggestions
+
+            if (filteredProducts.length > 0) {
+                let suggestionsHTML = '';
+                filteredProducts.forEach(product => {
+                    suggestionsHTML += `
+                        <div class="suggestion-item" onclick="selectSuggestion('${product.product_title}', ${product.product_id})">
+                            <i class="fas fa-search suggestion-icon"></i>
+                            <span>${highlightMatch(product.product_title, query)}</span>
+                        </div>
+                    `;
+                });
+
+                // Add "Search for..." option
+                suggestionsHTML += `
+                    <div class="suggestion-item" onclick="performSearchFor('${query}')">
+                        <i class="fas fa-arrow-right suggestion-icon"></i>
+                        <span>Search for "<strong>${query}</strong>"</span>
+                    </div>
+                `;
+
+                suggestions.innerHTML = suggestionsHTML;
+                suggestions.style.display = 'block';
+            } else {
+                suggestions.innerHTML = `
+                    <div class="suggestion-item" onclick="performSearchFor('${query}')">
+                        <i class="fas fa-search suggestion-icon"></i>
+                        <span>Search for "<strong>${query}</strong>"</span>
+                    </div>
+                `;
+                suggestions.style.display = 'block';
+            }
+        }
+
+        function hideSearchSuggestions() {
+            document.getElementById('searchSuggestions').style.display = 'none';
+        }
+
+        function highlightMatch(text, query) {
+            const regex = new RegExp(`(${query})`, 'gi');
+            return text.replace(regex, '<strong>$1</strong>');
+        }
+
+        function selectSuggestion(productTitle, productId) {
+            document.getElementById('searchInput').value = productTitle;
+            hideSearchSuggestions();
+            applyFilters();
+        }
+
+        function performSearchFor(query) {
+            document.getElementById('searchInput').value = query;
+            hideSearchSuggestions();
+            applyFilters();
+        }
+
+        function performInstantSearch() {
+            applyFilters();
+        }
+
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.search-autocomplete-container')) {
+                hideSearchSuggestions();
+            }
+        });
+
+        // Checkbox Dropdown functionality
+        function initCheckboxDropdowns() {
+            // Initialize dropdowns
+            document.querySelectorAll('.dropdown-toggle').forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const content = document.getElementById(targetId);
+                    const isOpen = content.classList.contains('show');
+
+                    // Close all dropdowns first
+                    document.querySelectorAll('.dropdown-content').forEach(dropdown => {
+                        dropdown.classList.remove('show');
+                    });
+                    document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+                        toggle.classList.remove('active');
+                    });
+
+                    // Toggle current dropdown
+                    if (!isOpen) {
+                        content.classList.add('show');
+                        this.classList.add('active');
+                    }
+                });
+            });
+
+            // Handle category checkboxes
+            document.querySelectorAll('.category-checkbox, #category_all').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (this.id === 'category_all') {
+                        // If "All Categories" is checked, uncheck others
+                        if (this.checked) {
+                            document.querySelectorAll('.category-checkbox').forEach(cb => cb.checked = false);
+                        }
+                    } else {
+                        // If any specific category is checked, uncheck "All Categories"
+                        if (this.checked) {
+                            document.getElementById('category_all').checked = false;
+                        }
+                    }
+                    updateCategoryDropdownText();
+                    applyFilters();
+                });
+            });
+
+            // Handle brand checkboxes
+            document.querySelectorAll('.brand-checkbox, #brand_all').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (this.id === 'brand_all') {
+                        // If "All Brands" is checked, uncheck others
+                        if (this.checked) {
+                            document.querySelectorAll('.brand-checkbox').forEach(cb => cb.checked = false);
+                        }
+                    } else {
+                        // If any specific brand is checked, uncheck "All Brands"
+                        if (this.checked) {
+                            document.getElementById('brand_all').checked = false;
+                        }
+                    }
+                    updateBrandDropdownText();
+                    applyFilters();
+                });
+            });
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.checkbox-dropdown')) {
+                    document.querySelectorAll('.dropdown-content').forEach(dropdown => {
+                        dropdown.classList.remove('show');
+                    });
+                    document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+                        toggle.classList.remove('active');
+                    });
+                }
+            });
+        }
+
+        function updateCategoryDropdownText() {
+            const checkedCategories = document.querySelectorAll('.category-checkbox:checked');
+            const allCategoriesChecked = document.getElementById('category_all').checked;
+            const dropdown = document.querySelector('#categoryDropdown .dropdown-text');
+
+            if (allCategoriesChecked || checkedCategories.length === 0) {
+                dropdown.textContent = 'All Categories';
+            } else if (checkedCategories.length === 1) {
+                dropdown.textContent = checkedCategories[0].nextElementSibling.textContent;
+            } else {
+                dropdown.textContent = `${checkedCategories.length} Categories Selected`;
+            }
+        }
+
+        function updateBrandDropdownText() {
+            const checkedBrands = document.querySelectorAll('.brand-checkbox:checked');
+            const allBrandsChecked = document.getElementById('brand_all').checked;
+            const dropdown = document.querySelector('#brandDropdown .dropdown-text');
+
+            if (allBrandsChecked || checkedBrands.length === 0) {
+                dropdown.textContent = 'All Brands';
+            } else if (checkedBrands.length === 1) {
+                dropdown.textContent = checkedBrands[0].nextElementSibling.textContent;
+            } else {
+                dropdown.textContent = `${checkedBrands.length} Brands Selected`;
+            }
+        }
+
         // Filter functionality
         document.addEventListener('DOMContentLoaded', function() {
-            const categoryFilter = document.getElementById('categoryFilter');
-            const brandFilter = document.getElementById('brandFilter');
             const searchInput = document.getElementById('searchInput');
             const clearFilters = document.getElementById('clearFilters');
 
+            // Initialize checkbox dropdowns
+            initCheckboxDropdowns();
+
             function applyFilters() {
-                const categoryId = categoryFilter.value;
-                const brandId = brandFilter.value;
+                // Get selected categories
+                const selectedCategories = Array.from(document.querySelectorAll('.category-checkbox:checked')).map(cb => cb.value);
+                const allCategoriesSelected = document.getElementById('category_all').checked;
+
+                // Get selected brands
+                const selectedBrands = Array.from(document.querySelectorAll('.brand-checkbox:checked')).map(cb => cb.value);
+                const allBrandsSelected = document.getElementById('brand_all').checked;
+
                 const searchQuery = searchInput.value;
 
                 const params = new URLSearchParams();
-                if (categoryId) params.append('cat_id', categoryId);
-                if (brandId) params.append('brand_id', brandId);
+
+                // Add category filters
+                if (!allCategoriesSelected && selectedCategories.length > 0) {
+                    selectedCategories.forEach(catId => {
+                        if (catId) params.append('cat_ids[]', catId);
+                    });
+                }
+
+                // Add brand filters
+                if (!allBrandsSelected && selectedBrands.length > 0) {
+                    selectedBrands.forEach(brandId => {
+                        if (brandId) params.append('brand_ids[]', brandId);
+                    });
+                }
+
                 if (searchQuery) params.append('query', searchQuery);
                 params.append('action', 'combined_filter');
 
@@ -854,14 +1258,36 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
             let searchTimeout;
             searchInput.addEventListener('input', function() {
                 clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(applyFilters, 500);
+
+                const query = this.value.trim();
+
+                if (query.length >= 2) {
+                    // Show autocomplete suggestions
+                    showSearchSuggestions(query);
+                    searchTimeout = setTimeout(applyFilters, 500);
+                } else {
+                    hideSearchSuggestions();
+                    if (query.length === 0) {
+                        searchTimeout = setTimeout(applyFilters, 500);
+                    }
+                }
             });
 
             clearFilters.addEventListener('click', function() {
-                categoryFilter.value = '';
-                brandFilter.value = '';
+                // Reset all checkboxes
+                document.querySelectorAll('.category-checkbox, .brand-checkbox').forEach(cb => cb.checked = false);
+                document.getElementById('category_all').checked = true;
+                document.getElementById('brand_all').checked = true;
+
+                // Reset search input
                 searchInput.value = '';
-                location.reload();
+
+                // Update dropdown texts
+                updateCategoryDropdownText();
+                updateBrandDropdownText();
+
+                // Apply filters (which will show all products)
+                applyFilters();
             });
         });
     </script>

@@ -326,6 +326,23 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
             transform: scale(1.02);
         }
 
+        .hero-bar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 25px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(139, 95, 191, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .hero-actions .btn {
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-weight: 600;
+            border-width: 2px;
+        }
+
         .clear-filters-btn {
             background: #e2e8f0;
             color: #4a5568;
@@ -365,21 +382,47 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
                     <h1 class="mb-0" style="color: #8b5fbf; font-weight: 700;">Search Results</h1>
                 </div>
                 <div class="col-lg-2 text-end">
-                    <?php if ($is_logged_in): ?>
-                        <a href="login/logout.php" class="btn btn-outline-danger">Logout</a>
-                    <?php else: ?>
-                        <a href="login/login.php" class="btn btn-outline-primary">Login</a>
-                    <?php endif; ?>
+                    <div class="d-flex align-items-center justify-content-end gap-3">
+                        <!-- Cart Icon -->
+                        <a href="#" class="cart-icon position-relative" onclick="showCart()">
+                            <i class="fas fa-shopping-cart" style="font-size: 1.5rem; color: #8b5fbf;"></i>
+                            <span class="cart-badge position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cartCount">
+                                0
+                            </span>
+                        </a>
+
+                        <?php if ($is_logged_in): ?>
+                            <a href="login/logout.php" class="btn btn-outline-danger">Logout</a>
+                        <?php else: ?>
+                            <a href="login/login.php" class="btn btn-outline-primary">Login</a>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
         </div>
     </header>
 
     <div class="container mt-4">
-        <a href="index.php" class="back-btn">
-            <i class="fas fa-arrow-left"></i>
-            Back to Home
-        </a>
+        <!-- Hero Bar -->
+        <div class="hero-bar">
+            <div class="d-flex align-items-center justify-content-between">
+                <a href="index.php" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Home
+                </a>
+                <div class="hero-title">
+                    <h2 class="mb-0 text-muted" style="font-size: 1.2rem; font-weight: 600;">
+                        Search Results for "<?php echo htmlspecialchars($search_query); ?>"
+                    </h2>
+                </div>
+                <div class="hero-actions">
+                    <button class="btn btn-outline-primary" onclick="document.getElementById('query').focus()">
+                        <i class="fas fa-search"></i>
+                        New Search
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <div class="search-header">
             <form method="GET" action="product_search_result.php">
@@ -532,7 +575,34 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
         }
 
         function addToCart(productId) {
-            alert('Add to cart functionality - Product ID: ' + productId);
+            // Add visual feedback
+            const btn = event.target.closest('.add-to-cart-btn');
+            const originalText = btn.innerHTML;
+
+            btn.innerHTML = '<i class="fas fa-check"></i> Added!';
+            btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.background = 'linear-gradient(135deg, #8b5fbf, #f093fb)';
+            }, 1500);
+
+            // Here you would normally send AJAX request to add to cart
+            console.log('Add to cart functionality - Product ID: ' + productId);
+
+            // Update cart count
+            updateCartCount();
+        }
+
+        function showCart() {
+            alert('Cart functionality will be implemented soon!\nThis will show your cart items.');
+        }
+
+        function updateCartCount() {
+            // This would normally get the actual cart count from storage/database
+            const cartCountElement = document.getElementById('cartCount');
+            let currentCount = parseInt(cartCountElement.textContent);
+            cartCountElement.textContent = currentCount + 1;
         }
 
         function clearFilters() {

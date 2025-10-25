@@ -248,6 +248,338 @@ try {
 			box-shadow: 0 4px 12px rgba(139, 95, 191, 0.3);
 		}
 
+		.dropdown-menu-custom {
+			position: absolute;
+			top: 100%;
+			right: 0;
+			background: rgba(255, 255, 255, 0.95);
+			backdrop-filter: blur(20px);
+			border: 1px solid rgba(139, 95, 191, 0.2);
+			border-radius: 15px;
+			box-shadow: 0 8px 32px rgba(139, 95, 191, 0.15);
+			padding: 15px 0;
+			min-width: 220px;
+			z-index: 1000;
+			opacity: 0;
+			visibility: hidden;
+			transform: translateY(-10px);
+			transition: all 0.3s ease;
+		}
+
+		.dropdown-menu-custom.show {
+			opacity: 1;
+			visibility: visible;
+			transform: translateY(0);
+		}
+
+		.dropdown-item-custom {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			padding: 12px 20px;
+			color: #4a5568;
+			text-decoration: none;
+			transition: all 0.3s ease;
+			border: none;
+			background: none;
+			width: 100%;
+			cursor: pointer;
+			font-size: 0.9rem;
+		}
+
+		.dropdown-item-custom:hover {
+			background: rgba(139, 95, 191, 0.1);
+			color: #8b5fbf;
+			transform: translateX(3px);
+		}
+
+		.dropdown-item-custom i {
+			font-size: 1rem;
+			width: 18px;
+			text-align: center;
+		}
+
+		.dropdown-divider-custom {
+			height: 1px;
+			background: linear-gradient(90deg, transparent, rgba(139, 95, 191, 0.2), transparent);
+			margin: 8px 0;
+		}
+
+		.theme-toggle {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.toggle-switch {
+			position: relative;
+			width: 40px;
+			height: 20px;
+			background: #e2e8f0;
+			border-radius: 10px;
+			cursor: pointer;
+			transition: all 0.3s ease;
+		}
+
+		.toggle-switch.active {
+			background: linear-gradient(135deg, #8b5fbf, #f093fb);
+		}
+
+		.toggle-slider {
+			position: absolute;
+			top: 2px;
+			left: 2px;
+			width: 16px;
+			height: 16px;
+			background: white;
+			border-radius: 50%;
+			transition: all 0.3s ease;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		}
+
+		.toggle-switch.active .toggle-slider {
+			transform: translateX(20px);
+		}
+
+		.language-selector {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.language-flag {
+			width: 20px;
+			height: 15px;
+			border-radius: 3px;
+			background: linear-gradient(45deg, #4f46e5, #7c3aed);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: white;
+			font-size: 10px;
+			font-weight: bold;
+		}
+
+		/* Top Picks Section */
+		.top-picks-section {
+			background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
+			position: relative;
+			overflow: hidden;
+		}
+
+		.section-title {
+			font-size: 2.5rem;
+			font-weight: 800;
+			background: linear-gradient(135deg, #8b5fbf, #f093fb);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+			margin-bottom: 15px;
+		}
+
+		.section-subtitle {
+			font-size: 1.1rem;
+			color: #64748b;
+			max-width: 600px;
+			margin: 0 auto;
+		}
+
+		.top-pick-card {
+			background: rgba(255, 255, 255, 0.95);
+			backdrop-filter: blur(20px);
+			border-radius: 20px;
+			padding: 25px;
+			text-decoration: none;
+			color: inherit;
+			transition: all 0.4s ease;
+			border: 1px solid rgba(139, 95, 191, 0.1);
+			box-shadow: 0 8px 32px rgba(139, 95, 191, 0.1);
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+		}
+
+		.top-pick-card:hover {
+			transform: translateY(-10px) scale(1.02);
+			box-shadow: 0 16px 48px rgba(139, 95, 191, 0.2);
+			color: inherit;
+		}
+
+		.pick-image {
+			width: 100%;
+			height: 200px;
+			object-fit: cover;
+			border-radius: 15px;
+			margin-bottom: 20px;
+			background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+		}
+
+		.pick-title {
+			font-size: 1.3rem;
+			font-weight: 700;
+			color: #1a202c;
+			margin-bottom: 10px;
+		}
+
+		.pick-price {
+			font-size: 1.5rem;
+			font-weight: 800;
+			background: linear-gradient(135deg, #8b5fbf, #f093fb);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+			margin-bottom: 15px;
+		}
+
+		.pick-description {
+			color: #64748b;
+			font-size: 0.95rem;
+			line-height: 1.6;
+			margin-bottom: 20px;
+			flex-grow: 1;
+		}
+
+		.pick-rating {
+			display: flex;
+			align-items: center;
+			gap: 5px;
+			margin-bottom: 15px;
+		}
+
+		.rating-stars {
+			color: #fbbf24;
+			font-size: 0.9rem;
+		}
+
+		.rating-text {
+			color: #64748b;
+			font-size: 0.9rem;
+		}
+
+		.pick-badge {
+			position: absolute;
+			top: 15px;
+			right: 15px;
+			background: linear-gradient(135deg, #ef4444, #dc2626);
+			color: white;
+			padding: 6px 12px;
+			border-radius: 20px;
+			font-size: 0.8rem;
+			font-weight: 600;
+			text-transform: uppercase;
+		}
+
+		.loading-spinner {
+			padding: 60px 20px;
+			color: #64748b;
+		}
+
+		/* Dark Mode Styles */
+		body.dark-mode {
+			background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+			color: #e2e8f0;
+		}
+
+		body.dark-mode .main-header {
+			background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+		}
+
+		body.dark-mode .category-nav {
+			background: #2d3748;
+			border-top-color: #4a5568;
+		}
+
+		body.dark-mode .category-item {
+			color: #cbd5e0;
+		}
+
+		body.dark-mode .category-item:hover,
+		body.dark-mode .category-item.active {
+			color: #8b5fbf;
+		}
+
+		body.dark-mode .hero-section {
+			background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+		}
+
+		body.dark-mode .promo-card {
+			background: rgba(45, 55, 72, 0.8);
+			backdrop-filter: blur(20px);
+			border: 1px solid rgba(139, 95, 191, 0.2);
+		}
+
+		body.dark-mode .dropdown-menu-custom {
+			background: rgba(45, 55, 72, 0.95);
+			border-color: rgba(139, 95, 191, 0.3);
+		}
+
+		body.dark-mode .dropdown-item-custom {
+			color: #cbd5e0;
+		}
+
+		body.dark-mode .dropdown-item-custom:hover {
+			background: rgba(139, 95, 191, 0.2);
+			color: #f093fb;
+		}
+
+		/* Floating Bubbles Animation */
+		.floating-bubbles {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			pointer-events: none;
+			z-index: -1;
+			overflow: hidden;
+		}
+
+		.bubble {
+			position: absolute;
+			border-radius: 50%;
+			background: linear-gradient(135deg, rgba(139, 95, 191, 0.1), rgba(240, 147, 251, 0.05));
+			animation: floatUp linear infinite;
+			opacity: 0.8;
+		}
+
+		.bubble:nth-child(odd) {
+			background: linear-gradient(135deg, rgba(240, 147, 251, 0.1), rgba(139, 95, 191, 0.05));
+		}
+
+		.bubble:nth-child(3n) {
+			background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 95, 191, 0.05));
+		}
+
+		.bubble:nth-child(5n) {
+			background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(240, 147, 251, 0.05));
+		}
+
+		@keyframes floatUp {
+			from {
+				transform: translateY(100vh) rotate(0deg);
+				opacity: 0;
+			}
+			10% {
+				opacity: 0.8;
+			}
+			90% {
+				opacity: 0.8;
+			}
+			to {
+				transform: translateY(-100px) rotate(360deg);
+				opacity: 0;
+			}
+		}
+
+		/* Dark mode bubble adjustments */
+		body.dark-mode .bubble {
+			background: linear-gradient(135deg, rgba(139, 95, 191, 0.2), rgba(240, 147, 251, 0.1));
+		}
+
+		body.dark-mode .bubble:nth-child(odd) {
+			background: linear-gradient(135deg, rgba(240, 147, 251, 0.2), rgba(139, 95, 191, 0.1));
+		}
+
 		/* Category Navigation */
 		.category-nav {
 			background: white;
@@ -925,6 +1257,9 @@ try {
 </head>
 
 <body>
+	<!-- Floating Bubbles Background -->
+	<div class="floating-bubbles" id="floatingBubbles"></div>
+
 	<!-- Main Header -->
 	<header class="main-header animate__animated animate__fadeInDown">
 		<div class="container">
@@ -945,12 +1280,6 @@ try {
 
 				<!-- Header Actions -->
 				<div class="header-actions">
-					<!-- All Products Link -->
-					<a href="all_product.php" class="header-icon me-3" title="All Products">
-						<i class="fas fa-th-large"></i>
-						<span class="d-none d-md-inline ms-1">Products</span>
-					</a>
-
 					<!-- Navigation based on login and admin status -->
 					<?php if (!$is_logged_in): ?>
 						<!-- Not logged in: Register | Login -->
@@ -972,8 +1301,46 @@ try {
 					<!-- User Avatar (if logged in) -->
 					<?php if ($is_logged_in): ?>
 						<div class="user-dropdown ms-2">
-							<div class="user-avatar" title="<?= htmlspecialchars($_SESSION['name'] ?? 'User') ?>">
+							<div class="user-avatar" title="<?= htmlspecialchars($_SESSION['name'] ?? 'User') ?>" onclick="toggleUserDropdown()">
 								<?= strtoupper(substr($_SESSION['name'] ?? 'U', 0, 1)) ?>
+							</div>
+							<div class="dropdown-menu-custom" id="userDropdownMenu">
+								<button class="dropdown-item-custom" onclick="openProfilePictureModal()">
+									<i class="fas fa-camera"></i>
+									<span>Profile Picture</span>
+								</button>
+								<div class="dropdown-divider-custom"></div>
+								<div class="dropdown-item-custom">
+									<i class="fas fa-globe"></i>
+									<div class="language-selector">
+										<span>Language</span>
+										<select class="form-select form-select-sm" style="border: none; background: transparent; font-size: 0.8rem;" onchange="changeLanguage(this.value)">
+											<option value="en">🇬🇧 EN</option>
+											<option value="es">🇪🇸 ES</option>
+											<option value="fr">🇫🇷 FR</option>
+											<option value="de">🇩🇪 DE</option>
+										</select>
+									</div>
+								</div>
+								<div class="dropdown-item-custom">
+									<i class="fas fa-moon"></i>
+									<div class="theme-toggle">
+										<span>Dark Mode</span>
+										<div class="toggle-switch" id="themeToggle" onclick="toggleTheme()">
+											<div class="toggle-slider"></div>
+										</div>
+									</div>
+								</div>
+								<div class="dropdown-divider-custom"></div>
+								<a href="wishlist.php" class="dropdown-item-custom">
+									<i class="fas fa-heart"></i>
+									<span>Wishlist</span>
+								</a>
+								<div class="dropdown-divider-custom"></div>
+								<a href="login/logout.php" class="dropdown-item-custom">
+									<i class="fas fa-sign-out-alt"></i>
+									<span>Logout</span>
+								</a>
 							</div>
 						</div>
 					<?php endif; ?>
@@ -988,28 +1355,12 @@ try {
 			<div class="category-list">
 				<a href="all_product.php" class="category-item featured">All Products</a>
 				<?php if (!empty($categories)): ?>
-					<?php foreach (array_slice($categories, 0, 6) as $category): ?>
+					<?php foreach (array_slice($categories, 0, 8) as $category): ?>
 						<a href="all_product.php?cat_id=<?php echo $category['cat_id']; ?>" class="category-item">
 							<?php echo htmlspecialchars($category['cat_name']); ?>
 						</a>
 					<?php endforeach; ?>
 				<?php endif; ?>
-
-				<!-- Brand Dropdown -->
-				<div class="dropdown">
-					<a href="#" class="category-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-						Brands <i class="fas fa-chevron-down ms-1"></i>
-					</a>
-					<ul class="dropdown-menu">
-						<?php if (!empty($brands)): ?>
-							<?php foreach ($brands as $brand): ?>
-								<li><a class="dropdown-item" href="all_product.php?brand_id=<?php echo $brand['brand_id']; ?>">
-									<?php echo htmlspecialchars($brand['brand_name']); ?>
-								</a></li>
-							<?php endforeach; ?>
-						<?php endif; ?>
-					</ul>
-				</div>
 			</div>
 		</div>
 	</nav>
@@ -1087,6 +1438,32 @@ try {
 		</div>
 	</section>
 
+	<!-- Top Picks Section -->
+	<section class="top-picks-section py-5">
+		<div class="container">
+			<div class="text-center mb-5">
+				<h2 class="section-title">FlavorHub's Top Picks for You</h2>
+				<p class="section-subtitle">Discover our most popular and trending products this week</p>
+			</div>
+
+			<div class="row" id="topPicksContainer">
+				<div class="col-12 text-center">
+					<div class="loading-spinner">
+						<i class="fas fa-spinner fa-spin fa-2x" style="color: #8b5fbf;"></i>
+						<p class="mt-3">Loading top picks...</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="text-center mt-4">
+				<a href="all_product.php" class="btn btn-outline-primary btn-lg">
+					<i class="fas fa-eye me-2"></i>
+					View All Products
+				</a>
+			</div>
+		</div>
+	</section>
+
 	<!-- Scripts -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 	<script>
@@ -1158,6 +1535,179 @@ try {
 		document.querySelectorAll('.promo-card, .hero-content').forEach(el => {
 			observer.observe(el);
 		});
+
+		// User dropdown functionality
+		function toggleUserDropdown() {
+			const dropdown = document.getElementById('userDropdownMenu');
+			dropdown.classList.toggle('show');
+		}
+
+		// Close dropdown when clicking outside
+		document.addEventListener('click', function(event) {
+			const dropdown = document.getElementById('userDropdownMenu');
+			const avatar = document.querySelector('.user-avatar');
+
+			if (!dropdown.contains(event.target) && !avatar.contains(event.target)) {
+				dropdown.classList.remove('show');
+			}
+		});
+
+		// Profile picture modal functionality
+		function openProfilePictureModal() {
+			// For now, show alert - will be replaced with actual modal
+			alert('Profile picture upload functionality will be implemented');
+		}
+
+		// Language change functionality
+		function changeLanguage(language) {
+			// Store language preference
+			localStorage.setItem('selectedLanguage', language);
+			console.log('Language changed to:', language);
+			// Here you would implement actual language switching
+			alert('Language changed to: ' + language);
+		}
+
+		// Theme toggle functionality
+		function toggleTheme() {
+			const toggle = document.getElementById('themeToggle');
+			const body = document.body;
+
+			toggle.classList.toggle('active');
+			body.classList.toggle('dark-mode');
+
+			// Store theme preference
+			const isDark = body.classList.contains('dark-mode');
+			localStorage.setItem('darkMode', isDark);
+		}
+
+		// Load saved preferences on page load
+		document.addEventListener('DOMContentLoaded', function() {
+			// Load saved language
+			const savedLanguage = localStorage.getItem('selectedLanguage');
+			if (savedLanguage) {
+				const languageSelect = document.querySelector('.language-selector select');
+				if (languageSelect) {
+					languageSelect.value = savedLanguage;
+				}
+			}
+
+			// Load saved theme
+			const isDarkMode = localStorage.getItem('darkMode') === 'true';
+			if (isDarkMode) {
+				document.body.classList.add('dark-mode');
+				document.getElementById('themeToggle').classList.add('active');
+			}
+
+			// Create floating bubbles
+			createFloatingBubbles();
+
+			// Load top picks
+			loadTopPicks();
+		});
+
+		// Create 40+ floating bubbles with different sizes and animations
+		function createFloatingBubbles() {
+			const bubblesContainer = document.getElementById('floatingBubbles');
+			const bubbleCount = 45; // Create 45 bubbles
+
+			for (let i = 0; i < bubbleCount; i++) {
+				const bubble = document.createElement('div');
+				bubble.className = 'bubble';
+
+				// Random size between 10px and 80px
+				const size = Math.random() * 70 + 10;
+				bubble.style.width = size + 'px';
+				bubble.style.height = size + 'px';
+
+				// Random horizontal position
+				bubble.style.left = Math.random() * 100 + '%';
+
+				// Random animation duration between 8s and 20s
+				const duration = Math.random() * 12 + 8;
+				bubble.style.animationDuration = duration + 's';
+
+				// Random delay between 0s and 10s
+				const delay = Math.random() * 10;
+				bubble.style.animationDelay = delay + 's';
+
+				// Random opacity between 0.3 and 0.8
+				const opacity = Math.random() * 0.5 + 0.3;
+				bubble.style.opacity = opacity;
+
+				bubblesContainer.appendChild(bubble);
+			}
+		}
+
+		// Load top picks products
+		function loadTopPicks() {
+			fetch('actions/product_actions.php?action=view_all_products')
+				.then(response => response.json())
+				.then(products => {
+					if (products && products.length > 0) {
+						// Get first 4 products as top picks
+						const topPicks = products.slice(0, 4);
+						displayTopPicks(topPicks);
+					} else {
+						displayNoTopPicks();
+					}
+				})
+				.catch(error => {
+					console.error('Error loading top picks:', error);
+					displayNoTopPicks();
+				});
+		}
+
+		// Display top picks products
+		function displayTopPicks(products) {
+			const container = document.getElementById('topPicksContainer');
+			container.innerHTML = '';
+
+			products.forEach((product, index) => {
+				const imagePath = product.product_image ?
+					(product.product_image.startsWith('uploads/') ? product.product_image : 'uploads/' + product.product_image) :
+					`https://via.placeholder.com/300x200/8b5fbf/ffffff?text=${encodeURIComponent(product.product_title)}`;
+
+				const badges = ['Hot', 'Trending', 'Popular', 'Best Seller'];
+				const ratings = [4.8, 4.9, 4.7, 4.6];
+
+				const cardHtml = `
+					<div class="col-lg-3 col-md-6 mb-4">
+						<a href="single_product.php?id=${product.product_id}" class="top-pick-card">
+							<div class="position-relative">
+								<img src="${imagePath}" alt="${product.product_title}" class="pick-image"
+									 onerror="this.src='https://via.placeholder.com/300x200/8b5fbf/ffffff?text=${encodeURIComponent(product.product_title)}'">
+								<div class="pick-badge">${badges[index]}</div>
+							</div>
+							<h4 class="pick-title">${product.product_title}</h4>
+							<div class="pick-price">$${parseFloat(product.product_price).toFixed(2)}</div>
+							<div class="pick-rating">
+								<div class="rating-stars">
+									${'★'.repeat(5)}
+								</div>
+								<span class="rating-text">(${ratings[index]})</span>
+							</div>
+							<p class="pick-description">${product.product_desc || 'Delicious and fresh product from FlavorHub kitchen.'}</p>
+						</a>
+					</div>
+				`;
+				container.innerHTML += cardHtml;
+			});
+		}
+
+		// Display message when no top picks available
+		function displayNoTopPicks() {
+			const container = document.getElementById('topPicksContainer');
+			container.innerHTML = `
+				<div class="col-12 text-center">
+					<div class="loading-spinner">
+						<i class="fas fa-utensils fa-2x mb-3" style="color: #8b5fbf;"></i>
+						<h4>Coming Soon!</h4>
+						<p>Our chefs are preparing amazing top picks for you.</p>
+						<a href="all_product.php" class="btn btn-primary mt-3">Browse All Products</a>
+					</div>
+				</div>
+			`;
+		}
 	</script>
 </body>
 
