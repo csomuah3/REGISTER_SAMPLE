@@ -3,6 +3,7 @@ require_once(__DIR__ . '/settings/core.php');
 require_once(__DIR__ . '/controllers/product_controller.php');
 require_once(__DIR__ . '/controllers/category_controller.php');
 require_once(__DIR__ . '/controllers/brand_controller.php');
+require_once(__DIR__ . '/helpers/image_helper.php');
 
 $is_logged_in = check_login();
 $is_admin = false;
@@ -841,27 +842,13 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
                         <div class="product-card" onclick="viewProduct(<?php echo $product['product_id']; ?>)">
                             <div class="product-image-container">
                                 <?php
-                                $image_path = '';
-                                if (!empty($product['product_image'])) {
-                                    // Check if image exists in uploads directory first
-                                    if (file_exists(__DIR__ . '/uploads/' . $product['product_image'])) {
-                                        $image_path = 'uploads/' . htmlspecialchars($product['product_image']);
-                                    }
-                                    // Then check images directory
-                                    elseif (file_exists(__DIR__ . '/images/' . $product['product_image'])) {
-                                        $image_path = 'images/' . htmlspecialchars($product['product_image']);
-                                    }
-                                }
-
-                                // Use placeholder if no image found
-                                if (empty($image_path)) {
-                                    $image_path = 'https://via.placeholder.com/320x240/8b5fbf/ffffff?text=' . urlencode($product['product_title']);
-                                }
+                                $image_url = get_product_image_url($product['product_image'], $product['product_title'], '320x240');
+                                $image_onerror = get_image_onerror($product['product_title'], '320x240');
                                 ?>
-                                <img src="<?php echo $image_path; ?>"
+                                <img src="<?php echo $image_url; ?>"
                                      alt="<?php echo htmlspecialchars($product['product_title']); ?>"
                                      class="product-image"
-                                     onerror="this.src='https://via.placeholder.com/320x240/8b5fbf/ffffff?text=<?php echo urlencode($product['product_title']); ?>'">
+                                     onerror="<?php echo $image_onerror; ?>">
                                 <div class="product-badge">New</div>
                             </div>
                             <div class="product-content">
@@ -963,6 +950,44 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
             } else {
                 productGrid.classList.remove('list-view');
             }
+        }
+
+        // JavaScript Image Helper Functions
+        function getProductImageUrl(imageFilename, productTitle, size = '320x240') {
+            // List of possible image directories to check (in order of preference)
+            const imageDirectories = [
+                'uploads/products/',
+                'uploads/',
+                'images/',
+                'assets/images/',
+                'assets/img/'
+            ];
+
+            if (imageFilename) {
+                // Check if filename already contains a path
+                if (imageFilename.includes('/')) {
+                    return imageFilename;
+                }
+
+                // Try common directories
+                for (let dir of imageDirectories) {
+                    // We can't check file existence in JavaScript, so we'll use the first directory
+                    return dir + imageFilename;
+                }
+            }
+
+            // Return placeholder if no image
+            return generatePlaceholderUrl(productTitle, size);
+        }
+
+        function generatePlaceholderUrl(text, size = '320x240') {
+            const encodedText = encodeURIComponent(text);
+            return `https://via.placeholder.com/${size}/8b5fbf/ffffff?text=${encodedText}`;
+        }
+
+        function getImageOnerror(productTitle, size = '320x240') {
+            const placeholderUrl = generatePlaceholderUrl(productTitle, size);
+            return `this.src='${placeholderUrl}'`;
         }
 
         // Autocomplete functionality
@@ -1208,16 +1233,8 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
                     `;
                 } else {
                     productGrid.innerHTML = products.map(product => {
-                        let imagePath = '';
-                        if (product.product_image) {
-                            if (product.product_image.startsWith('uploads/') || product.product_image.startsWith('images/')) {
-                                imagePath = product.product_image;
-                            } else {
-                                imagePath = 'uploads/' + product.product_image;
-                            }
-                        } else {
-                            imagePath = \`https://via.placeholder.com/320x240/8b5fbf/ffffff?text=\${encodeURIComponent(product.product_title)}\`;
-                        }
+                        const imagePath = getProductImageUrl(product.product_image, product.product_title);
+                        const imageOnerror = getImageOnerror(product.product_title);
 
                         return \`
                         <div class="product-card" onclick="viewProduct(\${product.product_id})">
@@ -1225,7 +1242,7 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
                                 <img src="\${imagePath}"
                                      alt="\${product.product_title}"
                                      class="product-image"
-                                     onerror="this.src='https://via.placeholder.com/320x240/8b5fbf/ffffff?text=\${encodeURIComponent(product.product_title)}'">
+                                     onerror="\${imageOnerror}">
                                 <div class="product-badge">New</div>
                             </div>
                             <div class="product-content">

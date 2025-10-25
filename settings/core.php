@@ -100,3 +100,10 @@ function require_admin(string $fallback = '/index.php')
 {
     if (!check_admin()) redirect($fallback);
 }
+
+// Initialize image directories on first load
+$image_helper_path = __DIR__ . '/../helpers/image_helper.php';
+if (file_exists($image_helper_path)) {
+    require_once($image_helper_path);
+    ensure_image_directories();
+}

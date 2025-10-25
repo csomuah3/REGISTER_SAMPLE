@@ -1,6 +1,7 @@
 <?php
 require_once(__DIR__ . '/settings/core.php');
 require_once(__DIR__ . '/controllers/product_controller.php');
+require_once(__DIR__ . '/helpers/image_helper.php');
 
 $is_logged_in = check_login();
 $is_admin = false;
@@ -356,27 +357,13 @@ if (!$product) {
             <div class="row g-0">
                 <div class="col-lg-6">
                     <?php
-                    $image_path = '';
-                    if (!empty($product['product_image'])) {
-                        // Check if image exists in uploads directory first
-                        if (file_exists(__DIR__ . '/uploads/' . $product['product_image'])) {
-                            $image_path = 'uploads/' . htmlspecialchars($product['product_image']);
-                        }
-                        // Then check images directory
-                        elseif (file_exists(__DIR__ . '/images/' . $product['product_image'])) {
-                            $image_path = 'images/' . htmlspecialchars($product['product_image']);
-                        }
-                    }
-
-                    // Use placeholder if no image found
-                    if (empty($image_path)) {
-                        $image_path = 'https://via.placeholder.com/600x400/8b5fbf/ffffff?text=' . urlencode($product['product_title']);
-                    }
+                    $image_url = get_product_image_url($product['product_image'], $product['product_title'], '600x400');
+                    $image_onerror = get_image_onerror($product['product_title'], '600x400');
                     ?>
-                    <img src="<?php echo $image_path; ?>"
+                    <img src="<?php echo $image_url; ?>"
                          alt="<?php echo htmlspecialchars($product['product_title']); ?>"
                          class="product-image"
-                         onerror="this.src='https://via.placeholder.com/600x400/8b5fbf/ffffff?text=<?php echo urlencode($product['product_title']); ?>'">
+                         onerror="<?php echo $image_onerror; ?>">
                 </div>
                 <div class="col-lg-6">
                     <div class="product-details">

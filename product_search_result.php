@@ -3,6 +3,7 @@ require_once(__DIR__ . '/settings/core.php');
 require_once(__DIR__ . '/controllers/product_controller.php');
 require_once(__DIR__ . '/controllers/category_controller.php');
 require_once(__DIR__ . '/controllers/brand_controller.php');
+require_once(__DIR__ . '/helpers/image_helper.php');
 
 $is_logged_in = check_login();
 $is_admin = false;
@@ -515,10 +516,14 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
                 <div class="product-grid" id="productGrid">
                     <?php foreach ($products_to_display as $product): ?>
                         <div class="product-card" onclick="viewProduct(<?php echo $product['product_id']; ?>)">
-                            <img src="<?php echo !empty($product['product_image']) ? 'images/' . htmlspecialchars($product['product_image']) : 'images/no-image.jpg'; ?>"
+                            <?php
+                            $image_url = get_product_image_url($product['product_image'], $product['product_title'], '320x240');
+                            $image_onerror = get_image_onerror($product['product_title'], '320x240');
+                            ?>
+                            <img src="<?php echo $image_url; ?>"
                                  alt="<?php echo htmlspecialchars($product['product_title']); ?>"
                                  class="product-image"
-                                 onerror="this.src='images/no-image.jpg'">
+                                 onerror="<?php echo $image_onerror; ?>">
                             <div class="product-content">
                                 <h5 class="product-title">
                                     <?php

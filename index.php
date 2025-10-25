@@ -6,6 +6,7 @@ ini_set('display_errors', 1);
 try {
     // Start session and include core functions
     require_once(__DIR__ . '/settings/core.php');
+    require_once(__DIR__ . '/helpers/image_helper.php');
 
     // Check login status and admin status
     $is_logged_in = check_login();
