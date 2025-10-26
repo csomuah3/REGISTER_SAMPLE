@@ -179,6 +179,38 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
             transform: translateY(-2px);
         }
 
+        .price-input {
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: rgba(248, 250, 252, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .price-input:focus {
+            outline: none;
+            border-color: #8b5fbf;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 0 0 3px rgba(139, 95, 191, 0.1);
+        }
+
+        .preset-btn {
+            border-radius: 8px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+            padding: 6px 12px;
+            transition: all 0.3s ease;
+        }
+
+        .preset-btn:hover, .preset-btn.active {
+            background: linear-gradient(135deg, #8b5fbf, #f093fb);
+            color: white;
+            border-color: #8b5fbf;
+        }
+
         .clear-filters-btn {
             background: linear-gradient(135deg, #ef4444, #dc2626);
             color: white;
@@ -795,6 +827,26 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
                 </div>
                 <div class="col-md-4">
                     <div class="filter-group">
+                        <label class="filter-label">Price Range</label>
+                        <div class="price-filter-container">
+                            <div class="d-flex gap-2 align-items-center">
+                                <input type="number" class="form-control price-input" id="minPrice" placeholder="Min $" min="0" step="0.01">
+                                <span class="text-muted">to</span>
+                                <input type="number" class="form-control price-input" id="maxPrice" placeholder="Max $" min="0" step="0.01">
+                            </div>
+                            <div class="price-presets mt-2">
+                                <button type="button" class="btn btn-sm btn-outline-secondary preset-btn" data-min="0" data-max="10">$0-10</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary preset-btn" data-min="10" data-max="25">$10-25</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary preset-btn" data-min="25" data-max="50">$25-50</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary preset-btn" data-min="50" data-max="">$50+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <div class="filter-group">
                         <label class="filter-label">Search Products</label>
                         <div class="search-autocomplete-container position-relative">
                             <input type="text" class="filter-input" id="searchInput" placeholder="Search by name or keywords..." autocomplete="off">
@@ -841,14 +893,12 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
                     <?php foreach ($products_to_display as $product): ?>
                         <div class="product-card" onclick="viewProduct(<?php echo $product['product_id']; ?>)">
                             <div class="product-image-container">
-                                <?php
-                                $image_url = get_product_image_url($product['product_image'], $product['product_title'], '320x240');
-                                $image_onerror = get_image_onerror($product['product_title'], '320x240');
-                                ?>
-                                <img src="<?php echo $image_url; ?>"
+                                <img src=""
                                      alt="<?php echo htmlspecialchars($product['product_title']); ?>"
                                      class="product-image"
-                                     onerror="<?php echo $image_onerror; ?>">
+                                     data-product-id="<?php echo $product['product_id']; ?>"
+                                     data-product-image="<?php echo htmlspecialchars($product['product_image'] ?? ''); ?>"
+                                     data-product-title="<?php echo htmlspecialchars($product['product_title']); ?>">
                                 <div class="product-badge">New</div>
                             </div>
                             <div class="product-content">
@@ -952,42 +1002,34 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
             }
         }
 
-        // JavaScript Image Helper Functions
-        function getProductImageUrl(imageFilename, productTitle, size = '320x240') {
-            // List of possible image directories to check (in order of preference)
-            const imageDirectories = [
-                'uploads/products/',
-                'uploads/',
-                'images/',
-                'assets/images/',
-                'assets/img/'
-            ];
+        // Image Loading System
+        function loadProductImages() {
+            document.querySelectorAll('.product-image').forEach(img => {
+                const productId = img.getAttribute('data-product-id');
+                const productImage = img.getAttribute('data-product-image');
+                const productTitle = img.getAttribute('data-product-title');
 
-            if (imageFilename) {
-                // Check if filename already contains a path
-                if (imageFilename.includes('/')) {
-                    return imageFilename;
-                }
-
-                // Try common directories
-                for (let dir of imageDirectories) {
-                    // We can't check file existence in JavaScript, so we'll use the first directory
-                    return dir + imageFilename;
-                }
-            }
-
-            // Return placeholder if no image
-            return generatePlaceholderUrl(productTitle, size);
+                // Load image using the dedicated action
+                fetch(`actions/upload_product_image_action.php?action=get_image_url&product_id=${productId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success && data.url) {
+                            img.src = data.url;
+                        } else {
+                            // Use placeholder
+                            img.src = generatePlaceholderUrl(productTitle);
+                        }
+                    })
+                    .catch(error => {
+                        console.log('Image load error for product', productId, '- using placeholder');
+                        img.src = generatePlaceholderUrl(productTitle);
+                    });
+            });
         }
 
         function generatePlaceholderUrl(text, size = '320x240') {
             const encodedText = encodeURIComponent(text);
             return `https://via.placeholder.com/${size}/8b5fbf/ffffff?text=${encodedText}`;
-        }
-
-        function getImageOnerror(productTitle, size = '320x240') {
-            const placeholderUrl = generatePlaceholderUrl(productTitle, size);
-            return `this.src='${placeholderUrl}'`;
         }
 
         // Autocomplete functionality
@@ -1173,8 +1215,13 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
             const searchInput = document.getElementById('searchInput');
             const clearFilters = document.getElementById('clearFilters');
 
-            // Initialize checkbox dropdowns
-            initCheckboxDropdowns();
+            // Initialize checkbox dropdowns first
+            setTimeout(() => {
+                initCheckboxDropdowns();
+            }, 100);
+
+            // Load product images
+            loadProductImages();
 
             function applyFilters() {
                 // Get selected categories
@@ -1184,6 +1231,10 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
                 // Get selected brands
                 const selectedBrands = Array.from(document.querySelectorAll('.brand-checkbox:checked')).map(cb => cb.value);
                 const allBrandsSelected = document.getElementById('brand_all').checked;
+
+                // Get price range
+                const minPrice = parseFloat(document.getElementById('minPrice').value) || 0;
+                const maxPrice = parseFloat(document.getElementById('maxPrice').value) || Number.MAX_VALUE;
 
                 const searchQuery = searchInput.value;
 
@@ -1204,12 +1255,16 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
                 }
 
                 if (searchQuery) params.append('query', searchQuery);
+                if (minPrice > 0) params.append('min_price', minPrice);
+                if (maxPrice < Number.MAX_VALUE) params.append('max_price', maxPrice);
                 params.append('action', 'combined_filter');
 
                 fetch('actions/product_actions.php?' + params.toString())
                     .then(response => response.json())
                     .then(data => {
                         updateProductGrid(data);
+                        // Reload images for filtered products
+                        setTimeout(loadProductImages, 100);
                     })
                     .catch(error => {
                         console.error('Error:', error);
@@ -1233,16 +1288,15 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
                     `;
                 } else {
                     productGrid.innerHTML = products.map(product => {
-                        const imagePath = getProductImageUrl(product.product_image, product.product_title);
-                        const imageOnerror = getImageOnerror(product.product_title);
-
                         return \`
                         <div class="product-card" onclick="viewProduct(\${product.product_id})">
                             <div class="product-image-container">
-                                <img src="\${imagePath}"
+                                <img src=""
                                      alt="\${product.product_title}"
                                      class="product-image"
-                                     onerror="\${imageOnerror}">
+                                     data-product-id="\${product.product_id}"
+                                     data-product-image="\${product.product_image || ''}"
+                                     data-product-title="\${product.product_title}">
                                 <div class="product-badge">New</div>
                             </div>
                             <div class="product-content">
@@ -1290,6 +1344,38 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
                 }
             });
 
+            // Price filter event listeners
+            const minPriceInput = document.getElementById('minPrice');
+            const maxPriceInput = document.getElementById('maxPrice');
+
+            minPriceInput.addEventListener('input', function() {
+                clearTimeout(window.priceFilterTimeout);
+                window.priceFilterTimeout = setTimeout(applyFilters, 500);
+            });
+
+            maxPriceInput.addEventListener('input', function() {
+                clearTimeout(window.priceFilterTimeout);
+                window.priceFilterTimeout = setTimeout(applyFilters, 500);
+            });
+
+            // Price preset buttons
+            document.querySelectorAll('.preset-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Remove active class from all preset buttons
+                    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+
+                    const min = this.getAttribute('data-min');
+                    const max = this.getAttribute('data-max');
+
+                    minPriceInput.value = min;
+                    maxPriceInput.value = max;
+
+                    applyFilters();
+                });
+            });
+
             clearFilters.addEventListener('click', function() {
                 // Reset all checkboxes
                 document.querySelectorAll('.category-checkbox, .brand-checkbox').forEach(cb => cb.checked = false);
@@ -1298,6 +1384,13 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
 
                 // Reset search input
                 searchInput.value = '';
+
+                // Reset price inputs
+                minPriceInput.value = '';
+                maxPriceInput.value = '';
+
+                // Reset preset buttons
+                document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
 
                 // Update dropdown texts
                 updateCategoryDropdownText();

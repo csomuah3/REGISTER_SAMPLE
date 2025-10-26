@@ -15,6 +15,9 @@ function get_product_image_url($image_filename, $product_title = 'Product', $siz
     // Base directory for the application
     $base_dir = __DIR__ . '/..';
 
+    // Clean the image filename
+    $image_filename = trim($image_filename);
+
     // List of possible image directories to check (in order of preference)
     $image_directories = [
         'uploads/products/',
@@ -26,6 +29,15 @@ function get_product_image_url($image_filename, $product_title = 'Product', $siz
 
     // If we have an image filename, try to find it
     if (!empty($image_filename)) {
+        // Check if filename already has a path
+        if (strpos($image_filename, '/') !== false) {
+            $direct_path = $base_dir . '/' . $image_filename;
+            if (file_exists($direct_path)) {
+                return htmlspecialchars($image_filename);
+            }
+        }
+
+        // Try each directory
         foreach ($image_directories as $dir) {
             $full_path = $base_dir . '/' . $dir . $image_filename;
             if (file_exists($full_path)) {
@@ -33,11 +45,9 @@ function get_product_image_url($image_filename, $product_title = 'Product', $siz
             }
         }
 
-        // Also check if the image_filename already contains a path
-        $direct_path = $base_dir . '/' . $image_filename;
-        if (file_exists($direct_path)) {
-            return htmlspecialchars($image_filename);
-        }
+        // If file doesn't exist, still return the first directory path
+        // This allows for graceful fallback to onerror handling
+        return 'uploads/products/' . htmlspecialchars($image_filename);
     }
 
     // No image found, return placeholder

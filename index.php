@@ -605,6 +605,32 @@ try {
 			border: 1px solid rgba(139, 95, 191, 0.3);
 		}
 
+		/* View All Products Button */
+		.view-all-products-btn {
+			display: inline-flex;
+			align-items: center;
+			padding: 15px 30px;
+			background: linear-gradient(135deg, #8b5fbf, #f093fb);
+			color: white;
+			text-decoration: none;
+			border-radius: 12px;
+			font-size: 1.1rem;
+			font-weight: 600;
+			transition: all 0.3s ease;
+			box-shadow: 0 4px 15px rgba(139, 95, 191, 0.3);
+		}
+
+		.view-all-products-btn:hover {
+			background: linear-gradient(135deg, #764ba2, #8b5fbf);
+			transform: translateY(-2px);
+			box-shadow: 0 8px 25px rgba(139, 95, 191, 0.4);
+			color: white;
+		}
+
+		.view-all-products-btn i {
+			margin-right: 8px;
+		}
+
 		/* Category Navigation */
 		.category-nav {
 			background: white;
@@ -1311,8 +1337,10 @@ try {
 						<a href="login/register.php" class="login-btn me-2">Register</a>
 						<a href="login/login.php" class="login-btn">Login</a>
 					<?php elseif ($is_admin): ?>
-						<!-- Admin logged in: Category | Brand | Logout -->
-
+						<!-- Admin logged in: Category | Brand | Add Product | Logout -->
+						<a href="admin/category.php" class="login-btn me-2">Category</a>
+						<a href="admin/brand.php" class="login-btn me-2">Brand</a>
+						<a href="admin/product.php" class="login-btn me-2">Add Product</a>
 						<a href="login/logout.php" class="logout-btn">Logout</a>
 					<?php else: ?>
 						<!-- Regular user logged in: Cart | Logout -->
@@ -1481,7 +1509,7 @@ try {
 			</div>
 
 			<div class="text-center mt-4">
-				<a href="all_product.php" class="btn btn-outline-primary btn-lg">
+				<a href="all_product.php" class="view-all-products-btn">
 					<i class="fas fa-eye me-2"></i>
 					View All Products
 				</a>

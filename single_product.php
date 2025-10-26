@@ -356,14 +356,12 @@ if (!$product) {
         <div class="product-container">
             <div class="row g-0">
                 <div class="col-lg-6">
-                    <?php
-                    $image_url = get_product_image_url($product['product_image'], $product['product_title'], '600x400');
-                    $image_onerror = get_image_onerror($product['product_title'], '600x400');
-                    ?>
-                    <img src="<?php echo $image_url; ?>"
+                    <img src=""
                          alt="<?php echo htmlspecialchars($product['product_title']); ?>"
                          class="product-image"
-                         onerror="<?php echo $image_onerror; ?>">
+                         data-product-id="<?php echo $product['product_id']; ?>"
+                         data-product-image="<?php echo htmlspecialchars($product['product_image'] ?? ''); ?>"
+                         data-product-title="<?php echo htmlspecialchars($product['product_title']); ?>">
                 </div>
                 <div class="col-lg-6">
                     <div class="product-details">
@@ -511,8 +509,38 @@ if (!$product) {
             }
         }
 
+        // Image Loading System
+        function loadProductImage() {
+            const img = document.querySelector('.product-image');
+            const productId = img.getAttribute('data-product-id');
+            const productTitle = img.getAttribute('data-product-title');
+
+            fetch(`actions/upload_product_image_action.php?action=get_image_url&product_id=${productId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.url) {
+                        img.src = data.url;
+                    } else {
+                        // Use placeholder
+                        img.src = generatePlaceholderUrl(productTitle, '600x400');
+                    }
+                })
+                .catch(error => {
+                    console.log('Image load error - using placeholder');
+                    img.src = generatePlaceholderUrl(productTitle, '600x400');
+                });
+        }
+
+        function generatePlaceholderUrl(text, size = '600x400') {
+            const encodedText = encodeURIComponent(text);
+            return `https://via.placeholder.com/${size}/8b5fbf/ffffff?text=${encodedText}`;
+        }
+
         // Add some interactivity
         document.addEventListener('DOMContentLoaded', function() {
+            // Load product image
+            loadProductImage();
+
             // Animate product details on load
             const productDetails = document.querySelector('.product-details');
             productDetails.style.opacity = '0';

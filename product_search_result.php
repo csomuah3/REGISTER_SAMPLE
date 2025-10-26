@@ -516,14 +516,12 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
                 <div class="product-grid" id="productGrid">
                     <?php foreach ($products_to_display as $product): ?>
                         <div class="product-card" onclick="viewProduct(<?php echo $product['product_id']; ?>)">
-                            <?php
-                            $image_url = get_product_image_url($product['product_image'], $product['product_title'], '320x240');
-                            $image_onerror = get_image_onerror($product['product_title'], '320x240');
-                            ?>
-                            <img src="<?php echo $image_url; ?>"
+                            <img src=""
                                  alt="<?php echo htmlspecialchars($product['product_title']); ?>"
                                  class="product-image"
-                                 onerror="<?php echo $image_onerror; ?>">
+                                 data-product-id="<?php echo $product['product_id']; ?>"
+                                 data-product-image="<?php echo htmlspecialchars($product['product_image'] ?? ''); ?>"
+                                 data-product-title="<?php echo htmlspecialchars($product['product_title']); ?>">
                             <div class="product-content">
                                 <h5 class="product-title">
                                     <?php
@@ -615,8 +613,37 @@ $products_to_display = array_slice($products, $offset, $products_per_page);
             window.location.href = 'product_search_result.php?query=' + encodeURIComponent(searchQuery);
         }
 
+        // Image Loading System
+        function loadProductImages() {
+            document.querySelectorAll('.product-image').forEach(img => {
+                const productId = img.getAttribute('data-product-id');
+                const productTitle = img.getAttribute('data-product-title');
+
+                fetch(`actions/upload_product_image_action.php?action=get_image_url&product_id=${productId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success && data.url) {
+                            img.src = data.url;
+                        } else {
+                            img.src = generatePlaceholderUrl(productTitle);
+                        }
+                    })
+                    .catch(error => {
+                        console.log('Image load error for product', productId, '- using placeholder');
+                        img.src = generatePlaceholderUrl(productTitle);
+                    });
+            });
+        }
+
+        function generatePlaceholderUrl(text, size = '320x240') {
+            const encodedText = encodeURIComponent(text);
+            return `https://via.placeholder.com/${size}/8b5fbf/ffffff?text=${encodedText}`;
+        }
+
         // Filter functionality
         document.addEventListener('DOMContentLoaded', function() {
+            // Load product images
+            loadProductImages();
             const categoryFilter = document.getElementById('categoryFilter');
             const brandFilter = document.getElementById('brandFilter');
 
