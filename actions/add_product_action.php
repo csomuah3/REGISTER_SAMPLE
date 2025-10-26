@@ -17,22 +17,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Handle file upload
     $product_image = '';
     if (isset($_FILES['product_image']) && $_FILES['product_image']['error'] === UPLOAD_ERR_OK) {
-        $upload_dir = '../uploads/';
+        $upload_dir = __DIR__ . '/../uploads/products/';
 
         // Create uploads directory if it doesn't exist
         if (!is_dir($upload_dir)) {
             mkdir($upload_dir, 0755, true);
         }
 
-        $file_name = time() . '_' . basename($_FILES['product_image']['name']);
+        // Generate proper filename with product prefix
+        $file_extension = strtolower(pathinfo($_FILES['product_image']['name'], PATHINFO_EXTENSION));
+        $file_name = 'product_' . time() . '_' . uniqid() . '.' . $file_extension;
         $upload_path = $upload_dir . $file_name;
 
-        // Check if file is an image
+        // Check if file is an image with more thorough validation
         $allowed_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
-        if (in_array($_FILES['product_image']['type'], $allowed_types)) {
-            if (move_uploaded_file($_FILES['product_image']['tmp_name'], $upload_path)) {
-                $product_image = 'uploads/' . $file_name;
+        $file_type = mime_content_type($_FILES['product_image']['tmp_name']);
+
+        if (in_array($file_type, $allowed_types)) {
+            // Check file size (5MB max)
+            if ($_FILES['product_image']['size'] <= 5 * 1024 * 1024) {
+                if (move_uploaded_file($_FILES['product_image']['tmp_name'], $upload_path)) {
+                    $product_image = $file_name; // Store just the filename, not the path
+                }
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Image file too large. Maximum 5MB allowed.']);
+                exit;
             }
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Invalid file type. Only JPEG, PNG, GIF, and WebP are allowed.']);
+            exit;
         }
     }
     $product_keywords = trim($_POST['product_keywords'] ?? '');

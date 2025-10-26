@@ -424,27 +424,8 @@ function displayProducts(products) {
     }
 
     products.forEach(function(product) {
-        var imageHtml;
-        if (product.product_image) {
-            // Determine the correct image path
-            var imagePath = product.product_image;
-
-            // If the image path doesn't start with uploads/ or images/, add the correct prefix
-            if (!imagePath.startsWith('uploads/') && !imagePath.startsWith('images/') && !imagePath.startsWith('http')) {
-                // Assume it's a filename only, add uploads path
-                imagePath = '../uploads/' + imagePath;
-            } else if (imagePath.startsWith('uploads/') || imagePath.startsWith('images/')) {
-                // Add ../ for admin panel relative path
-                imagePath = '../' + imagePath;
-            }
-
-            var placeholderImage = 'https://via.placeholder.com/50x50/8b5fbf/ffffff?text=' + encodeURIComponent(product.product_title.substring(0, 2));
-
-            imageHtml = '<img src="' + imagePath + '" alt="' + product.product_title + '" class="product-image" onerror="this.src=\'' + placeholderImage + '\';">';
-        } else {
-            var placeholderImage = 'https://via.placeholder.com/50x50/8b5fbf/ffffff?text=' + encodeURIComponent(product.product_title.substring(0, 2));
-            imageHtml = '<img src="' + placeholderImage + '" alt="' + product.product_title + '" class="product-image">';
-        }
+        var placeholderImage = 'https://via.placeholder.com/50x50/8b5fbf/ffffff?text=' + encodeURIComponent(product.product_title.substring(0, 2));
+        var imageHtml = '<img src="' + placeholderImage + '" alt="' + product.product_title + '" class="product-image" data-product-id="' + product.product_id + '" data-product-title="' + product.product_title.replace(/'/g, "&apos;") + '">';
 
         var priceDisplay = 'GH₵' + parseFloat(product.product_price).toFixed(2);
 
@@ -471,6 +452,9 @@ function displayProducts(products) {
             '</tr>';
         tbody.append(row);
     });
+
+    // Load product images after table is populated
+    loadProductImages();
 }
 
 // Load categories for dropdown
@@ -723,4 +707,50 @@ function copyImageUrl(url) {
             timerProgressBar: true
         });
     });
+}
+
+// Load product images using centralized image system
+function loadProductImages() {
+    // Add a small delay to ensure DOM is ready
+    setTimeout(() => {
+        const productImages = document.querySelectorAll('.product-image');
+        console.log('Loading images for', productImages.length, 'products');
+
+        productImages.forEach((img, index) => {
+            const productId = img.getAttribute('data-product-id');
+            const productTitle = img.getAttribute('data-product-title');
+
+            console.log('Loading image for product', productId, productTitle);
+
+            if (productId) {
+                // Add loading indicator
+                img.style.opacity = '0.5';
+
+                fetch('../actions/upload_product_image_action.php?action=get_image_url&product_id=' + productId)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Image response for product', productId, data);
+
+                        if (data.success && data.url) {
+                            img.src = data.url;
+                            img.style.opacity = '1';
+                            console.log('✅ Image loaded for product', productId);
+                        } else {
+                            img.style.opacity = '1';
+                            console.log('No image found for product', productId, '- keeping placeholder');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Image load error for product', productId, error);
+                        img.style.opacity = '1';
+                        // Keep the placeholder on error
+                    });
+            }
+        });
+    }, 100);
 }
