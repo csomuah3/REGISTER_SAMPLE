@@ -4,42 +4,41 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 try {
-    // Start session and include core functions
-    require_once(__DIR__ . '/settings/core.php');
-    require_once(__DIR__ . '/helpers/image_helper.php');
+	// Start session and include core functions
+	require_once(__DIR__ . '/settings/core.php');
+	require_once(__DIR__ . '/helpers/image_helper.php');
 
-    // Check login status and admin status
-    $is_logged_in = check_login();
-    $is_admin = false;
+	// Check login status and admin status
+	$is_logged_in = check_login();
+	$is_admin = false;
 
-    if ($is_logged_in) {
-        $is_admin = check_admin();
-    }
+	if ($is_logged_in) {
+		$is_admin = check_admin();
+	}
 
-    // Initialize arrays for navigation
-    $categories = [];
-    $brands = [];
+	// Initialize arrays for navigation
+	$categories = [];
+	$brands = [];
 
-    // Try to load categories and brands safely
-    try {
-        require_once(__DIR__ . '/controllers/category_controller.php');
-        $categories = get_all_categories_ctr();
-    } catch (Exception $e) {
-        // If categories fail to load, continue with empty array
-        error_log("Failed to load categories: " . $e->getMessage());
-    }
+	// Try to load categories and brands safely
+	try {
+		require_once(__DIR__ . '/controllers/category_controller.php');
+		$categories = get_all_categories_ctr();
+	} catch (Exception $e) {
+		// If categories fail to load, continue with empty array
+		error_log("Failed to load categories: " . $e->getMessage());
+	}
 
-    try {
-        require_once(__DIR__ . '/controllers/brand_controller.php');
-        $brands = get_all_brands_ctr();
-    } catch (Exception $e) {
-        // If brands fail to load, continue with empty array
-        error_log("Failed to load brands: " . $e->getMessage());
-    }
-
+	try {
+		require_once(__DIR__ . '/controllers/brand_controller.php');
+		$brands = get_all_brands_ctr();
+	} catch (Exception $e) {
+		// If brands fail to load, continue with empty array
+		error_log("Failed to load brands: " . $e->getMessage());
+	}
 } catch (Exception $e) {
-    // If core fails, show error
-    die("Critical error: " . $e->getMessage());
+	// If core fails, show error
+	die("Critical error: " . $e->getMessage());
 }
 ?>
 
@@ -560,12 +559,15 @@ try {
 				transform: translateY(100vh) rotate(0deg);
 				opacity: 0;
 			}
+
 			10% {
 				opacity: 0.8;
 			}
+
 			90% {
 				opacity: 0.8;
 			}
+
 			to {
 				transform: translateY(-100px) rotate(360deg);
 				opacity: 0;
@@ -662,7 +664,7 @@ try {
 			margin-top: 0px;
 			position: relative;
 			overflow: hidden;
-			min-height: auto;
+			min-height: 50vh;
 		}
 
 		/* Main Semi-Circle Design (like login page) */
