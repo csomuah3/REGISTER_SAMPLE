@@ -664,7 +664,7 @@ try {
 			margin-top: 0px;
 			position: relative;
 			overflow: hidden;
-			min-height: 50vh;
+			min-height: 60vh;
 		}
 
 		/* Main Semi-Circle Design (like login page) */
