@@ -659,10 +659,10 @@ try {
 		.hero-section {
 			background: linear-gradient(135deg, #f8f9ff 0%, #f1f5f9 50%, #e2e8f0 100%);
 			padding: 60px 0;
-			margin-top: 40px;
+			margin-top: 0px;
 			position: relative;
 			overflow: hidden;
-			min-height: 110vh;
+			min-height: 90vh;
 		}
 
 		/* Main Semi-Circle Design (like login page) */
