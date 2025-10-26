@@ -369,7 +369,7 @@ try {
 		}
 
 		.section-title {
-			font-size: 2.5rem;
+			font-size: 3.5rem;
 			font-weight: 800;
 			background: linear-gradient(135deg, #8b5fbf, #f093fb);
 			-webkit-background-clip: text;
@@ -659,10 +659,10 @@ try {
 		.hero-section {
 			background: linear-gradient(135deg, #f8f9ff 0%, #f1f5f9 50%, #e2e8f0 100%);
 			padding: 60px 0;
-			margin-top: 20px;
+			margin-top: 40px;
 			position: relative;
 			overflow: hidden;
-			min-height: 100vh;
+			min-height: 110vh;
 		}
 
 		/* Main Semi-Circle Design (like login page) */
