@@ -431,8 +431,16 @@ function displayProducts(products) {
     }
 
     products.forEach(function(product) {
-        var placeholderImage = 'https://via.placeholder.com/50x50/8b5fbf/ffffff?text=' + encodeURIComponent(product.product_title.substring(0, 2));
-        var imageHtml = '<img src="' + placeholderImage + '" alt="' + product.product_title + '" class="product-image" data-product-id="' + product.product_id + '" data-product-title="' + product.product_title.replace(/'/g, "&apos;") + '">';
+        // Create image element with proper data attributes
+        var imageHtml = '';
+        if (product.product_image && product.product_image.trim() !== '') {
+            // Product has an image - create img element
+            imageHtml = '<img class="product-image" width="50" height="50" style="object-fit: cover; border-radius: 8px;" data-product-id="' + product.product_id + '" data-product-title="' + product.product_title.replace(/'/g, "&apos;") + '" src="../uploads/products/' + product.product_image + '" alt="' + product.product_title + '">';
+        } else {
+            // No image - create placeholder
+            var initials = product.product_title.substring(0, 2).toUpperCase();
+            imageHtml = '<div class="product-image" style="width: 50px; height: 50px; background: #8b5fbf; color: white; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-weight: bold;" data-product-id="' + product.product_id + '" data-product-title="' + product.product_title.replace(/'/g, "&apos;") + '">' + initials + '</div>';
+        }
 
         var priceDisplay = 'GH₵' + parseFloat(product.product_price).toFixed(2);
 
@@ -723,15 +731,23 @@ function loadProductImages() {
         const productImages = document.querySelectorAll('.product-image');
         console.log('Loading images for', productImages.length, 'products');
 
-        productImages.forEach((img, index) => {
-            const productId = img.getAttribute('data-product-id');
-            const productTitle = img.getAttribute('data-product-title');
+        productImages.forEach((element, index) => {
+            const productId = element.getAttribute('data-product-id');
+            const productTitle = element.getAttribute('data-product-title');
 
             console.log('Loading image for product', productId, productTitle);
 
+            // If it's already an img element with src, skip loading
+            if (element.tagName === 'IMG' && element.src && !element.src.includes('placeholder')) {
+                console.log('Image already loaded for product', productId);
+                return;
+            }
+
             if (productId) {
-                // Add loading indicator
-                img.style.opacity = '0.5';
+                // Add loading indicator for div placeholders
+                if (element.tagName === 'DIV') {
+                    element.style.opacity = '0.5';
+                }
 
                 fetch('../actions/upload_product_image_action.php?action=get_image_url&product_id=' + productId)
                     .then(response => {
@@ -744,18 +760,38 @@ function loadProductImages() {
                         console.log('Image response for product', productId, data);
 
                         if (data.success && data.url) {
-                            img.src = data.url;
-                            img.style.opacity = '1';
-                            console.log('✅ Image loaded for product', productId);
+                            // Replace placeholder div with actual image
+                            if (element.tagName === 'DIV') {
+                                const img = document.createElement('img');
+                                img.className = 'product-image';
+                                img.width = 50;
+                                img.height = 50;
+                                img.style.objectFit = 'cover';
+                                img.style.borderRadius = '8px';
+                                img.setAttribute('data-product-id', productId);
+                                img.setAttribute('data-product-title', productTitle);
+                                img.src = data.url;
+                                img.alt = productTitle;
+                                element.parentNode.replaceChild(img, element);
+                                console.log('✅ Image loaded and replaced placeholder for product', productId);
+                            } else if (element.tagName === 'IMG') {
+                                element.src = data.url;
+                                console.log('✅ Image loaded for product', productId);
+                            }
                         } else {
-                            img.style.opacity = '1';
+                            // Keep placeholder but restore opacity
+                            if (element.tagName === 'DIV') {
+                                element.style.opacity = '1';
+                            }
                             console.log('No image found for product', productId, '- keeping placeholder');
                         }
                     })
                     .catch(error => {
                         console.error('Image load error for product', productId, error);
-                        img.style.opacity = '1';
-                        // Keep the placeholder on error
+                        // Keep placeholder but restore opacity
+                        if (element.tagName === 'DIV') {
+                            element.style.opacity = '1';
+                        }
                     });
             }
         });

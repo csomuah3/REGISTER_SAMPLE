@@ -196,14 +196,21 @@ function handleGetImageUrl() {
             $image_url = get_product_image_url(
                 $product['product_image'],
                 $product['product_title'],
-                '400x300'
+                '50x50'
             );
 
-            echo json_encode([
-                'success' => true,
-                'url' => $image_url,
-                'filename' => $product['product_image']
-            ]);
+            if ($image_url) {
+                echo json_encode([
+                    'success' => true,
+                    'url' => $image_url,
+                    'filename' => $product['product_image']
+                ]);
+            } else {
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'No image found for this product'
+                ]);
+            }
         } else {
             throw new Exception('Product not found');
         }

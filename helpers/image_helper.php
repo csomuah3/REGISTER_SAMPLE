@@ -50,8 +50,8 @@ function get_product_image_url($image_filename, $product_title = 'Product', $siz
         return 'uploads/products/' . htmlspecialchars($image_filename);
     }
 
-    // No image found, return placeholder
-    return generate_placeholder_url($product_title, $size);
+    // No image found, return null to let JavaScript handle placeholder
+    return null;
 }
 
 /**
