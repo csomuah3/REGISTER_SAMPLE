@@ -292,7 +292,7 @@ $(document).ready(function() {
         var productTitle = $('#edit_product_title').val().trim();
         var productPrice = $('#edit_product_price').val();
         var productDesc = $('#edit_product_desc').val().trim();
-        var productImage = $('#edit_product_image').val().trim();
+        var productImageFile = $('#edit_product_image')[0].files[0];
         var productKeywords = $('#edit_product_keywords').val().trim();
         var categoryId = $('#edit_category_id').val();
         var brandId = $('#edit_brand_id').val();
@@ -343,21 +343,28 @@ $(document).ready(function() {
         var originalText = $btn.text();
         $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2" role="status"></span>Updating...');
 
+        // Create FormData for file upload
+        var formData = new FormData();
+        formData.append('product_id', productId);
+        formData.append('product_title', productTitle);
+        formData.append('product_price', productPrice);
+        formData.append('product_desc', productDesc);
+        formData.append('product_keywords', productKeywords);
+        formData.append('category_id', categoryId);
+        formData.append('brand_id', brandId);
+
+        if (productImageFile) {
+            formData.append('product_image', productImageFile);
+        }
+
         // AJAX request
         $.ajax({
             url: '../actions/update_product_action.php',
             type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
             dataType: 'json',
-            data: {
-                product_id: productId,
-                product_title: productTitle,
-                product_price: productPrice,
-                product_desc: productDesc,
-                product_image: productImage,
-                product_keywords: productKeywords,
-                category_id: categoryId,
-                brand_id: brandId
-            },
             success: function(response) {
                 if (response.status === 'success') {
                     Swal.fire({

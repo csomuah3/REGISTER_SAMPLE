@@ -802,7 +802,7 @@ require_admin(); // only admins
             <p>Manage your products</p>
         </div>
         <ul class="sidebar-menu">
-            <li><a href="../dashboard.php"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="../index.php"><i class="fas fa-home"></i> Dashboard</a></li>
             <li><a href="category.php"><i class="fas fa-list"></i> Categories</a></li>
             <li><a href="brand.php"><i class="fas fa-tags"></i> Brands</a></li>
             <li><a href="#" class="active"><i class="fas fa-box"></i> Products</a></li>

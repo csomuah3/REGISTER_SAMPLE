@@ -38,6 +38,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($_FILES['product_image']['size'] <= 5 * 1024 * 1024) {
                 if (move_uploaded_file($_FILES['product_image']['tmp_name'], $upload_path)) {
                     $product_image = $file_name; // Store just the filename, not the path
+                    // Debug: Log successful upload
+                    error_log("Image uploaded successfully: " . $upload_path);
+                } else {
+                    // Debug: Log upload failure
+                    error_log("Failed to move uploaded file from " . $_FILES['product_image']['tmp_name'] . " to " . $upload_path);
+                    echo json_encode(['status' => 'error', 'message' => 'Failed to save uploaded image']);
+                    exit;
                 }
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Image file too large. Maximum 5MB allowed.']);
